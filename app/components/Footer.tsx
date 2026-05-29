@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { Phone, Mail, Clock, MapPin, MessageCircle, ArrowRight, ArrowUpRight } from 'lucide-react'
 
 // ── Data ─────────────────────────────────────────────────────────────────────
@@ -94,11 +95,13 @@ export default function Footer() {
       {/* ── Pre-footer CTA ── */}
       <div className="relative overflow-hidden">
         {/* Background image */}
-        <img
+        <Image
           src="/images/hero.JPG"
           alt=""
           aria-hidden
-          className="absolute inset-0 w-full h-full object-cover object-center"
+          fill
+          quality={80}
+          className="object-cover object-center"
         />
         {/* Gradient overlay — dark on both sides, lighter in centre */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#04060E]/95 via-[#04060E]/75 to-[#04060E]/90" />
@@ -221,9 +224,11 @@ export default function Footer() {
 
             {/* Brand column */}
             <div>
-              <img
+              <Image
                 src="/images/everyday_logo.avif"
                 alt="Everyday Travels"
+                width={180}
+                height={80}
                 className="h-[80px] w-auto object-contain mb-5"
               />
               <p

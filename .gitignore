@@ -42,6 +42,3 @@ next-env.d.ts
 
 # large media — host via CDN
 public/videos/
-public/images/*.JPG
-public/images/*.jpg
-public/images/*.mov

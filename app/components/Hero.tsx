@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'motion/react'
+import Image from 'next/image'
 import QuoteForm from './QuoteForm'
 import TrustBar from './TrustBar'
 
@@ -46,10 +47,13 @@ export default function Hero() {
       className="relative flex flex-col min-h-screen bg-[#0C0F1C]"
     >
       {/* Background image */}
-      <img
+      <Image
         src="/images/hero.JPG"
         alt="Everyday Travels coach on a scenic road with mountains in the background"
-        className="absolute inset-0 w-full h-full object-cover object-center"
+        fill
+        priority
+        quality={85}
+        className="object-cover object-center"
       />
 
       {/* Gradient layers */}

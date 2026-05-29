@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { ChevronDown, Menu, X, ArrowRight } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
@@ -65,9 +66,11 @@ export default function Navbar({
             aria-label="Everyday Travels home"
             className="flex-shrink-0 select-none"
           >
-            <img
+            <Image
               src="/images/everyday_logo.avif"
               alt="Everyday Travels"
+              width={160}
+              height={62}
               className="h-[62px] w-auto object-contain"
             />
           </Link>

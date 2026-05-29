@@ -249,11 +249,70 @@ export default function QuoteForm() {
   const [pickupTime, setPickupTime]   = useState('')
   const [returnDate, setReturnDate]   = useState('')
   const [returnTime, setReturnTime]   = useState('')
-  const [email, setEmail]             = useState('')
-  const [phone, setPhone]             = useState('')
+  const [email, setEmail]               = useState('')
+  const [phone, setPhone]               = useState('')
+  const [emailError, setEmailError]     = useState('')
+  const [emailTouched, setEmailTouched] = useState(false)
+  const [submitting, setSubmitting]     = useState(false)
+  const [submitted, setSubmitted]       = useState(false)
+
+  useEffect(() => {
+    if (!submitted) return
+    const t = setTimeout(() => {
+      setSubmitted(false)
+      setJourneyType('oneway')
+      setPickup('')
+      setDestination('')
+      setPassengers('')
+      setTravelDate('')
+      setPickupTime('')
+      setReturnDate('')
+      setReturnTime('')
+      setEmail('')
+      setPhone('')
+      setEmailTouched(false)
+      setEmailError('')
+    }, 3000)
+    return () => clearTimeout(t)
+  }, [submitted])
 
   const isReturn       = journeyType === 'return'
   const showContactRow = Boolean(pickup && destination && passengers && travelDate && pickupTime)
+
+  const validateEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())
+
+  const handleEmailBlur = () => {
+    setEmailTouched(true)
+    if (!email) {
+      setEmailError('Email address is required')
+    } else if (!validateEmail(email)) {
+      setEmailError('Please enter a valid email address')
+    } else {
+      setEmailError('')
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setEmailTouched(true)
+    if (!email) { setEmailError('Email address is required'); return }
+    if (!validateEmail(email)) { setEmailError('Please enter a valid email address'); return }
+    setEmailError('')
+    setSubmitting(true)
+    try {
+      const res = await fetch('/api/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ journeyType, pickup, destination, passengers, travelDate, pickupTime, returnDate, returnTime, email, phone }),
+      })
+      if (!res.ok) throw new Error('Failed')
+      setSubmitted(true)
+    } catch {
+      alert('Something went wrong. Please try again.')
+    } finally {
+      setSubmitting(false)
+    }
+  }
 
 
   return (
@@ -304,7 +363,16 @@ export default function QuoteForm() {
           </div>
         </div>
 
-        <form onSubmit={(e) => e.preventDefault()} noValidate>
+        {submitted ? (
+          <div className="flex flex-col items-center justify-center py-10 gap-3 text-center">
+            <div className="w-10 h-10 rounded-full bg-[#EBBA6F]/15 flex items-center justify-center">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EBBA6F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><polyline points="20 6 9 17 4 12" /></svg>
+            </div>
+            <p className="text-white text-[15px] font-medium" style={{ fontFamily: 'var(--font-body)' }}>Quote request sent!</p>
+            <p className="text-white/45 text-[13px]" style={{ fontFamily: 'var(--font-body)' }}>We'll be in touch shortly at <span className="text-white/70">{email}</span></p>
+          </div>
+        ) : (
+        <form onSubmit={handleSubmit} noValidate>
 
           {/* ── Row 1: 5 equal columns ── */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
@@ -457,7 +525,7 @@ export default function QuoteForm() {
           <AnimatePresence>
             {showContactRow && (
               <motion.div {...REVEAL} className="overflow-hidden">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-end">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-start">
 
                   <div>
                     <label htmlFor="email">
@@ -468,10 +536,31 @@ export default function QuoteForm() {
                       aria-label="Email address"
                       type="email"
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => {
+                        setEmail(e.target.value)
+                        if (emailTouched) {
+                          const v = e.target.value
+                          if (!v) setEmailError('Email address is required')
+                          else if (!validateEmail(v)) setEmailError('Please enter a valid email address')
+                          else setEmailError('')
+                        }
+                      }}
+                      onBlur={handleEmailBlur}
                       placeholder="your@email.com"
-                      className={inputCls}
+                      aria-invalid={emailTouched && !!emailError}
+                      aria-describedby={emailTouched && emailError ? 'email-error' : undefined}
+                      className={`${inputCls} ${emailTouched && emailError ? '!border-red-500/70 focus-visible:!border-red-500' : ''}`}
                     />
+                    {emailTouched && emailError && (
+                      <p
+                        id="email-error"
+                        role="alert"
+                        className="mt-1.5 text-[11px] text-red-400"
+                        style={{ fontFamily: 'var(--font-ui)' }}
+                      >
+                        {emailError}
+                      </p>
+                    )}
                   </div>
 
                   <div>
@@ -489,20 +578,25 @@ export default function QuoteForm() {
                     />
                   </div>
 
+                  <div>
+                    <span className="block text-[11px] mb-1.5" aria-hidden>&#8203;</span>
                   <button
                     type="submit"
-                    className="h-10 flex items-center justify-center gap-2 px-6 bg-[#EBBA6F] text-[#0C0F1C] text-[13.5px] font-semibold rounded-lg hover:bg-[#E2B36A] active:bg-[#AC864C] transition-colors duration-150 w-full"
+                    disabled={submitting}
+                    className="h-10 flex items-center justify-center gap-2 px-6 bg-[#EBBA6F] text-[#0C0F1C] text-[13.5px] font-semibold rounded-lg hover:bg-[#E2B36A] active:bg-[#AC864C] transition-colors duration-150 w-full disabled:opacity-60 disabled:cursor-not-allowed"
                     style={{ fontFamily: 'var(--font-ui)' }}
                   >
-                    Get Instant Quote
-                    <ArrowRight size={15} aria-hidden />
+                    {submitting ? 'Sending…' : 'Get Instant Quote'}
+                    {!submitting && <ArrowRight size={15} aria-hidden />}
                   </button>
+                  </div>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
 
         </form>
+        )}
       </div>
     </section>
   )

@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState, useCallback } from 'react'
+import Image from 'next/image'
 import { Sparkles, ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
 
 const FLEET = [
@@ -131,10 +132,12 @@ export default function FleetCarousel() {
             style={{ aspectRatio: '3/4' }}
           >
             {/* Image */}
-            <img
+            <Image
               src={item.image}
               alt={item.name}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+              fill
+              sizes="(max-width: 640px) 82vw, (max-width: 1024px) 45vw, 29vw"
+              className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
             />
 
             {/* Gradient overlay */}
