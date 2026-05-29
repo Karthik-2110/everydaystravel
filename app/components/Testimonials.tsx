@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Users, PenLine, ChevronDown } from 'lucide-react'
+import { PenLine, ChevronDown } from 'lucide-react'
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -107,7 +107,7 @@ const INITIAL_COUNT = 6
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
-function Stars({ filled = 5, total = 5 }: { filled?: number; total?: number }) {
+function Stars({ filled = 5, total = 5, color = '#EBBA6F' }: { filled?: number; total?: number; color?: string }) {
   return (
     <div
       className="flex items-center gap-[3px]"
@@ -120,7 +120,7 @@ function Stars({ filled = 5, total = 5 }: { filled?: number; total?: number }) {
           width="13"
           height="13"
           viewBox="0 0 20 20"
-          fill="#EBBA6F"
+          fill={color}
           opacity={i < filled ? 1 : 0.2}
           aria-hidden
         >
@@ -167,6 +167,155 @@ function TrustpilotLogo() {
     <svg width="14" height="14" viewBox="0 0 24 24" fill="#00B67A" aria-hidden>
       <path d="M12 2l2.582 7.953H22l-6.29 4.573 2.4 7.388L12 17.35l-6.11 4.564 2.4-7.388L2 9.953h7.418L12 2z" />
     </svg>
+  )
+}
+
+
+function PartialStar({ fill = 1, color }: { fill?: number; color: string }) {
+  const clipped = Math.max(0, Math.min(1, fill))
+  return (
+    <div className="relative w-[17px] h-[17px] shrink-0">
+      <svg width="17" height="17" viewBox="0 0 20 20" fill="#DCDCE6" aria-hidden>
+        <path d="M10 1l2.4 4.9 5.3.8-3.9 3.8.9 5.3-4.7-2.5-4.8 2.5.9-5.3-3.8-3.8 5.3-.8L10 1z" />
+      </svg>
+      {clipped > 0 && (
+        <div className="absolute inset-0 overflow-hidden" style={{ width: `${clipped * 100}%` }}>
+          <svg width="17" height="17" viewBox="0 0 20 20" fill={color} aria-hidden>
+            <path d="M10 1l2.4 4.9 5.3.8-3.9 3.8.9 5.3-4.7-2.5-4.8 2.5.9-5.3-3.8-3.8 5.3-.8L10 1z" />
+          </svg>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function RatingStars({ rating, color }: { rating: number; color: string }) {
+  return (
+    <div className="flex items-center gap-[3px]" role="img" aria-label={`${rating} out of 5 stars`}>
+      {[1, 2, 3, 4, 5].map((i) => (
+        <PartialStar key={i} fill={Math.max(0, Math.min(1, rating - (i - 1)))} color={color} />
+      ))}
+    </div>
+  )
+}
+
+function TrustpilotWidget() {
+  return (
+    <div className="flex items-center flex-1 bg-white rounded-2xl border border-[#0C0F1C]/[0.06] shadow-[0_1px_3px_rgba(12,15,28,0.05),0_4px_14px_rgba(12,15,28,0.06)] overflow-hidden">
+
+      {/* Brand */}
+      <div className="flex items-center gap-2.5 px-6 py-5 shrink-0">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#00B67A" aria-hidden>
+          <path d="M12 2l2.582 7.953H22l-6.29 4.573 2.4 7.388L12 17.35l-6.11 4.564 2.4-7.388L2 9.953h7.418L12 2z" />
+        </svg>
+        <span className="text-[13.5px] font-bold text-[#191919] tracking-[-0.01em]" style={{ fontFamily: 'var(--font-ui)' }}>
+          Trustpilot
+        </span>
+      </div>
+
+      <div className="w-px self-stretch bg-[#0C0F1C]/[0.06] shrink-0" />
+
+      {/* Score */}
+      <div className="flex items-center gap-3 px-6 py-5 flex-1">
+        <span
+          className="leading-none tracking-[-0.02em] text-[#191919]"
+          style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(2.2rem, 3vw, 2.8rem)' }}
+        >
+          4.4
+        </span>
+        <div className="flex flex-col gap-1.5">
+          <RatingStars rating={4.4} color="#00B67A" />
+          <span className="text-[11px] text-[#0C0F1C]/35" style={{ fontFamily: 'var(--font-ui)' }}>
+            10 reviews
+          </span>
+        </div>
+      </div>
+
+      <div className="w-px self-stretch bg-[#0C0F1C]/[0.06] shrink-0" />
+
+      {/* Actions */}
+      <div className="flex items-center gap-4 px-6 py-5 shrink-0">
+        <a
+          href="https://www.trustpilot.com/review/everydaystravel.co.uk"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[12px] text-[#0C0F1C]/40 hover:text-[#00B67A] transition-colors duration-150 whitespace-nowrap"
+          style={{ fontFamily: 'var(--font-ui)' }}
+        >
+          View all →
+        </a>
+        <span className="text-[#0C0F1C]/15 select-none">·</span>
+        <a
+          href="https://www.trustpilot.com/evaluate/everydaystravel.co.uk"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 text-[12px] text-[#0C0F1C]/40 hover:text-[#00B67A] transition-colors duration-150 whitespace-nowrap"
+          style={{ fontFamily: 'var(--font-ui)' }}
+        >
+          <PenLine size={11} aria-hidden />
+          Share feedback
+        </a>
+      </div>
+    </div>
+  )
+}
+
+function GoogleWidget() {
+  return (
+    <div className="flex items-center flex-1 bg-white rounded-2xl border border-[#0C0F1C]/[0.06] shadow-[0_1px_3px_rgba(12,15,28,0.05),0_4px_14px_rgba(12,15,28,0.06)] overflow-hidden">
+
+      {/* Brand */}
+      <div className="flex items-center gap-2.5 px-6 py-5 shrink-0">
+        <GoogleLogo />
+        <span className="text-[13.5px] font-bold text-[#191919] tracking-[-0.01em]" style={{ fontFamily: 'var(--font-ui)' }}>
+          Google Reviews
+        </span>
+      </div>
+
+      <div className="w-px self-stretch bg-[#0C0F1C]/[0.06] shrink-0" />
+
+      {/* Score */}
+      <div className="flex items-center gap-3 px-6 py-5 flex-1">
+        <span
+          className="leading-none tracking-[-0.02em] text-[#191919]"
+          style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(2.2rem, 3vw, 2.8rem)' }}
+        >
+          4.8
+        </span>
+        <div className="flex flex-col gap-1.5">
+          <RatingStars rating={4.8} color="#FBBC05" />
+          <span className="text-[11px] text-[#0C0F1C]/35" style={{ fontFamily: 'var(--font-ui)' }}>
+            10 reviews
+          </span>
+        </div>
+      </div>
+
+      <div className="w-px self-stretch bg-[#0C0F1C]/[0.06] shrink-0" />
+
+      {/* Actions */}
+      <div className="flex items-center gap-4 px-6 py-5 shrink-0">
+        <a
+          href="https://maps.google.com/?q=Everydays+Travel+Limited"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[12px] text-[#0C0F1C]/40 hover:text-[#4285F4] transition-colors duration-150 whitespace-nowrap"
+          style={{ fontFamily: 'var(--font-ui)' }}
+        >
+          View all →
+        </a>
+        <span className="text-[#0C0F1C]/15 select-none">·</span>
+        <a
+          href="https://search.google.com/local/writereview?placeid=everydaystravel"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 text-[12px] text-[#0C0F1C]/40 hover:text-[#4285F4] transition-colors duration-150 whitespace-nowrap"
+          style={{ fontFamily: 'var(--font-ui)' }}
+        >
+          <PenLine size={11} aria-hidden />
+          Share feedback
+        </a>
+      </div>
+    </div>
   )
 }
 
@@ -234,55 +383,22 @@ export default function Testimonials({ reviews = DEFAULT_REVIEWS }: { reviews?: 
       <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 lg:py-28">
 
         {/* ── Centered header ── */}
-        <div className="flex flex-col items-center text-center mb-14">
-
-    
+        <div className="flex flex-col items-center text-center mb-10">
 
           {/* Heading */}
           <h2
-            className="text-[#0C0F1C] text-[clamp(2rem,3.8vw,3.2rem)] leading-[1.08] tracking-[-0.015em] mb-7 whitespace-nowrap"
+            className="text-[#0C0F1C] text-[clamp(2rem,3.8vw,3.2rem)] leading-[1.08] tracking-[-0.015em] mb-8 whitespace-nowrap"
             style={{ fontFamily: 'var(--font-display)', fontWeight: 400 }}
           >
             What our clients say about us
           </h2>
 
-          {/* Avatar stack + social proof */}
-          <div className="flex items-center gap-3 mb-8">
-            <div className="flex -space-x-2.5">
-              {reviews.slice(0, 4).map((r, i) => (
-                <div key={r.name} style={{ zIndex: 4 - i }} className="relative">
-                  <AvatarCircle initials={r.initials} bg={r.avatarBg} ring />
-                </div>
-              ))}
-            </div>
-            <p
-              className="text-[#0C0F1C]/60 text-[14px]"
-              style={{ fontFamily: 'var(--font-body)' }}
-            >
-              Trusted by{' '}
-              <strong className="text-[#0C0F1C] font-semibold">5,000+</strong>{' '}
-              people.
-            </p>
+          {/* Rating widgets */}
+          <div className="flex flex-col sm:flex-row gap-4 w-full">
+            <TrustpilotWidget />
+            <GoogleWidget />
           </div>
 
-          {/* Action buttons */}
-          <div className="flex items-center gap-2.5">
-            <button
-              type="button"
-              className="h-10 px-6 bg-[#0C0F1C] text-white text-[13px] font-medium rounded-full hover:bg-[#1a2030] transition-colors duration-150"
-              style={{ fontFamily: 'var(--font-ui)' }}
-            >
-              Get a Quote
-            </button>
-            <button
-              type="button"
-              className="h-10 px-6 bg-white border border-[#0C0F1C]/12 text-[#0C0F1C] text-[13px] font-medium rounded-full hover:bg-[#0C0F1C]/[0.04] transition-colors duration-150 flex items-center gap-2"
-              style={{ fontFamily: 'var(--font-ui)' }}
-            >
-              <PenLine size={13} aria-hidden />
-              Share your feedback
-            </button>
-          </div>
         </div>
 
         {/* ── Card grid ── */}
@@ -292,9 +408,9 @@ export default function Testimonials({ reviews = DEFAULT_REVIEWS }: { reviews?: 
           ))}
         </div>
 
-        {/* ── Load more ── */}
-        {hasMore && (
-          <div className="mt-10 flex justify-center">
+        {/* ── Load more + Get a Quote ── */}
+        <div className="mt-10 flex items-center justify-center gap-3 flex-wrap">
+          {hasMore && (
             <button
               type="button"
               onClick={() => setVisibleCount((c) => Math.min(c + 3, reviews.length))}
@@ -304,8 +420,15 @@ export default function Testimonials({ reviews = DEFAULT_REVIEWS }: { reviews?: 
               <ChevronDown size={15} aria-hidden />
               Load more reviews
             </button>
-          </div>
-        )}
+          )}
+          <a
+            href="#quote"
+            className="h-10 px-7 flex items-center gap-2 bg-[#0C0F1C] text-white text-[13px] font-medium rounded-full hover:bg-[#1a2030] transition-colors duration-150"
+            style={{ fontFamily: 'var(--font-ui)' }}
+          >
+            Get a Quote
+          </a>
+        </div>
 
       </div>
     </section>
