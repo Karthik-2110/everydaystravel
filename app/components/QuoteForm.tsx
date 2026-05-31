@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import {
-  MapPin, Users, CalendarDays, Clock,
+  MapPin, Users, Clock,
   ArrowRight, ArrowRightLeft, ChevronDown,
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
@@ -434,12 +434,7 @@ export default function QuoteForm() {
               <label htmlFor="travel-date">
                 <FieldLabel>Travel date</FieldLabel>
               </label>
-              <div className="relative">
-                <CalendarDays
-                  size={13}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35 pointer-events-none z-10"
-                  aria-hidden
-                />
+              <div className="relative min-w-0 overflow-hidden">
                 <Input
                   id="travel-date"
                   aria-label="Travel date"
@@ -447,7 +442,7 @@ export default function QuoteForm() {
                   value={travelDate}
                   onChange={(e) => setTravelDate(e.target.value)}
                   min={today}
-                  className={`pl-8 [color-scheme:dark] ${base} focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#EBBA6F] ${travelDate ? 'text-white' : 'text-white/30'}`}
+                  className={`w-full [color-scheme:dark] ${base} focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#EBBA6F] ${travelDate ? 'text-white' : 'text-white/30'}`}
                 />
               </div>
             </div>
@@ -482,19 +477,14 @@ export default function QuoteForm() {
                     <label htmlFor="return-date">
                       <FieldLabel>Return date</FieldLabel>
                     </label>
-                    <div className="relative">
-                      <CalendarDays
-                        size={13}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35 pointer-events-none z-10"
-                        aria-hidden
-                      />
+                    <div className="relative min-w-0 overflow-hidden">
                       <Input
                         id="return-date"
                         type="date"
                         value={returnDate}
                         onChange={(e) => setReturnDate(e.target.value)}
                         min={travelDate || today}
-                        className={`pl-8 [color-scheme:dark] ${base} focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#EBBA6F] ${returnDate ? 'text-white' : 'text-white/30'}`}
+                        className={`w-full [color-scheme:dark] ${base} focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#EBBA6F] ${returnDate ? 'text-white' : 'text-white/30'}`}
                       />
                     </div>
                   </div>
