@@ -1,5 +1,6 @@
 'use client'
 
+import { useRef, useEffect } from 'react'
 import { motion } from 'motion/react'
 import Image from 'next/image'
 import { cdnUrl } from '@/app/lib/cloudinary'
@@ -36,9 +37,10 @@ const fadeUp = (delay: number): {
 export interface HeroLine { text: string; accent: boolean }
 
 export interface HeroProps {
-  badge?:   string
-  lines?:   HeroLine[]
-  subtext?: string
+  badge?:    string
+  lines?:    HeroLine[]
+  subtext?:  string
+  videoSrc?: string
 }
 
 const DEFAULT_LINES: HeroLine[] = [
@@ -50,24 +52,49 @@ const DEFAULT_LINES: HeroLine[] = [
 // ── Component ───────────────────────────────────────────────────────────────
 
 export default function Hero({
-  badge   = 'Premium Coach & Minibus Hire',
-  lines   = DEFAULT_LINES,
-  subtext = 'Reliable, professional transport for airport transfers, events and group travel.',
+  badge    = 'Premium Coach & Minibus Hire',
+  lines    = DEFAULT_LINES,
+  subtext  = 'Reliable, professional transport for airport transfers, events and group travel.',
+  videoSrc,
 }: HeroProps = {}) {
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = true
+      videoRef.current.play().catch(() => {})
+    }
+  }, [])
   return (
     <section
       aria-label="hero"
       className="relative flex flex-col min-h-screen bg-[#0C0F1C]"
     >
-      {/* Background image */}
-      <Image
-        src={cdnUrl('IMG_0938_fhylhh', 2400)}
-        alt="Everyday Travels coach on a scenic road with mountains in the background"
-        fill
-        priority
-        unoptimized
-        className="object-cover object-center"
-      />
+      {/* Background — video or image */}
+      {videoSrc ? (
+        <video
+          ref={videoRef}
+          loop
+          muted
+          playsInline
+          autoPlay
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        >
+          {/* WebM/VP9 for Chrome & Firefox */}
+          <source src={videoSrc.replace('/upload/', '/upload/vc_vp9,q_auto/')} type="video/webm" />
+          {/* H.264 MP4 for Safari — universally supported */}
+          <source src={videoSrc.replace('/upload/', '/upload/vc_h264,q_auto/') + '.mp4'} type="video/mp4" />
+        </video>
+      ) : (
+        <Image
+          src={cdnUrl('IMG_0938_fhylhh', 2400)}
+          alt="Everyday Travels coach on a scenic road with mountains in the background"
+          fill
+          priority
+          unoptimized
+          className="object-cover object-center"
+        />
+      )}
 
       {/* Gradient layers */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#060810]/90 via-[#0C0F1C]/60 to-[#0C0F1C]/0" />

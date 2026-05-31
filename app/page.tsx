@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <Hero />
+      <Hero videoSrc="https://res.cloudinary.com/dckyndryf/video/upload/v1780222799/hero_xgrraa" />
       <FleetCarousel />
       <Testimonials />
       <Footer />
