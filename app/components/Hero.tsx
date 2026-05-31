@@ -48,11 +48,11 @@ export default function Hero() {
     >
       {/* Background image */}
       <Image
-        src="/images/hero.JPG"
+        src="https://res.cloudinary.com/dckyndryf/image/upload/f_auto,q_auto/IMG_0938_fhylhh"
         alt="Everyday Travels coach on a scenic road with mountains in the background"
         fill
         priority
-        quality={85}
+        unoptimized
         className="object-cover object-center"
       />
 

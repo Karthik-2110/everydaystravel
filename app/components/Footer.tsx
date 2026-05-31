@@ -96,11 +96,11 @@ export default function Footer() {
       <div className="relative overflow-hidden">
         {/* Background image */}
         <Image
-          src="/images/hero.JPG"
+          src="https://res.cloudinary.com/dckyndryf/image/upload/f_auto,q_auto/IMG_0938_fhylhh"
           alt=""
           aria-hidden
           fill
-          quality={80}
+          unoptimized
           className="object-cover object-center"
         />
         {/* Gradient overlay — dark on both sides, lighter in centre */}
