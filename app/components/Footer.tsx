@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { cdnUrl } from '@/app/lib/cloudinary'
 import { Phone, Mail, Clock, MapPin, MessageCircle, ArrowRight, ArrowUpRight } from 'lucide-react'
 
 // ── Data ─────────────────────────────────────────────────────────────────────
@@ -96,7 +97,7 @@ export default function Footer() {
       <div className="relative overflow-hidden">
         {/* Background image */}
         <Image
-          src="https://res.cloudinary.com/dckyndryf/image/upload/f_auto,q_auto/IMG_0938_fhylhh"
+          src={cdnUrl('IMG_0938_fhylhh', 2400)}
           alt=""
           aria-hidden
           fill

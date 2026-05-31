@@ -2,6 +2,7 @@
 
 import { motion } from 'motion/react'
 import Image from 'next/image'
+import { cdnUrl } from '@/app/lib/cloudinary'
 import QuoteForm from './QuoteForm'
 import TrustBar from './TrustBar'
 
@@ -48,7 +49,7 @@ export default function Hero() {
     >
       {/* Background image */}
       <Image
-        src="https://res.cloudinary.com/dckyndryf/image/upload/f_auto,q_auto/IMG_0938_fhylhh"
+        src={cdnUrl('IMG_0938_fhylhh', 2400)}
         alt="Everyday Travels coach on a scenic road with mountains in the background"
         fill
         priority
