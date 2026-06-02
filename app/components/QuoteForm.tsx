@@ -8,6 +8,7 @@ import {
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { UK_LOCATION_GROUPS } from '@/app/lib/uk-locations'
+import DatePickerField from './DatePickerField'
 
 // ── Style constants ─────────────────────────────────────────────────────────
 
@@ -374,7 +375,7 @@ export default function QuoteForm() {
         ) : (
         <form onSubmit={handleSubmit} noValidate>
 
-          {/* ── Row 1: 5 equal columns ── */}
+          {/* ── Row 1: stacks on mobile, 2-col sm, 5-col lg ── */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
 
             {/* Pickup location */}
@@ -429,41 +430,34 @@ export default function QuoteForm() {
               </div>
             </div>
 
-            {/* Travel date */}
-            <div>
+            {/* Travel date — full row on mobile */}
+            <div className="sm:col-span-2 lg:col-span-1">
               <label htmlFor="travel-date">
                 <FieldLabel>Travel date</FieldLabel>
               </label>
-              <div className="relative min-w-0 overflow-hidden">
-                <Input
-                  id="travel-date"
-                  aria-label="Travel date"
-                  type="date"
-                  value={travelDate}
-                  onChange={(e) => setTravelDate(e.target.value)}
-                  min={today}
-                  className={`w-full [color-scheme:dark] ${base} focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#EBBA6F] ${travelDate ? 'text-white' : 'text-white/30'}`}
-                />
-              </div>
+              <DatePickerField
+                id="travel-date"
+                value={travelDate}
+                onChange={setTravelDate}
+                minDate={today}
+              />
             </div>
 
-            {/* Pickup time */}
-            <div>
+            {/* Pickup time — full row on mobile */}
+            <div className="sm:col-span-2 lg:col-span-1">
               <label htmlFor="pickup-time">
                 <FieldLabel>Pickup time</FieldLabel>
               </label>
-              <SelectField
-                id="pickup-time"
-                ariaLabel="Pickup time"
-                value={pickupTime}
-                onChange={setPickupTime}
-                icon={Clock}
-                placeholder="Select time"
-              >
-                {TIME_OPTIONS.map((t) => (
-                  <option key={t} value={t}>{t}</option>
-                ))}
-              </SelectField>
+              <div className="relative">
+                <Clock size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35 pointer-events-none z-10" aria-hidden />
+                <Input
+                  id="pickup-time"
+                  type="time"
+                  value={pickupTime}
+                  onChange={(e) => setPickupTime(e.target.value)}
+                  className={`pl-8 [color-scheme:dark] ${base} focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#EBBA6F] ${pickupTime ? 'text-white' : 'text-white/30'}`}
+                />
+              </div>
             </div>
           </div>
 
@@ -477,34 +471,28 @@ export default function QuoteForm() {
                     <label htmlFor="return-date">
                       <FieldLabel>Return date</FieldLabel>
                     </label>
-                    <div className="relative min-w-0 overflow-hidden">
-                      <Input
-                        id="return-date"
-                        type="date"
-                        value={returnDate}
-                        onChange={(e) => setReturnDate(e.target.value)}
-                        min={travelDate || today}
-                        className={`w-full [color-scheme:dark] ${base} focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#EBBA6F] ${returnDate ? 'text-white' : 'text-white/30'}`}
-                      />
-                    </div>
+                    <DatePickerField
+                      id="return-date"
+                      value={returnDate}
+                      onChange={setReturnDate}
+                      minDate={travelDate || today}
+                    />
                   </div>
 
                   <div>
                     <label htmlFor="return-time">
                       <FieldLabel>Return time</FieldLabel>
                     </label>
-                    <SelectField
-                      id="return-time"
-                      ariaLabel="Return time"
-                      value={returnTime}
-                      onChange={setReturnTime}
-                      icon={Clock}
-                      placeholder="Select time"
-                    >
-                      {TIME_OPTIONS.map((t) => (
-                        <option key={t} value={t}>{t}</option>
-                      ))}
-                    </SelectField>
+                    <div className="relative">
+                      <Clock size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35 pointer-events-none z-10" aria-hidden />
+                      <Input
+                        id="return-time"
+                        type="time"
+                        value={returnTime}
+                        onChange={(e) => setReturnTime(e.target.value)}
+                        className={`pl-8 [color-scheme:dark] ${base} focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#EBBA6F] ${returnTime ? 'text-white' : 'text-white/30'}`}
+                      />
+                    </div>
                   </div>
                 </div>
               </motion.div>

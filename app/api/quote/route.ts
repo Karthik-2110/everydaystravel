@@ -4,7 +4,8 @@ import { CHAUFFEUR_CARS, LUXURY_MINIBUSES, EXECUTIVE_COACHES } from '@/app/compo
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-const TO_EMAILS = ['web@everydaystravel.co.uk', 'sales@everydaystravel.co.uk']
+// Switch to ['web@everydaystravel.co.uk', 'sales@everydaystravel.co.uk'] after domain is verified in Resend
+const TO_EMAILS = ['karthikchembhc@gmail.com']
 
 const ALL_VEHICLES = [...CHAUFFEUR_CARS, ...LUXURY_MINIBUSES, ...EXECUTIVE_COACHES]
 
@@ -75,7 +76,8 @@ export async function POST(request: Request) {
   `
 
   const { error } = await resend.emails.send({
-    from: 'Everyday Travels <noreply@everydaystravel.co.uk>',
+    // Switch from address to 'Everyday Travels <noreply@everydaystravel.co.uk>' after domain is verified
+    from: 'Everyday Travels <onboarding@resend.dev>',
     to: TO_EMAILS,
     replyTo: email,
     subject,

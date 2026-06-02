@@ -198,7 +198,7 @@ export default function Hero({
       </div>
 
       {/* Quote form */}
-      <div className="relative z-10 w-full max-w-[1440px] pb-10">
+      <div className="relative z-10 w-full max-w-[1440px] mx-auto pb-10">
         <QuoteForm />
       </div>
 
