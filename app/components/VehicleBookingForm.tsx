@@ -1,14 +1,14 @@
 'use client'
 
-import { useState, useRef, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import {
-  MapPin, Users, Clock, Car,
+  Users, Clock, Car,
   ArrowRight, ArrowRightLeft, ChevronDown, Check,
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { UK_LOCATION_GROUPS } from '@/app/lib/uk-locations'
 import { ALL_VEHICLE_OPTIONS } from './VehicleList'
+import PlacesAutocompleteField from './PlacesAutocompleteField'
 
 // ── Shared style tokens ───────────────────────────────────────────────────────
 
@@ -76,120 +76,6 @@ function SimpleSelect({
   )
 }
 
-// ── LocationSelect (searchable combobox) ─────────────────────────────────────
-
-function LocationSelect({ id, ariaLabel, value, onChange, placeholder }: {
-  id: string; ariaLabel: string; value: string; onChange: (v: string) => void; placeholder: string
-}) {
-  const [open, setOpen]       = useState(false)
-  const [search, setSearch]   = useState('')
-  const containerRef          = useRef<HTMLDivElement>(null)
-  const searchRef             = useRef<HTMLInputElement>(null)
-
-  const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase()
-    if (!q) return UK_LOCATION_GROUPS
-    return UK_LOCATION_GROUPS
-      .map(group => ({
-        ...group,
-        locations: group.locations.filter(loc => loc.toLowerCase().includes(q)),
-      }))
-      .filter(group => group.locations.length > 0)
-  }, [search])
-
-  useEffect(() => { if (open) searchRef.current?.focus() }, [open])
-
-  useEffect(() => {
-    if (!open) return
-    const handler = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setOpen(false); setSearch('')
-      }
-    }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [open])
-
-  const handleSelect = (loc: string) => { onChange(loc); setOpen(false); setSearch('') }
-
-  return (
-    <div ref={containerRef} className="relative w-full">
-      <div className="relative">
-        <MapPin size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35 pointer-events-none z-10" aria-hidden />
-        <button
-          type="button"
-          id={id}
-          role="combobox"
-          aria-label={ariaLabel}
-          aria-expanded={open}
-          aria-haspopup="listbox"
-          onClick={() => setOpen(o => !o)}
-          className={`${base} pl-8 pr-8 flex items-center text-left focus:outline-none focus:border-[#EBBA6F] ${value ? 'text-white' : 'text-white/30'}`}
-        >
-          <span className="truncate" style={{ fontFamily: 'var(--font-body)' }}>
-            {value || placeholder}
-          </span>
-        </button>
-        <ChevronDown
-          size={13}
-          className={`absolute right-3 top-1/2 -translate-y-1/2 text-white/35 pointer-events-none transition-transform duration-150 ${open ? 'rotate-180' : ''}`}
-          aria-hidden
-        />
-      </div>
-
-      {open && (
-        <div className="absolute top-full left-0 right-0 mt-1 z-50 rounded-md border border-white/10 bg-[#0D1221] shadow-2xl overflow-hidden">
-          <div className="p-2 border-b border-white/[0.08]">
-            <input
-              ref={searchRef}
-              type="text"
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              onKeyDown={e => { if (e.key === 'Escape') { setOpen(false); setSearch('') } }}
-              placeholder="Search locations…"
-              className="w-full h-8 px-3 rounded bg-[#0C0F1C] border border-white/10 text-white text-[13px] placeholder:text-white/25 focus:outline-none focus:border-[#EBBA6F] transition-colors duration-150"
-              style={{ fontFamily: 'var(--font-ui)' }}
-            />
-          </div>
-          <div role="listbox" aria-label={ariaLabel} className="h-[260px] overflow-y-auto">
-            {filtered.map(group => (
-              <div key={group.label}>
-                <div
-                  className="px-3 py-1.5 text-[10px] font-semibold text-white/25 uppercase tracking-[0.08em] sticky top-0 bg-[#0D1221]"
-                  style={{ fontFamily: 'var(--font-ui)' }}
-                  aria-hidden
-                >
-                  {group.label}
-                </div>
-                {group.locations.map(loc => (
-                  <div
-                    key={loc}
-                    role="option"
-                    aria-selected={loc === value}
-                    onClick={() => handleSelect(loc)}
-                    className={`px-3 py-2 text-[13px] cursor-pointer transition-colors duration-100 ${
-                      loc === value
-                        ? 'text-[#EBBA6F] bg-[#EBBA6F]/[0.08]'
-                        : 'text-white/65 hover:text-white hover:bg-white/5'
-                    }`}
-                    style={{ fontFamily: 'var(--font-body)' }}
-                  >
-                    {loc}
-                  </div>
-                ))}
-              </div>
-            ))}
-            {filtered.length === 0 && (
-              <div className="px-3 py-8 text-center text-white/30 text-[13px]" style={{ fontFamily: 'var(--font-body)' }}>
-                No locations found
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
@@ -319,13 +205,13 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
           {/* Pickup */}
           <div>
             <label htmlFor="vbf-pickup"><FieldLabel>Pickup location</FieldLabel></label>
-            <LocationSelect id="vbf-pickup" ariaLabel="Pickup location" value={pickup} onChange={setPickup} placeholder="Select pickup location" />
+            <PlacesAutocompleteField id="vbf-pickup" ariaLabel="Pickup location" value={pickup} onChange={setPickup} placeholder="Select pickup location" />
           </div>
 
           {/* Destination */}
           <div>
             <label htmlFor="vbf-dest"><FieldLabel>Destination</FieldLabel></label>
-            <LocationSelect id="vbf-dest" ariaLabel="Destination" value={destination} onChange={setDestination} placeholder="Select destination" />
+            <PlacesAutocompleteField id="vbf-dest" ariaLabel="Destination" value={destination} onChange={setDestination} placeholder="Select destination" />
           </div>
 
           {/* Passengers */}
