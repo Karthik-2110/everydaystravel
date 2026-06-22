@@ -10,6 +10,8 @@ export function loadGoogleMaps(): Promise<void> {
     v: 'weekly',
   })
 
-  loaderPromise = importLibrary('places').then(() => undefined)
+  loaderPromise = importLibrary('places')
+    .then(() => undefined)
+    .catch((e: unknown) => { loaderPromise = null; throw e })
   return loaderPromise
 }

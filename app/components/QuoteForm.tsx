@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import {
-  MapPin, Users, Clock,
+  Users, Clock,
   ArrowRight, ArrowRightLeft, ChevronDown,
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
