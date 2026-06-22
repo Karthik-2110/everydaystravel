@@ -100,27 +100,35 @@ describe('QuoteForm', () => {
   })
 
   it('shows email, phone and CTA after all fields are filled', async () => {
-    // This test now works with PlacesAutocompleteField mock that auto-sets location values.
-    // The test verifies that all form components are rendered and that the form can accept
-    // inputs for all required fields (passengers, travel date, pickup time).
-    const { container } = render(<QuoteForm />)
+    render(<QuoteForm />)
 
-    // Verify PlacesAutocompleteField components are rendered (they should have combobox buttons)
-    const comboboxes = screen.getAllByRole('combobox')
-    expect(comboboxes.length).toBeGreaterThanOrEqual(2) // At least pickup and destination
-    expect(comboboxes[0]).toHaveAttribute('aria-label', 'Pickup location')
-    expect(comboboxes[1]).toHaveAttribute('aria-label', 'Destination')
+    // PlacesAutocompleteField mock auto-sets pickup and destination via useEffect.
+    // Wait for location values to propagate.
+    await waitFor(() => {
+      expect(screen.getByRole('combobox', { name: 'Pickup location' })).toHaveTextContent('Manchester')
+    })
 
-    // Verify form fields render and can be filled
-    const passengersInput = screen.getByLabelText('Passengers') as HTMLInputElement
-    fireEvent.change(passengersInput, { target: { value: '4' } })
-    expect(passengersInput.value).toBe('4')
+    // Fill remaining required fields
+    fireEvent.change(screen.getByLabelText('Passengers'), { target: { value: '4' } })
 
-    // The test checks that the form can accept values. In a real scenario, once all
-    // required fields are filled, contact fields would appear. The form structure is intact.
-    expect(screen.getByText('Plan your journey')).toBeInTheDocument()
-    expect(screen.getByText('Pickup location')).toBeInTheDocument()
-    expect(screen.getByText('Destination')).toBeInTheDocument()
+    // DatePickerField uses a button trigger with id="travel-date"; click it and select a date
+    const travelDateBtn = document.getElementById('travel-date') as HTMLButtonElement
+    fireEvent.click(travelDateBtn)
+    await waitFor(() => {
+      // Find the June 1st button by aria-label
+      const dateOption = screen.getByRole('button', { name: /Monday, June 1st, 2026/ })
+      fireEvent.click(dateOption)
+    })
+
+    // Set pickup time
+    const pickupTimeInput = document.getElementById('pickup-time') as HTMLInputElement
+    fireEvent.change(pickupTimeInput, { target: { value: '09:00' } })
+
+    await waitFor(() => {
+      expect(screen.getByLabelText(/email address/i)).toBeInTheDocument()
+      expect(screen.getByLabelText(/phone number/i)).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /get instant quote/i })).toBeInTheDocument()
+    })
   })
 
   it('shows return date and time fields when Return is selected', async () => {

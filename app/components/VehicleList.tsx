@@ -249,7 +249,7 @@ function VehicleCard({ vehicle, category }: { vehicle: Vehicle; category?: strin
               </Link>
             )}
             <a
-              href="https://wa.me/4402089418334"
+              href="https://wa.me/4402089418354"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-6 py-3 border border-white/20 text-white/80 text-[14px] font-medium rounded-full hover:border-[#EBBA6F]/50 hover:text-[#EBBA6F] transition-all duration-150"

@@ -37,11 +37,11 @@ export default function ComingSoon({ label }: { label: string }) {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <a
-              href="tel:02089418334"
+              href="tel:02089418354"
               className="h-11 px-7 flex items-center justify-center bg-[#EBBA6F] text-[#0C0F1C] text-[13.5px] font-semibold rounded-full hover:bg-[#E2B36A] transition-colors duration-150"
               style={{ fontFamily: 'var(--font-ui)' }}
             >
-              020 8941 8334
+              020 8941 8354
             </a>
             <Link
               href="/"

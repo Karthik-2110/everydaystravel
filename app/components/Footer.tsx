@@ -29,7 +29,7 @@ interface ContactItem {
 }
 
 const CONTACT_ITEMS: ContactItem[] = [
-  { icon: Phone,  primary: '020 8941 8334',              href: 'tel:02089418334' },
+  { icon: Phone,  primary: '020 8941 8354',              href: 'tel:02089418354' },
   { icon: Mail,   primary: 'info@everydaystravel.co.uk', href: 'mailto:info@everydaystravel.co.uk' },
   { icon: MapPin, primary: 'London-based',               secondary: 'UK & European travel' },
   { icon: Clock,  primary: 'Mon – Fri: 7:00 AM – 7:00 PM', secondary: 'Sat & Sun: 8:00 AM – 4:00 PM' },
@@ -134,7 +134,7 @@ export default function Footer() {
 
               <div className="flex flex-col sm:flex-row gap-3">
                 <a
-                  href="https://wa.me/4402089418334"
+                  href="https://wa.me/4402089418354"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2.5 px-7 py-3.5 bg-[#EBBA6F] text-[#0C0F1C] text-[14px] font-semibold rounded-full hover:bg-[#E2B36A] active:bg-[#D4A85E] transition-colors duration-150 shadow-[0_0_28px_rgba(235,186,111,0.25)]"
@@ -166,16 +166,16 @@ export default function Footer() {
 
               {/* Phone */}
               <a
-                href="tel:02089418334"
+                href="tel:02089418354"
                 className="flex items-center gap-3 group"
-                aria-label="Call 020 8941 8334"
+                aria-label="Call 020 8941 8354"
               >
                 <Phone size={16} className="text-[#EBBA6F] shrink-0" strokeWidth={1.5} aria-hidden />
                 <span
                   className="text-white group-hover:text-[#EBBA6F] transition-colors duration-150 tracking-[-0.01em]"
                   style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.8rem, 2.8vw, 2.5rem)', lineHeight: 1 }}
                 >
-                  020 8941 8334
+                  020 8941 8354
                 </span>
               </a>
 
