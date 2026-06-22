@@ -1,15 +1,15 @@
-import { Loader } from '@googlemaps/js-api-loader'
+import { setOptions, importLibrary } from '@googlemaps/js-api-loader'
 
 let loaderPromise: Promise<void> | null = null
 
 export function loadGoogleMaps(): Promise<void> {
   if (loaderPromise) return loaderPromise
 
-  const loader = new Loader({
-    apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? '',
-    version: 'weekly',
+  setOptions({
+    key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? '',
+    v: 'weekly',
   })
 
-  loaderPromise = loader.importLibrary('places').then(() => undefined)
+  loaderPromise = importLibrary('places').then(() => undefined)
   return loaderPromise
 }

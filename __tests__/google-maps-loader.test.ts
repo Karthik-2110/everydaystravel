@@ -1,10 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
-// Mock the loader package before importing our module
 vi.mock('@googlemaps/js-api-loader', () => ({
-  Loader: vi.fn().mockImplementation(function () {
-    return { importLibrary: vi.fn().mockResolvedValue(undefined) }
-  }),
+  setOptions: vi.fn(),
+  importLibrary: vi.fn().mockResolvedValue(undefined),
 }))
 
 describe('loadGoogleMaps', () => {
