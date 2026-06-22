@@ -2,12 +2,10 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, fireEvent, act } from '@testing-library/react'
 import PlacesAutocompleteField from '@/app/components/PlacesAutocompleteField'
 
-// Mock the loader so no real network calls happen
 vi.mock('@/app/lib/google-maps-loader', () => ({
   loadGoogleMaps: vi.fn().mockResolvedValue(undefined),
 }))
 
-// Stub window.google.maps.places before each test
 const mockGetPredictions = vi.fn()
 
 function setupGoogle() {
@@ -30,7 +28,6 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  // Ensure real timers are restored even if a test failed mid-flight
   vi.useRealTimers()
 })
 
@@ -41,127 +38,99 @@ function renderField(value = '', onChange = vi.fn()) {
       ariaLabel="Pickup location"
       value={value}
       onChange={onChange}
-      placeholder="Search locations…"
+      placeholder="Enter pickup location"
     />
   )
 }
 
 describe('PlacesAutocompleteField', () => {
-  it('renders the placeholder when no value is selected', () => {
+  it('renders an input with the placeholder when no value', () => {
     renderField()
-    expect(screen.getByRole('combobox', { name: /pickup location/i })).toBeInTheDocument()
-    expect(screen.getByText('Search locations…')).toBeInTheDocument()
+    const input = screen.getByRole('combobox', { name: /pickup location/i })
+    expect(input).toBeInTheDocument()
+    expect(input).toHaveAttribute('placeholder', 'Enter pickup location')
   })
 
-  it('renders the selected value when one is provided', () => {
+  it('renders the current value in the input', () => {
     renderField('London Heathrow Airport, London, UK')
-    expect(screen.getByText('London Heathrow Airport, London, UK')).toBeInTheDocument()
+    const input = screen.getByRole('combobox') as HTMLInputElement
+    expect(input.value).toBe('London Heathrow Airport, London, UK')
   })
 
-  it('opens the dropdown on trigger click', () => {
-    renderField()
-    fireEvent.click(screen.getByRole('combobox'))
-    expect(screen.getByPlaceholderText('Search locations…')).toBeVisible()
+  it('calls onChange with typed text on every keystroke (free text)', () => {
+    const onChange = vi.fn()
+    renderField('', onChange)
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'Manchester' } })
+    expect(onChange).toHaveBeenCalledWith('Manchester')
   })
 
-  it('shows predictions after typing', async () => {
+  it('shows predictions after typing (debounced 300 ms)', async () => {
     vi.useFakeTimers()
     mockGetPredictions.mockImplementation(
-      (
-        _req: unknown,
-        cb: (predictions: unknown[], status: string) => void,
-      ) => {
+      (_req: unknown, cb: (predictions: unknown[], status: string) => void) => {
         cb(
-          [
-            {
-              place_id: 'abc123',
-              description: 'Gatwick Airport, Horley, UK',
-              structured_formatting: { main_text: 'Gatwick Airport' },
-            },
-          ],
+          [{ place_id: 'abc', description: 'Gatwick Airport, Horley, UK', structured_formatting: { main_text: 'Gatwick Airport' } }],
           'OK',
         )
       },
     )
 
-    renderField()
-    fireEvent.click(screen.getByRole('combobox'))
-    fireEvent.change(screen.getByPlaceholderText('Search locations…'), {
-      target: { value: 'Gatwick' },
-    })
-
-    // Flush the 300ms debounce + any queued microtasks/state updates
-    await act(async () => {
-      await vi.runAllTimersAsync()
-    })
+    renderField('Gatwick')
+    await act(async () => { await vi.runAllTimersAsync() })
 
     expect(screen.getByText('Gatwick Airport')).toBeInTheDocument()
+    expect(screen.getByRole('listbox')).toBeInTheDocument()
   })
 
   it('calls onChange with the full description when a prediction is selected', async () => {
     vi.useFakeTimers()
     const onChange = vi.fn()
     mockGetPredictions.mockImplementation(
-      (
-        _req: unknown,
-        cb: (predictions: unknown[], status: string) => void,
-      ) => {
+      (_req: unknown, cb: (predictions: unknown[], status: string) => void) => {
         cb(
-          [
-            {
-              place_id: 'xyz',
-              description: 'Gatwick Airport, Horley, UK',
-              structured_formatting: { main_text: 'Gatwick Airport' },
-            },
-          ],
+          [{ place_id: 'xyz', description: 'Gatwick Airport, Horley, UK', structured_formatting: { main_text: 'Gatwick Airport' } }],
           'OK',
         )
       },
     )
 
-    renderField('', onChange)
-    fireEvent.click(screen.getByRole('combobox'))
-    fireEvent.change(screen.getByPlaceholderText('Search locations…'), {
-      target: { value: 'Gatwick' },
-    })
+    renderField('Gatwick', onChange)
+    await act(async () => { await vi.runAllTimersAsync() })
 
-    await act(async () => {
-      await vi.runAllTimersAsync()
-    })
-
-    fireEvent.click(screen.getByText('Gatwick Airport'))
+    fireEvent.mouseDown(screen.getByText('Gatwick Airport'))
     expect(onChange).toHaveBeenCalledWith('Gatwick Airport, Horley, UK')
   })
 
-  it('closes on Escape key', () => {
-    renderField()
-    fireEvent.click(screen.getByRole('combobox'))
-    expect(screen.getByPlaceholderText('Search locations…')).toBeVisible()
-    fireEvent.keyDown(screen.getByPlaceholderText('Search locations…'), { key: 'Escape' })
-    expect(screen.queryByPlaceholderText('Search locations…')).not.toBeInTheDocument()
-  })
-
-  it('shows empty state when query returns no results', async () => {
+  it('closes the dropdown on Escape key', async () => {
     vi.useFakeTimers()
     mockGetPredictions.mockImplementation(
-      (
-        _req: unknown,
-        cb: (predictions: unknown[], status: string) => void,
-      ) => {
+      (_req: unknown, cb: (predictions: unknown[], status: string) => void) => {
+        cb(
+          [{ place_id: 'abc', description: 'Gatwick Airport', structured_formatting: { main_text: 'Gatwick Airport' } }],
+          'OK',
+        )
+      },
+    )
+
+    renderField('Gatwick')
+    await act(async () => { await vi.runAllTimersAsync() })
+    expect(screen.getByRole('listbox')).toBeInTheDocument()
+
+    fireEvent.keyDown(screen.getByRole('combobox'), { key: 'Escape' })
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
+  })
+
+  it('shows no dropdown when the query returns no results', async () => {
+    vi.useFakeTimers()
+    mockGetPredictions.mockImplementation(
+      (_req: unknown, cb: (predictions: unknown[], status: string) => void) => {
         cb([], 'ZERO_RESULTS')
       },
     )
 
-    renderField()
-    fireEvent.click(screen.getByRole('combobox'))
-    fireEvent.change(screen.getByPlaceholderText('Search locations…'), {
-      target: { value: 'xyzzy' },
-    })
+    renderField('xyzzy')
+    await act(async () => { await vi.runAllTimersAsync() })
 
-    await act(async () => {
-      await vi.runAllTimersAsync()
-    })
-
-    expect(screen.getByText('No locations found')).toBeInTheDocument()
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
   })
 })
