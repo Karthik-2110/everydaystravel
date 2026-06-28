@@ -69,8 +69,8 @@ export default function DatePickerField({ id, value, onChange, minDate, classNam
             onSelect={(day) => {
               if (day) { onChange(format(day, 'yyyy-MM-dd')); setOpen(false) }
             }}
-            fromDate={minDay}
-            initialFocus
+            disabled={{ before: minDay }}
+            startMonth={minDay}
             classNames={{
               caption_label: 'text-white font-semibold text-[14px]',
               weekday:        'flex-1 text-white/40 text-[11px] font-normal text-center select-none',
