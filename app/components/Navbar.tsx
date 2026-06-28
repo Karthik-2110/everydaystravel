@@ -14,9 +14,10 @@ interface DropdownChild {
 }
 
 interface NavItem {
-  label:    string
-  href:     string
-  children?: DropdownChild[]
+  label:         string
+  href:          string
+  children?:     DropdownChild[]
+  viewAllLabel?: string
 }
 
 interface NavbarProps {
@@ -25,12 +26,24 @@ interface NavbarProps {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { label: 'Home',     href: '/' },
-  { label: 'About',   href: '/about' },
-  { label: 'Services', href: '/services' },
+  { label: 'Home',  href: '/' },
+  { label: 'About', href: '/about' },
   {
-    label: 'Our Fleet',
-    href:  '/fleet',
+    label:         'Services',
+    href:          '/services',
+    viewAllLabel:  'View all services',
+    children: [
+      { label: 'Airport Transfers',  href: '/services/airport-transfers', description: 'All major UK airports, on time' },
+      { label: 'Corporate Travel',   href: '/services/corporate',         description: 'Executive transport for business' },
+      { label: 'Weddings & Events',  href: '/services/weddings-events',   description: 'Seamless bridal & guest logistics' },
+      { label: 'Group Travel & Tours', href: '/services/group-travel',    description: 'UK & Europe tours for your group' },
+      { label: 'School Trips',       href: '/services/school-trips',      description: 'Safe, reliable educational travel' },
+    ],
+  },
+  {
+    label:        'Our Fleet',
+    href:         '/fleet',
+    viewAllLabel: 'View all fleet',
     children: [
       { label: 'Chauffeur Cars',    href: '/fleet/chauffeur-cars',    description: 'Executive & prestige vehicles' },
       { label: 'Luxury Minibuses',  href: '/fleet/luxury-minibuses',  description: '8 to 16 seat luxury transfers' },
@@ -144,7 +157,7 @@ export default function Navbar({
                             className="flex items-center justify-between px-4 py-3 border-b border-white/[0.07] text-[#EBBA6F] text-[12px] font-semibold tracking-[0.08em] uppercase hover:bg-white/[0.04] transition-colors duration-150"
                             style={{ fontFamily: 'var(--font-ui)' }}
                           >
-                            View all fleet
+                            {item.viewAllLabel ?? `View all ${item.label.toLowerCase()}`}
                             <ArrowRight size={13} aria-hidden />
                           </Link>
                         )}
