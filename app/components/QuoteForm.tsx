@@ -230,7 +230,7 @@ export default function QuoteForm() {
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EBBA6F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><polyline points="20 6 9 17 4 12" /></svg>
             </div>
             <p className="text-white text-[15px] font-medium" style={{ fontFamily: 'var(--font-body)' }}>Quote request sent!</p>
-            <p className="text-white/45 text-[13px]" style={{ fontFamily: 'var(--font-body)' }}>We'll be in touch shortly at <span className="text-white/70">{email}</span></p>
+            <p className="text-white/45 text-[13px]" style={{ fontFamily: 'var(--font-body)' }}>The Everyday Travels team will get in touch with you shortly.</p>
           </div>
         ) : (
         <form onSubmit={handleSubmit} noValidate>
