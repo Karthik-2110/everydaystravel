@@ -27,17 +27,20 @@ interface NavbarProps {
 
 const NAV_ITEMS: NavItem[] = [
   { label: 'Home',  href: '/' },
-  { label: 'About', href: '/about' },
   {
     label:         'Services',
     href:          '/services',
     viewAllLabel:  'View all services',
     children: [
-      { label: 'Airport Transfers',  href: '/services/airport-transfers', description: 'All major UK airports, on time' },
-      { label: 'Corporate Travel',   href: '/services/corporate',         description: 'Executive transport for business' },
-      { label: 'Weddings & Events',  href: '/services/weddings-events',   description: 'Seamless bridal & guest logistics' },
-      { label: 'Group Travel & Tours', href: '/services/group-travel',    description: 'UK & Europe tours for your group' },
-      { label: 'School Trips',       href: '/services/school-trips',      description: 'Safe, reliable educational travel' },
+      { label: 'Airport Transfers',  href: '/services/airport-transfers',   description: 'All major UK airports, on time' },
+      { label: 'Corporate Travel',   href: '/services/corporate',           description: 'Executive transport for business' },
+      { label: 'Private Hire',       href: '/services/private-hire',        description: 'Premium vehicles, your schedule' },
+      { label: 'Wedding & Events',   href: '/services/weddings-events',     description: 'Seamless bridal & guest logistics' },
+      { label: 'School Transport',   href: '/services/school-trips',        description: 'Safe, reliable educational travel' },
+      { label: 'Group Travel and Tours', href: '/services/group-travel',    description: 'UK & Europe tours for your group' },
+      { label: 'Sports Team Travel', href: '/services/sports-team-travel',  description: 'Match-day travel for clubs & teams' },
+      { label: 'Cruise Port Transfers', href: '/services/cruise-port-transfers', description: 'Door to dock, luggage and all' },
+      { label: 'Executive Travel',   href: '/services/executive-travel',    description: 'First-class travel for VIPs' },
     ],
   },
   {
@@ -46,22 +49,35 @@ const NAV_ITEMS: NavItem[] = [
     viewAllLabel: 'View all fleet',
     children: [
       { label: 'Chauffeur Cars',    href: '/fleet/chauffeur-cars',    description: 'Executive & prestige vehicles' },
+      { label: 'Lamborghini Huracán',  href: '/fleet/chauffeur-cars/lamborghini-huracan', description: 'Supercar for special occasions' },
+      { label: 'BMW X7',               href: '/fleet/chauffeur-cars/bmw-x7',              description: 'Flagship luxury SUV' },
+      { label: 'Mercedes E-Class',     href: '/fleet/chauffeur-cars/mercedes-e-class',    description: 'Refined executive saloon' },
+      { label: 'Mercedes S-Class',     href: '/fleet/chauffeur-cars/mercedes-s-class',    description: 'The ultimate luxury saloon' },
+      { label: 'Mercedes V-Class',     href: '/fleet/chauffeur-cars/mercedes-v-class',    description: 'Executive MPV for up to 6' },
       { label: 'Luxury Minibuses',  href: '/fleet/luxury-minibuses',  description: '8 to 16 seat luxury transfers' },
-      { label: 'Executive Coaches', href: '/fleet/executive-coaches', description: '33 to 53 seat premium coaches' },
+      { label: '16 Seater Sprinter',     href: '/fleet/luxury-minibuses/16-seater-minibus',      description: 'Flagship minibus for larger groups' },
+      { label: '16 Seater VIP Sprinter', href: '/fleet/luxury-minibuses/16-seater-vip-sprinter', description: 'First-class group travel' },
+      { label: 'Executive Coaches', href: '/fleet/executive-coaches', description: '33 to 55 seat premium coaches' },
+      { label: '35 Seater Turas Midi',        href: '/fleet/executive-coaches/35-seater-turas-midi',        description: 'Mid-size executive coach' },
+      { label: '49 Seater Mercedes Turismo',  href: '/fleet/executive-coaches/49-seater-mercedes-turismo',  description: 'Touring comfort for large groups' },
+      { label: '53 Seater Mercedes Turismo',  href: '/fleet/executive-coaches/53-seater-coach',             description: 'Our most popular coach' },
+      { label: '55 Seater Neoplan Tourliner', href: '/fleet/executive-coaches/55-seater-neoplan-tourliner', description: 'Our largest flagship coach' },
     ],
   },
   { label: 'Reviews', href: '/reviews' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'About us', href: '/about' },
   {
-    label:    'See More',
+    label:    'More',
     href:     '#',
     children: [
       { label: 'Gallery',   href: '/gallery',   description: 'Our vehicles and journeys' },
       { label: 'Our Team',  href: '/team',      description: 'Meet the people behind Everyday Travels' },
       { label: 'Vacancies', href: '/vacancies', description: 'Join our growing team' },
-      { label: 'Blog',      href: '/blog',      description: 'News, tips and travel guides' },
+      { label: 'Travel Inspirations', href: '/blog', description: 'News, tips and travel guides' },
+      { label: 'FAQs',      href: '/faqs',      description: 'Answers to common questions' },
     ],
   },
+  { label: 'Contact us', href: '/contact' },
 ]
 
 export default function Navbar({
@@ -161,20 +177,22 @@ export default function Navbar({
                             <ArrowRight size={13} aria-hidden />
                           </Link>
                         )}
-                        {item.children.map((child) => (
-                          <Link
-                            key={child.href}
-                            href={child.href}
-                            className="flex flex-col px-4 py-3 hover:bg-white/[0.04] transition-colors duration-150 group/item"
-                          >
-                            <span className="text-white text-[13.5px] font-medium group-hover/item:text-[#EBBA6F] transition-colors duration-150" style={{ fontFamily: 'var(--font-ui)' }}>
-                              {child.label}
-                            </span>
-                            <span className="text-white/35 text-[11.5px] mt-0.5" style={{ fontFamily: 'var(--font-body)' }}>
-                              {child.description}
-                            </span>
-                          </Link>
-                        ))}
+                        <div className="max-h-[378px] overflow-y-auto overscroll-contain">
+                          {item.children.map((child) => (
+                            <Link
+                              key={child.href}
+                              href={child.href}
+                              className="flex flex-col px-4 py-3 hover:bg-white/[0.04] transition-colors duration-150 group/item"
+                            >
+                              <span className="text-white text-[13.5px] font-medium group-hover/item:text-[#EBBA6F] transition-colors duration-150" style={{ fontFamily: 'var(--font-ui)' }}>
+                                {child.label}
+                              </span>
+                              <span className="text-white/35 text-[11.5px] mt-0.5" style={{ fontFamily: 'var(--font-body)' }}>
+                                {child.description}
+                              </span>
+                            </Link>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -244,7 +262,7 @@ export default function Navbar({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:hidden bg-[#0C0F1C]/98 backdrop-blur-xl border-t border-white/[0.07]"
+            className="lg:hidden bg-[#0C0F1C]/98 backdrop-blur-xl border-t border-white/[0.07] max-h-[calc(100dvh-72px)] overflow-y-auto overscroll-contain"
           >
             <nav
               className="max-w-[1440px] mx-auto px-5 sm:px-8 py-4 flex flex-col"
