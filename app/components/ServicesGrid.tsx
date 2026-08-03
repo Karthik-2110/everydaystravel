@@ -22,6 +22,12 @@ interface ServicesGridProps {
 
 const PLACEHOLDER = 'https://res.cloudinary.com/dckyndryf/image/upload/f_auto,q_auto,w_800,c_limit/IMG_0938_fhylhh'
 
+// Real service photos — first is used on the card; extras for future service pages
+export const AIRPORT_TRANSFER_IMAGES = [
+  'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_1200,c_limit/v1783787064/IMG_6170_fxbudt.jpg',
+  'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_1200,c_limit/v1783784630/20260211_134438550_iOS_okfp39.jpg',
+]
+
 export const DEFAULT_SERVICES: ServiceItem[] = [
   {
     name:        'Private Hire',
@@ -44,7 +50,7 @@ export const DEFAULT_SERVICES: ServiceItem[] = [
   {
     name:        'Airport Transfers',
     description: 'Reliable group airport travel to and from all major UK airports.',
-    image:       PLACEHOLDER,
+    image:       AIRPORT_TRANSFER_IMAGES[0],
     href:        '/services/airport-transfers',
   },
   {

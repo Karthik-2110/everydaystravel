@@ -1,4 +1,4 @@
-import ComingSoon from '../../components/ComingSoon'
+import ServiceDetail from '../../components/ServiceDetail'
 export default function SportsTeamTravelPage() {
-  return <ComingSoon label="Sports Team Travel" />
+  return <ServiceDetail slug="sports-team-travel" />
 }

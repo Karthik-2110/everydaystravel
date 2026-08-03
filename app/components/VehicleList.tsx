@@ -9,6 +9,7 @@ export interface Vehicle {
   name:        string
   badge:       string
   image:       string
+  images?:     string[]  // gallery photos — falls back to `image` when absent
   seats:       string
   luggage:     string
   description: string
@@ -26,6 +27,46 @@ interface VehicleListProps {
 // ── Placeholder ───────────────────────────────────────────────────────────────
 
 const PH = 'https://res.cloudinary.com/dckyndryf/image/upload/f_auto,q_auto,w_900,c_limit/IMG_0938_fhylhh'
+
+// ── Real vehicle photos ───────────────────────────────────────────────────────
+
+const cdn = (path: string) =>
+  `https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_1600,c_limit/${path}`
+
+const S_CLASS_IMAGES = [
+  cdn('v1783787266/837f9f74-eb75-4beb-9553-2424ced64ace_rhx7vy.jpg'),
+  cdn('v1783787261/6d2f6a06-f8a1-4dfd-a346-d2bdf3b6b048_ouhnoc.jpg'),
+  cdn('v1783787257/63c156f9-9bb3-4f2e-9167-24a4ad993660_dk6xmg.jpg'),
+  cdn('v1783787248/31a87e08-d69e-4473-b50c-94832025b0a7_cekc7t.jpg'),
+  cdn('v1783787240/19ed3b38-0619-41ed-8fe7-d098ba14b037_rbhzvy.jpg'),
+]
+
+const V_CLASS_IMAGES = [
+  cdn('v1783787244/2d6095da-5ce2-48b0-a84f-5453ad8d3db0_pmmmbz.jpg'),
+  cdn('v1783787235/18a2fa3f-a225-4225-b2ac-85490b7e2751_qly7qs.jpg'),
+  cdn('v1783785281/0fd86aa5-d02a-4357-aa60-b4b79cb2c2ba_oitvek.jpg'),
+]
+
+const TURAS_35_IMAGE = cdn('v1783787232/0712a7cf-b45c-45e5-86cf-71de3a21ab55_zrwpei.jpg')
+
+const COACH_49_IMAGES = [
+  cdn('v1783783940/IMG_3023.JPG_y0gruj.jpg'),
+  cdn('v1783783910/IMG_8052_aixyc2.jpg'),
+  cdn('v1783783909/IMG_8109_hqk5fk.jpg'),
+  cdn('v1783783904/IMG_8018_mthmcm.jpg'),
+]
+
+const COACH_53_IMAGES = [
+  cdn('v1783787451/IMG_0419_kkqxkq.jpg'),
+  cdn('v1783784005/C0348T01_qztkqo.jpg'),
+  cdn('v1783784004/C0345T01_e5jzje.jpg'),
+]
+
+const COACH_55_IMAGES = [
+  cdn('v1783787281/IMG_0469_akacrg.heic'),
+  cdn('v1783787275/IMG_0395_zjwz1c.heic'),
+  cdn('v1783787271/IMG_0338_zs5i46.jpg'),
+]
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
@@ -67,7 +108,8 @@ export const CHAUFFEUR_CARS: Vehicle[] = [
     slug:        'mercedes-s-class',
     name:        'Mercedes-Benz S-Class Executive',
     badge:       'Executive',
-    image:       PH,
+    image:       S_CLASS_IMAGES[0],
+    images:      S_CLASS_IMAGES,
     seats:       '1–2 Passengers',
     luggage:     '2 large + 2 medium cases',
     description: 'The ultimate luxury vehicle, offering prestige, comfort and refinement for airport transfers, corporate events and private travel.',
@@ -78,7 +120,8 @@ export const CHAUFFEUR_CARS: Vehicle[] = [
     slug:        'mercedes-v-class',
     name:        'Mercedes-Benz V-Class Executive',
     badge:       'Executive MPV',
-    image:       PH,
+    image:       V_CLASS_IMAGES[0],
+    images:      V_CLASS_IMAGES,
     seats:       '1–6 Passengers',
     luggage:     '6 large + 4 small cases',
     description: 'A spacious MPV ideal for small groups or families, with luxurious flexible seating and ample room for luggage and refined travel.',
@@ -150,7 +193,7 @@ export const EXECUTIVE_COACHES: Vehicle[] = [
     slug:        '35-seater-turas-midi',
     name:        '35-Seater Turas Midi',
     badge:       'Midi Coach',
-    image:       PH,
+    image:       TURAS_35_IMAGE,
     seats:       'Up to 35 Passengers',
     luggage:     'Large underfloor hold',
     description: 'The Turas Midi punches above its size — a nimble mid-size coach with full executive specification, perfect when a full-size coach is more than you need.',
@@ -161,7 +204,8 @@ export const EXECUTIVE_COACHES: Vehicle[] = [
     slug:        '49-seater-mercedes-turismo',
     name:        '49-Seater Mercedes Turismo',
     badge:       'Coach',
-    image:       PH,
+    image:       COACH_49_IMAGES[0],
+    images:      COACH_49_IMAGES,
     seats:       'Up to 49 Passengers',
     luggage:     'Large underfloor hold',
     description: 'The Mercedes Turismo sets the benchmark for touring comfort — smooth, quiet and superbly appointed for long-distance group travel across the UK and Europe.',
@@ -172,7 +216,8 @@ export const EXECUTIVE_COACHES: Vehicle[] = [
     slug:        '53-seater-coach',
     name:        '53-Seater Mercedes Turismo',
     badge:       'Coach',
-    image:       PH,
+    image:       COACH_53_IMAGES[0],
+    images:      COACH_53_IMAGES,
     seats:       'Up to 53 Passengers',
     luggage:     'Large underfloor hold',
     description: 'Our most popular coach, trusted by sports clubs, schools, and event organisers across the UK. Premium comfort for large groups on any route.',
@@ -183,7 +228,8 @@ export const EXECUTIVE_COACHES: Vehicle[] = [
     slug:        '55-seater-neoplan-tourliner',
     name:        '55-Seater Neoplan Tourliner',
     badge:       'Coach',
-    image:       PH,
+    image:       COACH_55_IMAGES[0],
+    images:      COACH_55_IMAGES,
     seats:       'Up to 55 Passengers',
     luggage:     'Large underfloor hold',
     description: 'Our largest coach — the flagship Neoplan Tourliner carries up to 55 passengers in premium comfort, ideal for major events, tours and cruise transfers.',

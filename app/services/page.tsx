@@ -16,6 +16,7 @@ export default function ServicesPage() {
           { text: 'Every Journey', accent: true  },
         ]}
         subtext="From airport transfers to weddings and school trips — we have the right vehicle and the right team for every occasion."
+        imageSrc="https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_2400,c_limit/v1783784630/20260211_134438550_iOS_okfp39.jpg"
       />
       <ServicesGrid />
       <Testimonials />

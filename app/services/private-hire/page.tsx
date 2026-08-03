@@ -1,4 +1,4 @@
-import ComingSoon from '../../components/ComingSoon'
+import ServiceDetail from '../../components/ServiceDetail'
 export default function PrivateHirePage() {
-  return <ComingSoon label="Private Hire" />
+  return <ServiceDetail slug="private-hire" />
 }

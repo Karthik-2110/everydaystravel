@@ -8,7 +8,7 @@ import {
   Briefcase, GlassWater, MonitorPlay, Speaker,
   Accessibility, ShieldCheck, UserCheck, Star,
   Plane, Heart, Car, CalendarDays, Users, GraduationCap,
-  Trophy, Globe, Compass, Building2,
+  Trophy, Globe, Compass, Building2, Clock, Ship,
 } from 'lucide-react'
 import Navbar from './Navbar'
 import Footer from './Footer'
@@ -22,6 +22,14 @@ const STARS_IMG = 'https://res.cloudinary.com/dckyndryf/image/upload/v1780237231
 
 function featureIcon(text: string): LucideIcon {
   const f = text.toLowerCase()
+  // Service-specific keywords — checked first so they win over generic matches
+  if (f.includes('flight') || f.includes('airport') || f.includes('cruise') || f.includes('port')) return Plane
+  if (f.includes('meet & greet') || f.includes('greet') || f.includes('coordinator'))  return UserCheck
+  if (f.includes('seatbelt') || f.includes('dbs') || f.includes('risk') || f.includes('safe')) return ShieldCheck
+  if (f.includes('24/7') || f.includes('punctual') || f.includes('on time') || f.includes('schedul') || f.includes('waiting')) return Clock
+  if (f.includes('ribbon') || f.includes('decorat') || f.includes('red carpet') || f.includes('bridal')) return Heart
+  if (f.includes('itinerar') || f.includes('route') || f.includes('door-to-door') || f.includes('europe')) return Compass
+  if (f.includes('kit') || f.includes('equipment'))                                    return Briefcase
   if (f.includes('leather') || f.includes('seat') || f.includes('reclining')) return Armchair
   if (f.includes('privacy glass') || f.includes('tinted'))                     return EyeOff
   if (f.includes('climate') || f.includes('air con') || f.includes('temperature')) return Wind
@@ -54,7 +62,9 @@ function idealForIcon(tag: string): LucideIcon {
   if (t.includes('event') || t.includes('concert'))     return CalendarDays
   if (t.includes('family'))                              return Users
   if (t.includes('school') || t.includes('education'))  return GraduationCap
-  if (t.includes('sport') || t.includes('team') || t.includes('fixture')) return Trophy
+  if (t.includes('sport') || t.includes('team') || t.includes('fixture') || t.includes('tournament')) return Trophy
+  if (t.includes('cruise'))                              return Ship
+  if (t.includes('occasion') || t.includes('prom'))     return Star
   if (t.includes('tour') || t.includes('europe'))       return Globe
   if (t.includes('away') || t.includes('day'))          return Compass
   if (t.includes('group'))                              return Users
@@ -63,10 +73,10 @@ function idealForIcon(tag: string): LucideIcon {
 
 // ── Explore card (ServicesGrid style — square, full-bleed) ────────────────────
 
-function ExploreCard({ vehicle, category }: { vehicle: Vehicle; category: string }) {
+function ExploreCard({ vehicle, href, cta }: { vehicle: Vehicle; href: string; cta: string }) {
   return (
     <Link
-      href={`/fleet/${category}/${vehicle.slug}`}
+      href={href}
       className="group relative block w-full overflow-hidden rounded-2xl border border-white/[0.07] hover:border-[#EBBA6F]/35 transition-all duration-300 hover:shadow-[0_0_0_1px_rgba(235,186,111,0.12),0_16px_48px_rgba(0,0,0,0.5)]"
       style={{ aspectRatio: '1 / 1' }}
     >
@@ -105,7 +115,7 @@ function ExploreCard({ vehicle, category }: { vehicle: Vehicle; category: string
         </p>
         <div className="flex items-center gap-1.5 pt-0.5">
           <span className="text-[#EBBA6F] text-[12px] font-medium" style={{ fontFamily: 'var(--font-ui)' }}>
-            View vehicle
+            {cta}
           </span>
           <ArrowUpRight
             size={12}
@@ -126,14 +136,23 @@ interface VehicleDetailProps {
   categoryLabel: string
   otherVehicles: Vehicle[]
   popular?:      boolean
+  hrefBase?:         string   // base path for breadcrumb & explore links
+  exploreHeading?:   string
+  cardCta?:          string
+  preselectVehicle?: boolean  // false for pages (e.g. services) not tied to one vehicle
 }
 
 export default function VehicleDetail({
   vehicle, category, categoryLabel, otherVehicles, popular = true,
+  hrefBase, exploreHeading = 'Explore other vehicles', cardCta = 'View vehicle',
+  preselectVehicle = true,
 }: VehicleDetailProps) {
+  const base = hrefBase ?? `/fleet/${category}`
 
-  // 4 thumbnail slots — swap for real images when available
-  const galleryImages = [vehicle.image, vehicle.image, vehicle.image, vehicle.image]
+  // Real gallery photos when available, otherwise 4 placeholder slots
+  const galleryImages = vehicle.images?.length
+    ? vehicle.images
+    : [vehicle.image, vehicle.image, vehicle.image, vehicle.image]
 
   return (
     <div className="min-h-screen bg-[#0C0F1C]">
@@ -144,7 +163,7 @@ export default function VehicleDetail({
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 mb-6">
           <Link
-            href={`/fleet/${category}`}
+            href={base}
             className="flex items-center gap-1.5 text-white/40 text-[12.5px] hover:text-white/70 transition-colors duration-150"
             style={{ fontFamily: 'var(--font-ui)' }}
           >
@@ -271,7 +290,7 @@ export default function VehicleDetail({
 
           {/* ── Right: sticky booking form ── */}
           <div className="lg:sticky lg:top-24 lg:self-start pb-10">
-            <VehicleBookingForm defaultVehicleSlug={vehicle.slug} />
+            <VehicleBookingForm defaultVehicleSlug={preselectVehicle ? vehicle.slug : undefined} />
           </div>
 
         </div>
@@ -288,10 +307,10 @@ export default function VehicleDetail({
                 className="text-white leading-[0.93] tracking-[-0.02em] mb-3"
                 style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}
               >
-                Explore other vehicles
+                {exploreHeading}
               </h2>
               <Link
-                href={`/fleet/${category}`}
+                href={base}
                 className="text-[#EBBA6F]/60 text-[13px] hover:text-[#EBBA6F] transition-colors duration-150 mt-2"
                 style={{ fontFamily: 'var(--font-ui)' }}
               >
@@ -308,7 +327,7 @@ export default function VehicleDetail({
                   : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
             }`}>
               {otherVehicles.map((v) => (
-                <ExploreCard key={v.slug} vehicle={v} category={category} />
+                <ExploreCard key={v.slug} vehicle={v} href={`${base}/${v.slug}`} cta={cardCta} />
               ))}
             </div>
 

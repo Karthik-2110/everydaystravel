@@ -1,4 +1,4 @@
-import ComingSoon from '../../components/ComingSoon'
+import ServiceDetail from '../../components/ServiceDetail'
 export default function WeddingsEventsPage() {
-  return <ComingSoon label="Weddings & Events" />
+  return <ServiceDetail slug="weddings-events" />
 }

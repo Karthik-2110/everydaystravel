@@ -167,32 +167,30 @@ export default function Navbar({
                     {/* Dropdown panel */}
                     <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto translate-y-1 group-hover:translate-y-0 transition-all duration-200 z-50">
                       <div className="bg-[#0D1221] border border-white/[0.09] rounded-xl shadow-[0_16px_48px_rgba(0,0,0,0.5)] overflow-hidden min-w-[220px]">
-                        {!isDropdownOnly && (
+                        {item.children.slice(0, 5).map((child) => (
+                          <Link
+                            key={child.href}
+                            href={child.href}
+                            className="flex flex-col px-4 py-3 hover:bg-white/[0.04] transition-colors duration-150 group/item"
+                          >
+                            <span className="text-white text-[13.5px] font-medium group-hover/item:text-[#EBBA6F] transition-colors duration-150" style={{ fontFamily: 'var(--font-ui)' }}>
+                              {child.label}
+                            </span>
+                            <span className="text-white/35 text-[11.5px] mt-0.5" style={{ fontFamily: 'var(--font-body)' }}>
+                              {child.description}
+                            </span>
+                          </Link>
+                        ))}
+                        {!isDropdownOnly && item.children.length > 5 && (
                           <Link
                             href={item.href}
-                            className="flex items-center justify-between px-4 py-3 border-b border-white/[0.07] text-[#EBBA6F] text-[12px] font-semibold tracking-[0.08em] uppercase hover:bg-white/[0.04] transition-colors duration-150"
+                            className="flex items-center justify-between px-4 py-3 border-t border-white/[0.07] text-[#EBBA6F] text-[12px] font-semibold tracking-[0.08em] uppercase hover:bg-white/[0.04] transition-colors duration-150"
                             style={{ fontFamily: 'var(--font-ui)' }}
                           >
                             {item.viewAllLabel ?? `View all ${item.label.toLowerCase()}`}
                             <ArrowRight size={13} aria-hidden />
                           </Link>
                         )}
-                        <div className="max-h-[378px] overflow-y-auto overscroll-contain">
-                          {item.children.map((child) => (
-                            <Link
-                              key={child.href}
-                              href={child.href}
-                              className="flex flex-col px-4 py-3 hover:bg-white/[0.04] transition-colors duration-150 group/item"
-                            >
-                              <span className="text-white text-[13.5px] font-medium group-hover/item:text-[#EBBA6F] transition-colors duration-150" style={{ fontFamily: 'var(--font-ui)' }}>
-                                {child.label}
-                              </span>
-                              <span className="text-white/35 text-[11.5px] mt-0.5" style={{ fontFamily: 'var(--font-body)' }}>
-                                {child.description}
-                              </span>
-                            </Link>
-                          ))}
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -322,7 +320,7 @@ export default function Navbar({
                             className="overflow-hidden"
                           >
                             <div className="ml-4 pl-4 border-l border-white/[0.07] flex flex-col pb-2">
-                              {item.children.map((child) => (
+                              {item.children.slice(0, 5).map((child) => (
                                 <Link
                                   key={child.href}
                                   href={child.href}
@@ -336,6 +334,17 @@ export default function Navbar({
                                   </span>
                                 </Link>
                               ))}
+                              {!isDropdownOnly && item.children.length > 5 && (
+                                <Link
+                                  href={item.href}
+                                  className="flex items-center gap-2 py-2.5 text-[#EBBA6F] text-[13px] font-semibold tracking-[0.06em] uppercase hover:text-[#DDA85E] transition-colors duration-150"
+                                  style={{ fontFamily: 'var(--font-ui)' }}
+                                  onClick={() => setMobileOpen(false)}
+                                >
+                                  {item.viewAllLabel ?? `View all ${item.label.toLowerCase()}`}
+                                  <ArrowRight size={13} aria-hidden />
+                                </Link>
+                              )}
                             </div>
                           </motion.div>
                         )}

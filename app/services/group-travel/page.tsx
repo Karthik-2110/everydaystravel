@@ -1,4 +1,4 @@
-import ComingSoon from '../../components/ComingSoon'
+import ServiceDetail from '../../components/ServiceDetail'
 export default function GroupTravelPage() {
-  return <ComingSoon label="Group Travel" />
+  return <ServiceDetail slug="group-travel" />
 }

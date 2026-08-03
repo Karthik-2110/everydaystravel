@@ -23,6 +23,7 @@ export default function LuxuryMinibusesPage() {
           { text: 'Hire',      accent: true  },
         ]}
         subtext="Comfort and style for groups up to 16 passengers. Perfect for events, transfers, and group travel across the UK."
+        imageSrc="https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_2400,c_limit/v1783785511/IMG_6138_n9khty.jpg"
       />
       <StatBand stats={STATS} />
       <VehicleList

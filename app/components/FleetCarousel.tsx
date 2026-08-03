@@ -9,7 +9,7 @@ const FLEET = [
     name: '53 Seater Executive Coach',
     slug: 'executive-coach',
     features: ['Reclining seats', 'USB charging', 'Onboard WiFi'],
-    image: '/images/hero.JPG',
+    image: 'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_1200,c_limit/v1783787451/IMG_0419_kkqxkq.jpg',
     tag: 'Most popular',
   },
   {

@@ -38,6 +38,7 @@ export default function FleetPage() {
           { text: 'Every Occasion',  accent: true  },
         ]}
         subtext="From executive chauffeur cars to luxury minibuses and premium coaches — every vehicle in our fleet is maintained to the highest standard."
+        imageSrc="https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_2400,c_limit/v1783783988/DSC09031_yjmhzx.jpg"
       />
       <ServicesGrid
         services={FLEET}

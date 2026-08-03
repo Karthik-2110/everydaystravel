@@ -3,7 +3,6 @@
 import { useRef, useEffect } from 'react'
 import { motion } from 'motion/react'
 import Image from 'next/image'
-import { cdnUrl } from '@/app/lib/cloudinary'
 import QuoteForm from './QuoteForm'
 import TrustBar from './TrustBar'
 
@@ -41,7 +40,11 @@ export interface HeroProps {
   lines?:    HeroLine[]
   subtext?:  string
   videoSrc?: string
+  imageSrc?: string
 }
+
+const DEFAULT_HERO_IMAGE =
+  'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_2400,c_limit/v1783784686/DSC09063_xjmaio.jpg'
 
 const DEFAULT_LINES: HeroLine[] = [
   { text: 'Luxury Coach &', accent: false },
@@ -56,6 +59,7 @@ export default function Hero({
   lines    = DEFAULT_LINES,
   subtext  = 'Reliable, professional transport for airport transfers, events and group travel.',
   videoSrc,
+  imageSrc = DEFAULT_HERO_IMAGE,
 }: HeroProps = {}) {
   const videoRef = useRef<HTMLVideoElement>(null)
 
@@ -87,8 +91,8 @@ export default function Hero({
         </video>
       ) : (
         <Image
-          src={cdnUrl('IMG_0938_fhylhh', 2400)}
-          alt="Everyday Travels coach on a scenic road with mountains in the background"
+          src={imageSrc}
+          alt="Everyday Travels fleet of luxury coaches"
           fill
           priority
           unoptimized
