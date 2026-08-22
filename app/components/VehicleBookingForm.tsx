@@ -44,7 +44,7 @@ const today = new Date().toISOString().split('T')[0]
 function FieldLabel({ children }: { children: React.ReactNode }) {
   return (
     <span
-      className="block text-white/45 text-[11px] mb-1.5 tracking-[0.02em]"
+      className="block text-white text-[11px] mb-1.5 tracking-[0.02em]"
       style={{ fontFamily: 'var(--font-ui)' }}
     >
       {children}

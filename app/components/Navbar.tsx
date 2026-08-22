@@ -82,7 +82,7 @@ const NAV_ITEMS: NavItem[] = [
 
 export default function Navbar({
   ctaText = 'Book your journey',
-  ctaHref = '#quote',
+  ctaHref = '/book',
 }: NavbarProps) {
   const [mobileOpen, setMobileOpen]         = useState(false)
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null)
