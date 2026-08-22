@@ -1,6 +1,8 @@
 import Image from 'next/image'
 import { cdnUrl } from '@/app/lib/cloudinary'
-import { Phone, Mail, Clock, MapPin, MessageCircle, ArrowRight, ArrowUpRight } from 'lucide-react'
+import { Phone, Mail, Clock, MapPin, ArrowRight, ArrowUpRight } from 'lucide-react'
+import { WhatsAppIcon, InstagramIcon, FacebookIcon, LinkedInIcon, WHATSAPP_HREF } from './icons/social'
+import { ADDRESS } from './contact/contact-details'
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 
@@ -31,47 +33,15 @@ interface ContactItem {
 const CONTACT_ITEMS: ContactItem[] = [
   { icon: Phone,  primary: '020 8941 8354',              href: 'tel:02089418354' },
   { icon: Mail,   primary: 'info@everydaystravel.co.uk', href: 'mailto:info@everydaystravel.co.uk' },
-  { icon: MapPin, primary: 'London-based',               secondary: 'UK & European travel' },
+  { icon: MapPin, primary: ADDRESS,                      secondary: 'UK & European travel' },
   { icon: Clock,  primary: 'Mon – Fri: 7:00 AM – 7:00 PM', secondary: 'Sat & Sun: 8:00 AM – 4:00 PM' },
 ]
 
 const SOCIAL_LINKS = [
-  {
-    label: 'Instagram',
-    href: '#',
-    svg: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-        <circle cx="12" cy="12" r="4" />
-        <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none" />
-      </svg>
-    ),
-  },
-  {
-    label: 'Facebook',
-    href: '#',
-    svg: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-      </svg>
-    ),
-  },
-  {
-    label: 'WhatsApp',
-    href: '#',
-    svg: <MessageCircle size={13} aria-hidden />,
-  },
-  {
-    label: 'LinkedIn',
-    href: '#',
-    svg: (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-        <rect x="2" y="9" width="4" height="12" />
-        <circle cx="4" cy="4" r="2" />
-      </svg>
-    ),
-  },
+  { label: 'Instagram', href: '#',            svg: <InstagramIcon size={14} /> },
+  { label: 'Facebook',  href: '#',            svg: <FacebookIcon  size={14} /> },
+  { label: 'WhatsApp',  href: WHATSAPP_HREF,  svg: <WhatsAppIcon  size={14} /> },
+  { label: 'LinkedIn',  href: '#',            svg: <LinkedInIcon  size={14} /> },
 ]
 
 // ── Sub-components ────────────────────────────────────────────────────────────
@@ -134,13 +104,13 @@ export default function Footer() {
 
               <div className="flex flex-col sm:flex-row gap-3">
                 <a
-                  href="https://wa.me/4402089418354"
+                  href={WHATSAPP_HREF}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2.5 px-7 py-3.5 bg-[#EBBA6F] text-[#0C0F1C] text-[14px] font-semibold rounded-full hover:bg-[#E2B36A] active:bg-[#D4A85E] transition-colors duration-150 shadow-[0_0_28px_rgba(235,186,111,0.25)]"
                   style={{ fontFamily: 'var(--font-ui)' }}
                 >
-                  <MessageCircle size={15} strokeWidth={2} aria-hidden />
+                  <WhatsAppIcon size={15} />
                   Chat on WhatsApp
                 </a>
                 <a

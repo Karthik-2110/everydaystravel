@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Check, MessageCircle, ArrowRight, Users, Briefcase } from 'lucide-react'
+import { Check, ArrowRight, Users, Briefcase } from 'lucide-react'
+import { WhatsAppIcon, WHATSAPP_HREF } from './icons/social'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -361,13 +362,13 @@ function VehicleCard({ vehicle, category }: { vehicle: Vehicle; category?: strin
               </Link>
             )}
             <a
-              href="https://wa.me/4402089418354"
+              href={WHATSAPP_HREF}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-6 py-3 border border-white/20 text-white/80 text-[14px] font-medium rounded-full hover:border-[#EBBA6F]/50 hover:text-[#EBBA6F] transition-all duration-150"
               style={{ fontFamily: 'var(--font-ui)' }}
             >
-              <MessageCircle size={13} strokeWidth={1.5} aria-hidden />
+              <WhatsAppIcon size={13} />
               WhatsApp Us
             </a>
           </div>
