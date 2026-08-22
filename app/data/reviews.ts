@@ -5,8 +5,9 @@
 // Trustpilot: https://www.trustpilot.com/review/everydaystravel.co.uk
 // Last synced: 22 Aug 2026 — TrustScore 4.4 from 11 reviews, 100% five-star.
 //
-// Two of the older reviews (Laura, Hoang Xu) name "Trivo Travel", the company's
-// former trading name. They are kept as written because they are real.
+// Two reviews from 2018 that name "Trivo Travel", the company's former trading
+// name, are deliberately not listed here. `count` stays at the platform's real
+// total, which still includes them.
 
 export type ReviewSource = 'google' | 'trustpilot'
 
@@ -73,16 +74,6 @@ const TRUSTPILOT_REVIEWS: RawReview[] = [
     name: 'Nicola', reviews: 35, date: 'May 18, 2022',
     title: 'Great company for vehicle hire',
     text: 'Great service received by this company booked for a corporate event. Not only was the booking process smooth as well as payment but they were very patient with all the changes that had to be made. On the actual day of the booking, we had a few issues with traffic and my group running late and these were all handled extremely professionally and everyone was happy. Would definitely recommend.',
-  },
-  {
-    name: 'Laura', reviews: 2, date: 'Jun 27, 2018',
-    title: 'Trivo Travel coach hire',
-    text: "Every aspect of Trivo Travel's experience was fantastic. Anyone who is looking for a coach or mini bus hire I would highly recommend them, from the fast, efficient service getting us all booked in, to the modern, clean coach and finally the driver who made my cousins wedding a day to remember. Will definitely be using them again in the future.",
-  },
-  {
-    name: 'Hoang Xu', reviews: 1, date: 'Apr 6, 2018',
-    title: 'Professional and affordable!',
-    text: "More than met my expectations! Clean modern vehicles with a friendly driver and a professional support team. Couldn't ask for more for my wedding to be very honest. Would recommend trivo travel for all your transport needs. They supplied us a 42 seater mercedes and we loved it!",
   },
   {
     name: 'Grace Hawkins', reviews: 2, date: 'Mar 14, 2018',
