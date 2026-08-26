@@ -107,7 +107,7 @@ export default function Footer() {
                   href={WHATSAPP_HREF}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2.5 px-7 py-3.5 bg-[#EBBA6F] text-[#0C0F1C] text-[14px] font-semibold rounded-full hover:bg-[#E2B36A] active:bg-[#D4A85E] transition-colors duration-150 shadow-[0_0_28px_rgba(235,186,111,0.25)]"
+                  className="flex items-center justify-center gap-2.5 px-7 py-3.5 bg-[#25D366] text-white text-[14px] font-semibold rounded-full hover:bg-[#1FBB59] active:bg-[#19A34D] transition-colors duration-150 shadow-[0_0_28px_rgba(37,211,102,0.25)]"
                   style={{ fontFamily: 'var(--font-ui)' }}
                 >
                   <WhatsAppIcon size={15} />
@@ -118,7 +118,7 @@ export default function Footer() {
                   className="flex items-center justify-center gap-2.5 px-7 py-3.5 border border-white/25 text-white text-[14px] font-medium rounded-full hover:border-[#EBBA6F]/50 hover:text-[#EBBA6F] transition-all duration-150"
                   style={{ fontFamily: 'var(--font-ui)' }}
                 >
-                  Get instant quote
+                  Get a free quote
                   <ArrowRight size={14} strokeWidth={2} aria-hidden />
                 </a>
               </div>

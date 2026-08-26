@@ -141,7 +141,7 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
       {/* Header */}
       <div className="px-5 py-4 border-b border-white/[0.07] bg-[#EBBA6F]/[0.05]">
         <p className="text-[#EBBA6F] text-[11px] font-semibold tracking-[0.18em] uppercase mb-0.5" style={{ fontFamily: 'var(--font-ui)' }}>
-          Get an instant quote
+          Get a free quote
         </p>
         <p className="text-white/40 text-[12px]" style={{ fontFamily: 'var(--font-body)' }}>
           Fill in your journey details below
@@ -309,7 +309,7 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
             className="mt-1 h-11 flex items-center justify-center gap-2 bg-[#EBBA6F] text-[#0C0F1C] text-[14px] font-semibold rounded-lg hover:bg-[#E2B36A] active:bg-[#D4A85E] transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed w-full"
             style={{ fontFamily: 'var(--font-ui)' }}
           >
-            {submitting ? 'Sending…' : 'Get Instant Quote'}
+            {submitting ? 'Sending…' : 'Get a Free Quote'}
             {!submitting && <ArrowRight size={15} aria-hidden />}
           </button>
 

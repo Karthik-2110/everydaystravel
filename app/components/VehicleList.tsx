@@ -365,7 +365,7 @@ function VehicleCard({ vehicle, category }: { vehicle: Vehicle; category?: strin
               href={WHATSAPP_HREF}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-6 py-3 border border-white/20 text-white/80 text-[14px] font-medium rounded-full hover:border-[#EBBA6F]/50 hover:text-[#EBBA6F] transition-all duration-150"
+              className="flex items-center gap-2 px-6 py-3 bg-[#25D366] hover:bg-[#1FBB59] text-white text-[14px] font-medium rounded-full transition-colors duration-150"
               style={{ fontFamily: 'var(--font-ui)' }}
             >
               <WhatsAppIcon size={13} />

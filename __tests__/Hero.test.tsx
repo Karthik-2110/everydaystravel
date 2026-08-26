@@ -27,7 +27,7 @@ vi.mock('motion/react', () => ({
 describe('Hero', () => {
   it('renders the badge pill with correct text', () => {
     render(<Hero />)
-    expect(screen.getByText(/PREMIUM COACH & MINIBUS HIRE/i)).toBeInTheDocument()
+    expect(screen.getByText(/LUXURY COACH & MINIBUS HIRE/i)).toBeInTheDocument()
   })
 
   it('renders the two white headline lines', () => {

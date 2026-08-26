@@ -54,7 +54,7 @@ describe('Footer', () => {
   it('renders CTA buttons', () => {
     render(<Footer />)
     expect(screen.getByRole('link', { name: /chat on whatsapp/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /get instant quote/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /get a free quote/i })).toBeInTheDocument()
   })
 
   it('renders social media links', () => {

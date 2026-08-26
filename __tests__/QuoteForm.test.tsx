@@ -94,9 +94,9 @@ describe('QuoteForm', () => {
     expect(screen.queryByLabelText(/phone/i)).not.toBeInTheDocument()
   })
 
-  it('does not show Get Instant Quote button initially', () => {
+  it('does not show Get a Free Quote button initially', () => {
     render(<QuoteForm />)
-    expect(screen.queryByRole('button', { name: /get instant quote/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /get a free quote/i })).not.toBeInTheDocument()
   })
 
   it('shows email, phone and CTA after all fields are filled', async () => {
@@ -127,7 +127,7 @@ describe('QuoteForm', () => {
     await waitFor(() => {
       expect(screen.getByLabelText(/email address/i)).toBeInTheDocument()
       expect(screen.getByLabelText(/phone number/i)).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: /get instant quote/i })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /get a free quote/i })).toBeInTheDocument()
     })
   })
 

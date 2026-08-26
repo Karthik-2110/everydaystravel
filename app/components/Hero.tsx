@@ -3,8 +3,11 @@
 import { useRef, useEffect } from 'react'
 import { motion } from 'motion/react'
 import Image from 'next/image'
+import { Phone } from 'lucide-react'
 import QuoteForm from './QuoteForm'
 import TrustBar from './TrustBar'
+import { WhatsAppIcon, WHATSAPP_HREF } from './icons/social'
+import { PHONE, PHONE_HREF } from './contact/contact-details'
 
 // ── Animation helpers ───────────────────────────────────────────────────────
 
@@ -38,6 +41,11 @@ export interface HeroLine { text: string; accent: boolean }
 export interface HeroProps {
   badge?:    string
   lines?:    HeroLine[]
+  /** When set, replaces the large headline with a short story block. */
+  story?:    string[]
+  storyCta?: string
+  /** Show the call + WhatsApp buttons under the copy. */
+  showContact?: boolean
   subtext?:  string
   videoSrc?: string
   imageSrc?: string
@@ -55,8 +63,11 @@ const DEFAULT_LINES: HeroLine[] = [
 // ── Component ───────────────────────────────────────────────────────────────
 
 export default function Hero({
-  badge    = 'Premium Coach & Minibus Hire',
+  badge    = 'Luxury Coach & Minibus Hire',
   lines    = DEFAULT_LINES,
+  story,
+  storyCta,
+  showContact = false,
   subtext  = 'Reliable, professional transport for airport transfers, events and group travel.',
   videoSrc,
   imageSrc = DEFAULT_HERO_IMAGE,
@@ -101,12 +112,12 @@ export default function Hero({
       )}
 
       {/* Gradient layers */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#060810]/90 via-[#0C0F1C]/60 to-[#0C0F1C]/0" />
+      <div className="absolute inset-y-0 left-0 w-full md:w-[80%] bg-gradient-to-r from-[#060810]/95 via-[#060810]/72 to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-b from-[#0C0F1C]/40 via-transparent to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-t from-[#0C0F1C] via-[#0C0F1C]/20 to-transparent" />
 
       {/* Content */}
-      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-36 pb-10">
+      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-28 sm:pt-32 lg:pt-36 pb-10 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 lg:gap-10">
         <div className="max-w-[560px] lg:max-w-[660px]">
 
           {/* Badge pill */}
@@ -122,83 +133,141 @@ export default function Hero({
             </span>
           </motion.div>
 
-          {/* Headline — staggered line-by-line entrance */}
-          <h1
-            className="mb-7 leading-[0.91] tracking-[-0.015em]"
-            style={{ fontFamily: 'var(--font-display)', fontWeight: 300 }}
-          >
-            {lines.map((line, i) => (
-              <motion.span
-                key={line.text}
-                className={[
-                  'block text-[clamp(3rem,6.5vw,5.8rem)]',
-                  line.accent ? 'text-[#EBBA6F]' : 'text-white',
-                ].join(' ')}
-                variants={lineVariants}
-                initial="hidden"
-                animate="visible"
-                custom={i}
-              >
-                {line.text}
-              </motion.span>
-            ))}
-          </h1>
+          {story ? (
+            /* Story block — replaces the large headline */
+            <div className="mb-7 sm:mb-8 max-w-[640px]">
+              <h1 className="sr-only">{lines.map((l) => l.text).join(' ')}</h1>
+              {story.map((para, i) => (
+                <motion.p
+                  key={para}
+                  className={
+                    i === 0
+                      ? 'text-white text-[clamp(1.5rem,4.5vw,2.5rem)] leading-[1.3] sm:leading-[1.25] tracking-[-0.01em] mb-5 sm:mb-6'
+                      : 'text-white/90 text-[clamp(1rem,1.35vw,1.2rem)] leading-[1.7] sm:leading-[1.8] mb-4 sm:mb-5 last:mb-0 max-w-[56ch]'
+                  }
+                  style={{
+                    fontFamily: i === 0 ? 'var(--font-display)' : 'var(--font-body)',
+                    fontWeight: i === 0 ? 300 : undefined,
+                    textShadow: '0 2px 18px rgba(6,8,16,0.85), 0 1px 3px rgba(6,8,16,0.6)',
+                  }}
+                  variants={lineVariants}
+                  initial="hidden"
+                  animate="visible"
+                  custom={i}
+                >
+                  {para}
+                </motion.p>
+              ))}
+              {storyCta && (
+                <motion.p
+                  className="mt-6 sm:mt-7 text-[#EBBA6F] text-[clamp(0.9rem,1.2vw,1.1rem)] font-medium tracking-[0.12em] sm:tracking-[0.14em] uppercase"
+                  style={{ fontFamily: 'var(--font-ui)', textShadow: '0 2px 18px rgba(6,8,16,0.85)' }}
+                  variants={lineVariants}
+                  initial="hidden"
+                  animate="visible"
+                  custom={story.length}
+                >
+                  {storyCta}
+                </motion.p>
+              )}
+            </div>
+          ) : (
+            /* Headline — staggered line-by-line entrance */
+            <h1
+              className="mb-7 leading-[0.91] tracking-[-0.015em]"
+              style={{ fontFamily: 'var(--font-display)', fontWeight: 300 }}
+            >
+              {lines.map((line, i) => (
+                <motion.span
+                  key={line.text}
+                  className={[
+                    'block text-[clamp(3rem,6.5vw,5.8rem)]',
+                    line.accent ? 'text-[#EBBA6F]' : 'text-white',
+                  ].join(' ')}
+                  variants={lineVariants}
+                  initial="hidden"
+                  animate="visible"
+                  custom={i}
+                >
+                  {line.text}
+                </motion.span>
+              ))}
+            </h1>
+          )}
 
           {/* Subtext */}
-          <motion.p
-            {...fadeUp(0.6)}
-            className="text-white/70 text-[clamp(0.95rem,1.4vw,1.1rem)] leading-relaxed mb-5 max-w-[400px]"
-            style={{ fontFamily: 'var(--font-body)' }}
-          >
-            {subtext}
-          </motion.p>
-
-          {/* Trustpilot card */}
-          <motion.a
-            {...fadeUp(0.75)}
-            href="https://www.trustpilot.com/evaluate/everydaystravel.co.uk"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2.5 sm:gap-4 bg-white rounded-xl px-3.5 sm:px-5 py-3 sm:py-3.5 shadow-[0_4px_24px_rgba(0,0,0,0.18)] hover:shadow-[0_6px_32px_rgba(0,0,0,0.28)] transition-shadow duration-200 group"
-          >
-            {/* Wordmark */}
-            <div className="flex items-center gap-1.5 shrink-0">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="#00B67A" aria-hidden>
-                <path d="M12 2l2.582 7.953H22l-6.29 4.573 2.4 7.388L12 17.35l-6.11 4.564 2.4-7.388L2 9.953h7.418L12 2z" />
-              </svg>
-              <span className="text-[12px] sm:text-[13px] font-bold text-[#191919] tracking-[-0.01em]" style={{ fontFamily: 'var(--font-ui)' }}>
-                Trustpilot
-              </span>
-            </div>
-
-            {/* Divider */}
-            <div className="w-px h-6 sm:h-8 bg-black/10 shrink-0" />
-
-            {/* Score + stars */}
-            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-              <span className="text-[18px] sm:text-[24px] font-semibold text-[#191919] leading-none" style={{ fontFamily: 'var(--font-ui)' }}>
-                4.4
-              </span>
-              <img
-                src="https://res.cloudinary.com/dckyndryf/image/upload/v1780237231/stars-5_w1ckxp.svg"
-                alt="5 stars"
-                className="h-[15px] sm:h-[20px] w-auto"
-              />
-            </div>
-
-            {/* Divider */}
-            <div className="w-px h-6 sm:h-8 bg-black/10 shrink-0" />
-
-            {/* CTA */}
-            <span
-              className="text-[12px] sm:text-[13px] font-semibold text-white bg-[#00B67A] px-2.5 py-1.5 sm:px-3.5 rounded-lg shrink-0 group-hover:bg-[#00a368] transition-colors duration-150"
-              style={{ fontFamily: 'var(--font-ui)' }}
+          {subtext && (
+            <motion.p
+              {...fadeUp(0.6)}
+              className="text-white/70 text-[clamp(0.95rem,1.4vw,1.1rem)] leading-relaxed mb-5 max-w-[400px]"
+              style={{ fontFamily: 'var(--font-body)' }}
             >
-              Write a review
-            </span>
-          </motion.a>
+              {subtext}
+            </motion.p>
+          )}
+
+          {/* Call + WhatsApp */}
+          {showContact && (
+            <motion.div
+              {...fadeUp(0.8)}
+              className="flex flex-col sm:flex-row sm:items-center gap-3"
+            >
+              <a
+                href={PHONE_HREF}
+                aria-label={`Call ${PHONE}`}
+                className="h-12 w-full sm:w-auto px-6 inline-flex items-center justify-center gap-2.5 rounded-full bg-[#EBBA6F] text-[#0C0F1C] text-[15px] font-semibold hover:bg-[#DDA85E] active:bg-[#C8963E] transition-colors duration-150 shadow-[0_0_18px_rgba(235,186,111,0.35),0_0_36px_rgba(235,186,111,0.15)]"
+                style={{ fontFamily: 'var(--font-ui)' }}
+              >
+                <Phone size={17} aria-hidden />
+                {PHONE}
+              </a>
+              <a
+                href={WHATSAPP_HREF}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="h-12 w-full sm:w-auto px-6 inline-flex items-center justify-center gap-2.5 rounded-full bg-[#25D366] hover:bg-[#1FBB59] text-white text-[15px] font-medium transition-colors duration-150"
+                style={{ fontFamily: 'var(--font-ui)' }}
+              >
+                <WhatsAppIcon size={18} />
+                WhatsApp us
+              </a>
+            </motion.div>
+          )}
 
         </div>
+
+        {/* Trustpilot card — sits opposite the copy, top-right of the hero */}
+        <motion.a
+          {...fadeUp(0.9)}
+          href="https://www.trustpilot.com/evaluate/everydaystravel.co.uk"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Trustpilot rating 4.4 out of 5 — write a review"
+          className="self-start lg:self-auto shrink-0 inline-flex items-center gap-2.5 sm:gap-3 bg-white rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 shadow-[0_4px_24px_rgba(0,0,0,0.18)] hover:shadow-[0_6px_32px_rgba(0,0,0,0.28)] transition-shadow duration-200 group"
+        >
+          {/* Score + stars */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            <span className="text-[15px] sm:text-[17px] font-semibold text-[#191919] leading-none" style={{ fontFamily: 'var(--font-ui)' }}>
+              4.4
+            </span>
+            <img
+              src="https://res.cloudinary.com/dckyndryf/image/upload/v1780237231/stars-5_w1ckxp.svg"
+              alt="5 stars"
+              className="h-[13px] sm:h-[15px] w-auto"
+            />
+          </div>
+
+          {/* Divider */}
+          <div className="w-px h-5 sm:h-6 bg-black/10 shrink-0" />
+
+          {/* CTA */}
+          <span
+            className="text-[11px] sm:text-[12px] font-semibold text-white bg-[#00B67A] px-2.5 py-1.5 rounded-md shrink-0 group-hover:bg-[#00a368] transition-colors duration-150"
+            style={{ fontFamily: 'var(--font-ui)' }}
+          >
+            Write a review
+          </span>
+        </motion.a>
       </div>
 
       {/* Quote form */}

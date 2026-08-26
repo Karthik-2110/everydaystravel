@@ -424,7 +424,7 @@ export default function QuoteForm() {
                     className="h-10 flex items-center justify-center gap-2 px-6 bg-[#EBBA6F] text-[#0C0F1C] text-[13.5px] font-semibold rounded-lg hover:bg-[#E2B36A] active:bg-[#AC864C] transition-colors duration-150 w-full disabled:opacity-60 disabled:cursor-not-allowed"
                     style={{ fontFamily: 'var(--font-ui)' }}
                   >
-                    {submitting ? 'Sending…' : 'Get Instant Quote'}
+                    {submitting ? 'Sending…' : 'Get a Free Quote'}
                     {!submitting && <ArrowRight size={15} aria-hidden />}
                   </button>
                   </div>

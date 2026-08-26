@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import FloatingContactBar from "./components/FloatingContactBar";
 
 // Inter → drives --font-sans (shadcn) and --font-ui (brand)
 const inter = Inter({
@@ -20,7 +21,7 @@ const sourceSans3 = Source_Sans_3({
 
 export const metadata: Metadata = {
   title: "Everydays Travel | Luxury Coach & Minibus Hire Across the UK",
-  description: "Premium coach, minibus and private car hire across the UK. Airport transfers, corporate travel and group transport. Get an instant quote.",
+  description: "Premium coach, minibus and private car hire across the UK. Airport transfers, corporate travel and group transport. Get a free quote.",
 };
 
 export default function RootLayout({
@@ -39,6 +40,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-[#0C0F1C] text-white">
         {children}
+        <FloatingContactBar />
       </body>
     </html>
   );

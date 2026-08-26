@@ -168,7 +168,7 @@ export default function BookingForm() {
           href={WHATSAPP_HREF}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-3 h-10 px-5 inline-flex items-center gap-2 rounded-lg border border-white/15 text-white text-[13px] hover:border-[#EBBA6F]/60 hover:text-[#EBBA6F] transition-colors duration-150"
+          className="mt-3 h-10 px-5 inline-flex items-center gap-2 rounded-lg bg-[#25D366] hover:bg-[#1FBB59] text-white text-[13px] font-medium transition-colors duration-150"
           style={{ fontFamily: 'var(--font-ui)' }}
         >
           <WhatsAppIcon size={14} />
@@ -526,7 +526,7 @@ export default function BookingForm() {
             href={WHATSAPP_HREF}
             target="_blank"
             rel="noopener noreferrer"
-            className="h-12 px-6 flex items-center justify-center gap-2 rounded-lg border border-white/15 text-white text-[14px] hover:border-[#EBBA6F]/60 hover:text-[#EBBA6F] transition-colors duration-150"
+            className="h-12 px-6 flex items-center justify-center gap-2 rounded-lg bg-[#25D366] hover:bg-[#1FBB59] text-white text-[14px] font-medium transition-colors duration-150"
             style={{ fontFamily: 'var(--font-ui)' }}
           >
             <WhatsAppIcon size={15} />
