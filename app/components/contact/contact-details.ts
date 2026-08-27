@@ -5,6 +5,9 @@ export const ADDRESS = 'The Reeves, Snakey Lane, Feltham TW13 7NB'
 
 export const PHONE         = '020 8941 8354'
 export const PHONE_HREF    = 'tel:02089418354'
+/** Mobile — also the number behind every WhatsApp CTA. */
+export const MOBILE        = '+44 7538 724000'
+export const MOBILE_HREF   = 'tel:+447538724000'
 export const EMAIL         = 'info@everydaystravel.co.uk'
 export const EMAIL_HREF    = `mailto:${EMAIL}`
 

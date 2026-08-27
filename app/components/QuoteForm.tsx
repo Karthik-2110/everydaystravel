@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import {
   Users, Clock,
@@ -175,10 +175,21 @@ export default function QuoteForm() {
     }
   }
 
+  // Hovering the card drops the cursor straight into the first field, so a
+  // mouse user can start typing without a click. Skipped on touch (no real
+  // hover) and whenever focus is already somewhere inside the form.
+  const cardRef = useRef<HTMLDivElement>(null)
+
+  const focusFirstField = () => {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return
+    const card = cardRef.current
+    if (!card || card.contains(document.activeElement)) return
+    card.querySelector<HTMLInputElement>('#pickup-select')?.focus()
+  }
 
   return (
     <section className="relative z-20 px-5 sm:px-8 lg:px-12 mt-[42px]">
-      <div className="bg-[#0D1221] rounded-2xl border border-white/10 shadow-2xl p-6 sm:p-7 lg:p-8 transition-[border-color,box-shadow] duration-300 hover:border-[#EBBA6F]/30 hover:shadow-[0_0_0_1px_rgba(235,186,111,0.15),0_0_40px_rgba(235,186,111,0.08)]">
+      <div ref={cardRef} onMouseEnter={focusFirstField} className="bg-[#0D1221] rounded-2xl border border-[#EBBA6F]/35 shadow-[0_0_0_1px_rgba(235,186,111,0.10),0_0_34px_rgba(235,186,111,0.14),0_20px_60px_rgba(0,0,0,0.45)] p-6 sm:p-7 lg:p-8 transition-[border-color,box-shadow] duration-300 hover:border-[#EBBA6F]/70 hover:shadow-[0_0_0_1px_rgba(235,186,111,0.28),0_0_70px_rgba(235,186,111,0.30),0_24px_70px_rgba(0,0,0,0.5)]">
 
         {/* ── Header ── */}
         <div className="flex flex-wrap items-center gap-3 mb-6">

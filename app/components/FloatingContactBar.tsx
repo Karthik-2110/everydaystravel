@@ -3,10 +3,12 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Phone, Mail } from 'lucide-react'
-import { PHONE, PHONE_HREF, EMAIL, EMAIL_HREF } from './contact/contact-details'
+import { MOBILE, MOBILE_HREF, EMAIL, EMAIL_HREF } from './contact/contact-details'
+import { WhatsAppIcon, InstagramIcon, WHATSAPP_HREF, INSTAGRAM_HREF } from './icons/social'
 
 /**
- * Call + email pill that docks to the bottom of the viewport once the reader
+ * Call, email, WhatsApp and Instagram pill that docks to the bottom of the
+ * viewport once the reader
  * has scrolled clear of the hero. Hidden while the hero is still on screen so
  * it never competes with the hero's own CTAs.
  */
@@ -39,12 +41,12 @@ export default function FloatingContactBar() {
             style={{ fontFamily: 'var(--font-ui)' }}
           >
             <a
-              href={PHONE_HREF}
-              aria-label={`Call ${PHONE}`}
+              href={MOBILE_HREF}
+              aria-label={`Call ${MOBILE}`}
               className="h-11 px-5 inline-flex items-center gap-2.5 rounded-full bg-[#EBBA6F] text-[#0C0F1C] text-[14px] font-semibold hover:bg-[#DDA85E] active:bg-[#C8963E] transition-colors duration-150"
             >
               <Phone size={16} aria-hidden />
-              <span className="hidden sm:inline">{PHONE}</span>
+              <span className="hidden sm:inline">{MOBILE}</span>
               <span className="sm:hidden">Call us</span>
             </a>
             <a
@@ -54,6 +56,29 @@ export default function FloatingContactBar() {
             >
               <Mail size={16} aria-hidden />
               Email us
+            </a>
+            {/* Icon-only socials — same brand fills as the hero CTAs */}
+            <a
+              href={WHATSAPP_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Message us on WhatsApp"
+              className="h-11 w-11 shrink-0 inline-flex items-center justify-center rounded-full bg-[#25D366] hover:bg-[#1FBB59] text-white transition-colors duration-150"
+            >
+              <WhatsAppIcon size={18} />
+            </a>
+            <a
+              href={INSTAGRAM_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Everydays Travel on Instagram"
+              className="h-11 w-11 shrink-0 inline-flex items-center justify-center rounded-full text-white transition-opacity duration-150 hover:opacity-90"
+              style={{
+                background:
+                  'linear-gradient(45deg, #F9CE34 0%, #EE2A7B 50%, #6228D7 100%)',
+              }}
+            >
+              <InstagramIcon size={18} />
             </a>
           </div>
         </motion.div>

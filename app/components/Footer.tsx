@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { cdnUrl } from '@/app/lib/cloudinary'
 import { Phone, Mail, Clock, MapPin, ArrowRight, ArrowUpRight } from 'lucide-react'
-import { WhatsAppIcon, InstagramIcon, FacebookIcon, LinkedInIcon, WHATSAPP_HREF } from './icons/social'
+import { WhatsAppIcon, InstagramIcon, FacebookIcon, LinkedInIcon, WHATSAPP_HREF, INSTAGRAM_HREF } from './icons/social'
 import { ADDRESS } from './contact/contact-details'
 
 // ── Data ─────────────────────────────────────────────────────────────────────
@@ -38,7 +38,7 @@ const CONTACT_ITEMS: ContactItem[] = [
 ]
 
 const SOCIAL_LINKS = [
-  { label: 'Instagram', href: '#',            svg: <InstagramIcon size={14} /> },
+  { label: 'Instagram', href: INSTAGRAM_HREF,  svg: <InstagramIcon size={14} /> },
   { label: 'Facebook',  href: '#',            svg: <FacebookIcon  size={14} /> },
   { label: 'WhatsApp',  href: WHATSAPP_HREF,  svg: <WhatsAppIcon  size={14} /> },
   { label: 'LinkedIn',  href: '#',            svg: <LinkedInIcon  size={14} /> },
@@ -214,6 +214,9 @@ export default function Footer() {
                     key={label}
                     href={href}
                     aria-label={label}
+                    {...(href.startsWith('http')
+                      ? { target: '_blank', rel: 'noopener noreferrer' }
+                      : {})}
                     className="w-9 h-9 flex items-center justify-center rounded-full border border-white/30 text-white/60 hover:border-[#EBBA6F]/70 hover:text-[#EBBA6F] hover:scale-105 transition-all duration-150"
                   >
                     {svg}

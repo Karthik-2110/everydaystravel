@@ -2,6 +2,7 @@
 // here — one source for every social link and WhatsApp CTA in the app.
 // Paths are the official 24×24 brand outlines; they fill with currentColor so
 // they inherit the surrounding hover/active colours like a lucide icon would.
+import { MOBILE } from '../contact/contact-details'
 
 export interface SocialIconProps {
   size?:      number
@@ -52,5 +53,8 @@ export const FacebookIcon  = (p: SocialIconProps) => <Glyph {...p} title="Facebo
 export const LinkedInIcon  = (p: SocialIconProps) => <Glyph {...p} title="LinkedIn"  d={LINKEDIN_PATH} />
 export const XIcon         = (p: SocialIconProps) => <Glyph {...p} title="X"         d={X_PATH} />
 
-/** The number every WhatsApp CTA in the app dials. */
-export const WHATSAPP_HREF = 'https://wa.me/4402089418354'
+/** Every WhatsApp CTA opens a chat with the company mobile. */
+export const WHATSAPP_HREF = `https://wa.me/${MOBILE.replace(/\D/g, '')}`
+
+/** The company Instagram profile. */
+export const INSTAGRAM_HREF = 'https://www.instagram.com/everydaystravel/'

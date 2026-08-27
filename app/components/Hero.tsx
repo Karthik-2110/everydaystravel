@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { Phone } from 'lucide-react'
 import QuoteForm from './QuoteForm'
 import TrustBar from './TrustBar'
-import { WhatsAppIcon, WHATSAPP_HREF } from './icons/social'
+import { WhatsAppIcon, InstagramIcon, WHATSAPP_HREF, INSTAGRAM_HREF } from './icons/social'
 import { PHONE, PHONE_HREF } from './contact/contact-details'
 
 // ── Animation helpers ───────────────────────────────────────────────────────
@@ -140,14 +140,9 @@ export default function Hero({
               {story.map((para, i) => (
                 <motion.p
                   key={para}
-                  className={
-                    i === 0
-                      ? 'text-white text-[clamp(1.5rem,4.5vw,2.5rem)] leading-[1.3] sm:leading-[1.25] tracking-[-0.01em] mb-5 sm:mb-6'
-                      : 'text-white/90 text-[clamp(1rem,1.35vw,1.2rem)] leading-[1.7] sm:leading-[1.8] mb-4 sm:mb-5 last:mb-0 max-w-[56ch]'
-                  }
+                  className="text-white/90 text-[18px] leading-[1.65] mb-4 last:mb-0 max-w-[56ch]"
                   style={{
-                    fontFamily: i === 0 ? 'var(--font-display)' : 'var(--font-body)',
-                    fontWeight: i === 0 ? 300 : undefined,
+                    fontFamily: 'var(--font-body)',
                     textShadow: '0 2px 18px rgba(6,8,16,0.85), 0 1px 3px rgba(6,8,16,0.6)',
                   }}
                   variants={lineVariants}
@@ -160,8 +155,8 @@ export default function Hero({
               ))}
               {storyCta && (
                 <motion.p
-                  className="mt-6 sm:mt-7 text-[#EBBA6F] text-[clamp(0.9rem,1.2vw,1.1rem)] font-medium tracking-[0.12em] sm:tracking-[0.14em] uppercase"
-                  style={{ fontFamily: 'var(--font-ui)', textShadow: '0 2px 18px rgba(6,8,16,0.85)' }}
+                  className="mt-5 text-[#EBBA6F] text-[18px] leading-[1.65] font-semibold"
+                  style={{ fontFamily: 'var(--font-body)', textShadow: '0 2px 18px rgba(6,8,16,0.85)' }}
                   variants={lineVariants}
                   initial="hidden"
                   animate="visible"
@@ -230,6 +225,21 @@ export default function Hero({
               >
                 <WhatsAppIcon size={18} />
                 WhatsApp us
+              </a>
+              <a
+                href={INSTAGRAM_HREF}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Everydays Travel on Instagram"
+                className="h-12 w-full sm:w-auto px-6 inline-flex items-center justify-center gap-2.5 rounded-full text-white text-[15px] font-medium transition-opacity duration-150 hover:opacity-90"
+                style={{
+                  fontFamily: 'var(--font-ui)',
+                  background:
+                    'linear-gradient(45deg, #F9CE34 0%, #EE2A7B 50%, #6228D7 100%)',
+                }}
+              >
+                <InstagramIcon size={18} />
+                Instagram
               </a>
             </motion.div>
           )}
