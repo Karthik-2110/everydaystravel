@@ -4,13 +4,18 @@ import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Phone, Mail } from 'lucide-react'
 import { MOBILE, MOBILE_HREF, EMAIL, EMAIL_HREF } from './contact/contact-details'
-import { WhatsAppIcon, InstagramIcon, WHATSAPP_HREF, INSTAGRAM_HREF } from './icons/social'
+import { WhatsAppIcon, InstagramIcon, FacebookIcon, WHATSAPP_HREF, INSTAGRAM_HREF, FACEBOOK_HREF, SOCIAL_BRAND } from './icons/social'
+
+const SOCIALS = [
+  { label: 'Everydays Travel on Facebook',  href: FACEBOOK_HREF,  brand: SOCIAL_BRAND.facebook,  icon: <FacebookIcon  size={18} /> },
+  { label: 'Message us on WhatsApp',        href: WHATSAPP_HREF,  brand: SOCIAL_BRAND.whatsapp,  icon: <WhatsAppIcon  size={18} /> },
+  { label: 'Everydays Travel on Instagram', href: INSTAGRAM_HREF, brand: SOCIAL_BRAND.instagram, icon: <InstagramIcon size={18} /> },
+]
 
 /**
- * Call, email, WhatsApp and Instagram pill that docks to the bottom of the
- * viewport once the reader
- * has scrolled clear of the hero. Hidden while the hero is still on screen so
- * it never competes with the hero's own CTAs.
+ * Call, email, Facebook, WhatsApp and Instagram pill that docks to the bottom
+ * of the viewport once the reader has scrolled clear of the hero. Hidden while
+ * the hero is still on screen so it never competes with the hero's own CTAs.
  */
 export default function FloatingContactBar() {
   const [visible, setVisible] = useState(false)
@@ -57,29 +62,20 @@ export default function FloatingContactBar() {
               <Mail size={16} aria-hidden />
               Email us
             </a>
-            {/* Icon-only socials — same brand fills as the hero CTAs */}
-            <a
-              href={WHATSAPP_HREF}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Message us on WhatsApp"
-              className="h-11 w-11 shrink-0 inline-flex items-center justify-center rounded-full bg-[#25D366] hover:bg-[#1FBB59] text-white transition-colors duration-150"
-            >
-              <WhatsAppIcon size={18} />
-            </a>
-            <a
-              href={INSTAGRAM_HREF}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Everydays Travel on Instagram"
-              className="h-11 w-11 shrink-0 inline-flex items-center justify-center rounded-full text-white transition-opacity duration-150 hover:opacity-90"
-              style={{
-                background:
-                  'linear-gradient(45deg, #F9CE34 0%, #EE2A7B 50%, #6228D7 100%)',
-              }}
-            >
-              <InstagramIcon size={18} />
-            </a>
+            {/* Icon-only socials — same brand fills as the hero and footer */}
+            {SOCIALS.map(({ label, href, brand, icon }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                className="h-11 w-11 shrink-0 inline-flex items-center justify-center rounded-full text-white transition-opacity duration-150 hover:opacity-90"
+                style={brand}
+              >
+                {icon}
+              </a>
+            ))}
           </div>
         </motion.div>
       )}

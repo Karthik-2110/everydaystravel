@@ -1,7 +1,8 @@
 import Image from 'next/image'
 import { cdnUrl } from '@/app/lib/cloudinary'
 import { Phone, Mail, Clock, MapPin, ArrowRight, ArrowUpRight } from 'lucide-react'
-import { WhatsAppIcon, InstagramIcon, FacebookIcon, LinkedInIcon, WHATSAPP_HREF, INSTAGRAM_HREF } from './icons/social'
+import { WhatsAppIcon, InstagramIcon, FacebookIcon, LinkedInIcon, WHATSAPP_HREF, INSTAGRAM_HREF, FACEBOOK_HREF, LINKEDIN_HREF, SOCIAL_BRAND } from './icons/social'
+import SiteLink from './SiteLink'
 import { ADDRESS } from './contact/contact-details'
 
 // ── Data ─────────────────────────────────────────────────────────────────────
@@ -37,11 +38,12 @@ const CONTACT_ITEMS: ContactItem[] = [
   { icon: Clock,  primary: 'Mon – Fri: 7:00 AM – 7:00 PM', secondary: 'Sat & Sun: 8:00 AM – 4:00 PM' },
 ]
 
+// Brand-filled circles, matching the floating contact bar. Glyphs are 20px.
 const SOCIAL_LINKS = [
-  { label: 'Instagram', href: INSTAGRAM_HREF,  svg: <InstagramIcon size={14} /> },
-  { label: 'Facebook',  href: '#',            svg: <FacebookIcon  size={14} /> },
-  { label: 'WhatsApp',  href: WHATSAPP_HREF,  svg: <WhatsAppIcon  size={14} /> },
-  { label: 'LinkedIn',  href: '#',            svg: <LinkedInIcon  size={14} /> },
+  { label: 'Instagram', href: INSTAGRAM_HREF, brand: SOCIAL_BRAND.instagram, svg: <InstagramIcon size={20} /> },
+  { label: 'Facebook',  href: FACEBOOK_HREF,  brand: SOCIAL_BRAND.facebook,  svg: <FacebookIcon  size={20} /> },
+  { label: 'WhatsApp',  href: WHATSAPP_HREF,  brand: SOCIAL_BRAND.whatsapp,  svg: <WhatsAppIcon  size={20} /> },
+  { label: 'LinkedIn',  href: LINKEDIN_HREF,  brand: SOCIAL_BRAND.linkedin,  svg: <LinkedInIcon  size={20} /> },
 ]
 
 // ── Sub-components ────────────────────────────────────────────────────────────
@@ -113,14 +115,14 @@ export default function Footer() {
                   <WhatsAppIcon size={15} />
                   Chat on WhatsApp
                 </a>
-                <a
+                <SiteLink
                   href="/contact"
                   className="flex items-center justify-center gap-2.5 px-7 py-3.5 border border-white/25 text-white text-[14px] font-medium rounded-full hover:border-[#EBBA6F]/50 hover:text-[#EBBA6F] transition-all duration-150"
                   style={{ fontFamily: 'var(--font-ui)' }}
                 >
                   Get a free quote
                   <ArrowRight size={14} strokeWidth={2} aria-hidden />
-                </a>
+                </SiteLink>
               </div>
             </div>
 
@@ -208,19 +210,17 @@ export default function Footer() {
               >
                 Premium coach &amp; minibus hire across the UK and Europe.
               </p>
-              <div className="flex items-center gap-2">
-                {SOCIAL_LINKS.map(({ svg, href, label }) => (
-                  <a
+              <div className="flex items-center gap-2" data-testid="footer-socials">
+                {SOCIAL_LINKS.map(({ svg, href, label, brand }) => (
+                  <SiteLink
                     key={label}
                     href={href}
                     aria-label={label}
-                    {...(href.startsWith('http')
-                      ? { target: '_blank', rel: 'noopener noreferrer' }
-                      : {})}
-                    className="w-9 h-9 flex items-center justify-center rounded-full border border-white/30 text-white/60 hover:border-[#EBBA6F]/70 hover:text-[#EBBA6F] hover:scale-105 transition-all duration-150"
+                    style={brand}
+                    className="w-10 h-10 flex items-center justify-center rounded-full text-white hover:opacity-90 hover:scale-105 transition-all duration-150"
                   >
                     {svg}
-                  </a>
+                  </SiteLink>
                 ))}
               </div>
             </div>
@@ -231,7 +231,7 @@ export default function Footer() {
               <ul className="flex flex-col gap-3">
                 {QUICK_LINKS.map(({ label, href }) => (
                   <li key={label}>
-                    <a
+                    <SiteLink
                       href={href}
                       className="group inline-flex items-center gap-1.5 text-white/50 text-[14px] hover:text-[#EBBA6F] transition-colors duration-150"
                       style={{ fontFamily: 'var(--font-body)' }}
@@ -243,7 +243,7 @@ export default function Footer() {
                         className="opacity-0 -translate-x-1 translate-y-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-150 text-[#EBBA6F] shrink-0"
                         aria-hidden
                       />
-                    </a>
+                    </SiteLink>
                   </li>
                 ))}
               </ul>
@@ -255,7 +255,7 @@ export default function Footer() {
               <ul className="flex flex-col gap-3">
                 {SERVICES.map(({ label, href }) => (
                   <li key={label}>
-                    <a
+                    <SiteLink
                       href={href}
                       className="group inline-flex items-center gap-1.5 text-white/50 text-[14px] hover:text-[#EBBA6F] transition-colors duration-150"
                       style={{ fontFamily: 'var(--font-body)' }}
@@ -267,7 +267,7 @@ export default function Footer() {
                         className="opacity-0 -translate-x-1 translate-y-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-150 text-[#EBBA6F] shrink-0"
                         aria-hidden
                       />
-                    </a>
+                    </SiteLink>
                   </li>
                 ))}
               </ul>
@@ -332,21 +332,21 @@ export default function Footer() {
               © 2026 Everydays Travel. All rights reserved
             </p>
             <div className="flex items-center gap-5">
-              <a
+              <SiteLink
                 href="/privacy"
                 className="text-white/28 text-[12px] hover:text-[#EBBA6F]/70 transition-colors duration-150"
                 style={{ fontFamily: 'var(--font-ui)' }}
               >
                 Privacy Policy
-              </a>
+              </SiteLink>
               <span className="text-white/12 select-none">·</span>
-              <a
+              <SiteLink
                 href="/terms"
                 className="text-white/28 text-[12px] hover:text-[#EBBA6F]/70 transition-colors duration-150"
                 style={{ fontFamily: 'var(--font-ui)' }}
               >
                 Terms of Use
-              </a>
+              </SiteLink>
             </div>
           </div>
         </div>

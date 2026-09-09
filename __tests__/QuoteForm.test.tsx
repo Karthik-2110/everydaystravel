@@ -111,13 +111,18 @@ describe('QuoteForm', () => {
     // Fill remaining required fields
     fireEvent.change(screen.getByLabelText('Passengers'), { target: { value: '4' } })
 
-    // DatePickerField uses a button trigger with id="travel-date"; click it and select a date
+    // DatePickerField uses a button trigger with id="travel-date"; click it and
+    // pick the last selectable day the calendar offers. Chosen dynamically so
+    // the test does not rot as the real date moves past a hard-coded day.
     const travelDateBtn = document.getElementById('travel-date') as HTMLButtonElement
     fireEvent.click(travelDateBtn)
     await waitFor(() => {
-      // Find the June 1st button by aria-label
-      const dateOption = screen.getByRole('button', { name: /Monday, June 1st, 2026/ })
-      fireEvent.click(dateOption)
+      const days = screen
+        .getAllByRole('button')
+        .filter((b) => /day, \w+ \d+(st|nd|rd|th), \d{4}$/.test(b.getAttribute('aria-label') ?? ''))
+        .filter((b) => !b.hasAttribute('disabled') && b.getAttribute('aria-disabled') !== 'true')
+      expect(days.length).toBeGreaterThan(0)
+      fireEvent.click(days[days.length - 1])
     })
 
     // Set pickup time

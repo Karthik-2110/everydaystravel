@@ -20,6 +20,9 @@ vi.mock('motion/react', () => ({
     p: ({ children, initial, animate, transition, ...props }: any) => (
       <p {...props}>{children}</p>
     ),
+    a: ({ children, initial, animate, transition, whileHover, ...props }: any) => (
+      <a {...props}>{children}</a>
+    ),
   },
   AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }))
@@ -48,20 +51,29 @@ describe('Hero', () => {
     ).toBeInTheDocument()
   })
 
-  it('renders the trust signal with 500+', () => {
+  it('renders the Trustpilot card with its score', () => {
     render(<Hero />)
-    expect(screen.getByText(/500\+/)).toBeInTheDocument()
-    expect(screen.getByText(/Trusted by/i)).toBeInTheDocument()
+    expect(screen.getByText('4.4')).toBeInTheDocument()
+    expect(screen.getByText(/write a review/i)).toBeInTheDocument()
   })
 
-  it('renders star rating with accessible label', () => {
+  it('gives the Trustpilot card an accessible label', () => {
     render(<Hero />)
-    expect(screen.getByLabelText(/4 out of 5 stars/i)).toBeInTheDocument()
+    expect(
+      screen.getByLabelText(/trustpilot rating 4\.4 out of 5/i),
+    ).toBeInTheDocument()
   })
 
   it('renders a section with full viewport height', () => {
     render(<Hero />)
     const section = screen.getByRole('region', { name: /hero/i })
     expect(section).toBeInTheDocument()
+  })
+
+  it('shows the call and WhatsApp CTAs when showContact is set, and no Instagram', () => {
+    render(<Hero showContact />)
+    expect(screen.getByRole('link', { name: /whatsapp/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /call 020 8941 8354/i })).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /instagram/i })).not.toBeInTheDocument()
   })
 })

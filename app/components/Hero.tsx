@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { Phone } from 'lucide-react'
 import QuoteForm from './QuoteForm'
 import TrustBar from './TrustBar'
-import { WhatsAppIcon, InstagramIcon, WHATSAPP_HREF, INSTAGRAM_HREF } from './icons/social'
+import { WhatsAppIcon, WHATSAPP_HREF, SOCIAL_BRAND } from './icons/social'
 import { PHONE, PHONE_HREF } from './contact/contact-details'
 
 // ── Animation helpers ───────────────────────────────────────────────────────
@@ -220,26 +220,11 @@ export default function Hero({
                 href={WHATSAPP_HREF}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="h-12 w-full sm:w-auto px-6 inline-flex items-center justify-center gap-2.5 rounded-full bg-[#25D366] hover:bg-[#1FBB59] text-white text-[15px] font-medium transition-colors duration-150"
-                style={{ fontFamily: 'var(--font-ui)' }}
+                className="h-12 w-full sm:w-auto px-6 inline-flex items-center justify-center gap-2.5 rounded-full text-white text-[15px] font-medium transition-opacity duration-150 hover:opacity-90"
+                style={{ fontFamily: 'var(--font-ui)', ...SOCIAL_BRAND.whatsapp }}
               >
                 <WhatsAppIcon size={18} />
                 WhatsApp us
-              </a>
-              <a
-                href={INSTAGRAM_HREF}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Everydays Travel on Instagram"
-                className="h-12 w-full sm:w-auto px-6 inline-flex items-center justify-center gap-2.5 rounded-full text-white text-[15px] font-medium transition-opacity duration-150 hover:opacity-90"
-                style={{
-                  fontFamily: 'var(--font-ui)',
-                  background:
-                    'linear-gradient(45deg, #F9CE34 0%, #EE2A7B 50%, #6228D7 100%)',
-                }}
-              >
-                <InstagramIcon size={18} />
-                Instagram
               </a>
             </motion.div>
           )}

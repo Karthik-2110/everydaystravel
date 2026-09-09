@@ -53,8 +53,27 @@ export const FacebookIcon  = (p: SocialIconProps) => <Glyph {...p} title="Facebo
 export const LinkedInIcon  = (p: SocialIconProps) => <Glyph {...p} title="LinkedIn"  d={LINKEDIN_PATH} />
 export const XIcon         = (p: SocialIconProps) => <Glyph {...p} title="X"         d={X_PATH} />
 
+/**
+ * Official brand fills, so a WhatsApp button looks the same in the hero, the
+ * floating bar and the footer. `background` is a CSS value rather than a
+ * Tailwind class because Instagram's is a gradient and Tailwind cannot compile
+ * an arbitrary class built at runtime.
+ */
+export const SOCIAL_BRAND = {
+  whatsapp:  { background: '#25D366' },
+  facebook:  { background: '#1877F2' },
+  linkedin:  { background: '#0A66C2' },
+  instagram: { background: 'linear-gradient(45deg, #F9CE34 0%, #EE2A7B 50%, #6228D7 100%)' },
+} as const
+
 /** Every WhatsApp CTA opens a chat with the company mobile. */
 export const WHATSAPP_HREF = `https://wa.me/${MOBILE.replace(/\D/g, '')}`
 
 /** The company Instagram profile. */
 export const INSTAGRAM_HREF = 'https://www.instagram.com/everydaystravel/'
+
+/** The company Facebook page. */
+export const FACEBOOK_HREF = 'https://www.facebook.com/p/Everydays-Luxury-Travel-100063491714841/'
+
+/** The company LinkedIn page. */
+export const LINKEDIN_HREF = 'https://www.linkedin.com/company/everydays-travel-limited/'
