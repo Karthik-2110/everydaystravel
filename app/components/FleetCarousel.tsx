@@ -3,37 +3,33 @@
 import { useRef, useState, useCallback } from 'react'
 import Image from 'next/image'
 import { Sparkles, ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
+import { FLEET_CATEGORIES } from '../data/fleet'
 
-const FLEET = [
-  {
-    name: '53 Seater Executive Coach',
-    slug: 'executive-coach',
-    features: ['Reclining seats', 'USB charging', 'Onboard WiFi'],
-    image: 'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_1200,c_limit/v1783787451/IMG_0419_kkqxkq.jpg',
-    tag: 'Most popular',
-  },
-  {
-    name: '33 Seater Luxury Coach',
-    slug: 'luxury-coach',
-    features: ['Air conditioning', 'USB charging', 'Panoramic windows'],
-    image: '/images/hero.JPG',
-    tag: null,
-  },
-  {
-    name: '16 Seater Minibus',
-    slug: 'executive-minibus',
-    features: ['Climate control', 'USB charging', 'Extra legroom'],
-    image: '/images/hero.JPG',
-    tag: null,
-  },
-  {
-    name: '8 Seater Executive Van',
-    slug: 'luxury-van',
-    features: ['Leather interior', 'USB charging', 'Onboard WiFi'],
-    image: '/images/hero.JPG',
-    tag: null,
-  },
+// The vehicles we lead with on the homepage, as [category slug, vehicle slug].
+// Resolved against the real fleet below so names, photos and links can never go
+// stale — an unknown slug is dropped rather than rendered as a broken card.
+const HIGHLIGHTS: { category: string; vehicle: string; tag?: string }[] = [
+  { category: 'executive-coaches', vehicle: '53-seater-coach', tag: 'Most popular' },
+  { category: 'executive-coaches', vehicle: '55-seater-neoplan-tourliner' },
+  { category: 'luxury-minibuses',  vehicle: '7-seater-mpv-v-class' },
+  { category: 'chauffeur-cars',    vehicle: 'mercedes-s-class' },
 ]
+
+const FLEET = HIGHLIGHTS.flatMap(({ category, vehicle, tag }) => {
+  const found = FLEET_CATEGORIES
+    .find((c) => c.slug === category)
+    ?.vehicles.find((v) => v.slug === vehicle)
+
+  if (!found) return []
+
+  return [{
+    name:     found.name,
+    href:     `/fleet/${category}/${found.slug}`,
+    features: found.features.slice(0, 3),
+    image:    found.image,
+    tag:      tag ?? null,
+  }]
+})
 
 export default function FleetCarousel() {
   const carouselRef = useRef<HTMLDivElement>(null)
@@ -126,7 +122,7 @@ export default function FleetCarousel() {
         >
         {FLEET.map((item) => (
           <div
-            key={item.slug}
+            key={item.href}
             data-fleet-card
             className="relative flex-shrink-0 rounded-2xl overflow-hidden group cursor-pointer w-[82vw] sm:w-[45vw] lg:w-[29vw] max-w-[400px]"
             style={{ aspectRatio: '3/4' }}
@@ -174,7 +170,7 @@ export default function FleetCarousel() {
                 {item.features.join(' • ')}
               </p>
               <a
-                href={`/fleet/${item.slug}`}
+                href={item.href}
                 className="inline-flex items-center gap-1.5 px-4 py-2 bg-white text-[#0C0F1C] text-[12.5px] font-semibold rounded-full hover:bg-[#EBBA6F] transition-colors duration-200 select-none"
                 style={{ fontFamily: 'var(--font-ui)' }}
               >

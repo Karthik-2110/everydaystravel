@@ -4,13 +4,25 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { ChevronDown, Menu, X, ArrowRight } from 'lucide-react'
+import { ChevronDown, ChevronRight, Menu, X, ArrowRight } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
+import { FLEET_CATEGORIES } from '../data/fleet'
+import SiteLink from './SiteLink'
+
+interface SubChild {
+  label:       string
+  href:        string
+  description: string
+}
 
 interface DropdownChild {
   label:       string
   href:        string
   description: string
+  /** Stable id used for submenu state and test hooks. */
+  id?:         string
+  /** Third level — renders as a flyout beside this row on desktop. */
+  children?:   SubChild[]
 }
 
 interface NavItem {
@@ -23,6 +35,27 @@ interface NavItem {
 interface NavbarProps {
   ctaText?: string
   ctaHref?: string
+}
+
+/**
+ * Built from the fleet data so the menu can never drift from what we actually
+ * operate — each category opens a submenu of its vehicles.
+ */
+const FLEET_NAV_ITEM: NavItem = {
+  label:        'Our Fleet',
+  href:         '/fleet',
+  viewAllLabel: 'View all fleet',
+  children: FLEET_CATEGORIES.map((category) => ({
+    id:          category.slug,
+    label:       category.label,
+    href:        `/fleet/${category.slug}`,
+    description: category.description,
+    children: category.vehicles.map((vehicle) => ({
+      label:       vehicle.name,
+      href:        `/fleet/${category.slug}/${vehicle.slug}`,
+      description: vehicle.seats,
+    })),
+  })),
 }
 
 const NAV_ITEMS: NavItem[] = [
@@ -43,27 +76,7 @@ const NAV_ITEMS: NavItem[] = [
       { label: 'Executive Travel',   href: '/services/executive-travel',    description: 'First-class travel for VIPs' },
     ],
   },
-  {
-    label:        'Our Fleet',
-    href:         '/fleet',
-    viewAllLabel: 'View all fleet',
-    children: [
-      { label: 'Chauffeur Cars',    href: '/fleet/chauffeur-cars',    description: 'Executive & prestige vehicles' },
-      { label: 'Lamborghini Huracán',  href: '/fleet/chauffeur-cars/lamborghini-huracan', description: 'Supercar for special occasions' },
-      { label: 'BMW X7',               href: '/fleet/chauffeur-cars/bmw-x7',              description: 'Flagship luxury SUV' },
-      { label: 'Mercedes E-Class',     href: '/fleet/chauffeur-cars/mercedes-e-class',    description: 'Refined executive saloon' },
-      { label: 'Mercedes S-Class',     href: '/fleet/chauffeur-cars/mercedes-s-class',    description: 'The ultimate luxury saloon' },
-      { label: 'Mercedes V-Class',     href: '/fleet/chauffeur-cars/mercedes-v-class',    description: 'Executive MPV for up to 6' },
-      { label: 'Luxury Minibuses',  href: '/fleet/luxury-minibuses',  description: '8 to 16 seat luxury transfers' },
-      { label: '16 Seater Sprinter',     href: '/fleet/luxury-minibuses/16-seater-minibus',      description: 'Flagship minibus for larger groups' },
-      { label: '16 Seater VIP Sprinter', href: '/fleet/luxury-minibuses/16-seater-vip-sprinter', description: 'First-class group travel' },
-      { label: 'Executive Coaches', href: '/fleet/executive-coaches', description: '33 to 55 seat premium coaches' },
-      { label: '35 Seater Turas Midi',        href: '/fleet/executive-coaches/35-seater-turas-midi',        description: 'Mid-size executive coach' },
-      { label: '49 Seater Mercedes Turismo',  href: '/fleet/executive-coaches/49-seater-mercedes-turismo',  description: 'Touring comfort for large groups' },
-      { label: '53 Seater Mercedes Turismo',  href: '/fleet/executive-coaches/53-seater-coach',             description: 'Our most popular coach' },
-      { label: '55 Seater Neoplan Tourliner', href: '/fleet/executive-coaches/55-seater-neoplan-tourliner', description: 'Our largest flagship coach' },
-    ],
-  },
+  FLEET_NAV_ITEM,
   { label: 'Reviews', href: '/reviews' },
   { label: 'About us', href: '/about' },
   {
@@ -80,13 +93,17 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Contact us', href: '/contact' },
 ]
 
+/** Rows are capped so a long menu (Services) stays on screen; short menus show in full. */
+const DESKTOP_ROW_CAP = 5
+
 export default function Navbar({
   ctaText = 'Book your journey',
   ctaHref = '/book',
 }: NavbarProps) {
-  const [mobileOpen, setMobileOpen]         = useState(false)
-  const [mobileExpanded, setMobileExpanded] = useState<string | null>(null)
-  const [scrolled, setScrolled]             = useState(false)
+  const [mobileOpen, setMobileOpen]               = useState(false)
+  const [mobileExpanded, setMobileExpanded]       = useState<string | null>(null)
+  const [mobileSubExpanded, setMobileSubExpanded] = useState<string | null>(null)
+  const [scrolled, setScrolled]                   = useState(false)
   const pathname = usePathname()
 
   useEffect(() => {
@@ -101,6 +118,8 @@ export default function Navbar({
     document.body.style.overflow = mobileOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [mobileOpen])
+
+  const closeMobile = () => setMobileOpen(false)
 
   return (
     <header
@@ -118,12 +137,12 @@ export default function Navbar({
           {/* ── Logo ── */}
           <Link
             href="/"
-            aria-label="Everyday Travels home"
+            aria-label="Everydays Travel home"
             className="flex-shrink-0 select-none"
           >
             <Image
               src="/images/everyday_logo.avif"
-              alt="Everyday Travels"
+              alt="Everydays Travel"
               width={160}
               height={62}
               className="h-[62px] w-auto object-contain"
@@ -140,6 +159,7 @@ export default function Navbar({
 
               if (item.children) {
                 const isDropdownOnly = item.href === '#'
+                const rows = item.children.slice(0, DESKTOP_ROW_CAP)
                 const triggerCls = [
                   'flex items-center gap-[5px] px-4 py-2 text-[13.5px] font-medium rounded-full transition-all duration-200 select-none',
                   isActive ? 'text-[#EBBA6F]' : 'text-white/55 hover:text-white hover:bg-white/[0.05]',
@@ -165,26 +185,18 @@ export default function Navbar({
                     )}
 
                     {/* Dropdown panel */}
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto translate-y-1 group-hover:translate-y-0 transition-all duration-200 z-50">
-                      <div className="bg-[#0D1221] border border-white/[0.09] rounded-xl shadow-[0_16px_48px_rgba(0,0,0,0.5)] overflow-hidden min-w-[220px]">
-                        {item.children.slice(0, 5).map((child) => (
-                          <Link
-                            key={child.href}
-                            href={child.href}
-                            className="flex flex-col px-4 py-3 hover:bg-white/[0.04] transition-colors duration-150 group/item"
-                          >
-                            <span className="text-white text-[13.5px] font-medium group-hover/item:text-[#EBBA6F] transition-colors duration-150" style={{ fontFamily: 'var(--font-ui)' }}>
-                              {child.label}
-                            </span>
-                            <span className="text-white/35 text-[11.5px] mt-0.5" style={{ fontFamily: 'var(--font-body)' }}>
-                              {child.description}
-                            </span>
-                          </Link>
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto translate-y-1 group-hover:translate-y-0 group-focus-within:translate-y-0 transition-all duration-200 z-50">
+                      <div
+                        data-testid={`desktop-submenu-${item.label}`}
+                        className="bg-[#0D1221] border border-white/[0.09] rounded-xl shadow-[0_16px_48px_rgba(0,0,0,0.5)] min-w-[220px]"
+                      >
+                        {rows.map((child) => (
+                          <DesktopRow key={child.href} child={child} />
                         ))}
-                        {!isDropdownOnly && item.children.length > 5 && (
+                        {!isDropdownOnly && (
                           <Link
                             href={item.href}
-                            className="flex items-center justify-between px-4 py-3 border-t border-white/[0.07] text-[#EBBA6F] text-[12px] font-semibold tracking-[0.08em] uppercase hover:bg-white/[0.04] transition-colors duration-150"
+                            className="flex items-center justify-between px-4 py-3 border-t border-white/[0.07] text-[#EBBA6F] text-[12px] font-semibold tracking-[0.08em] uppercase hover:bg-white/[0.04] rounded-b-xl transition-colors duration-150"
                             style={{ fontFamily: 'var(--font-ui)' }}
                           >
                             {item.viewAllLabel ?? `View all ${item.label.toLowerCase()}`}
@@ -256,6 +268,7 @@ export default function Navbar({
         {mobileOpen && (
           <motion.div
             id="mobile-nav"
+            data-testid="mobile-nav"
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
@@ -272,7 +285,10 @@ export default function Navbar({
                 if (item.children) {
                   const isDropdownOnly = item.href === '#'
                   const isExpanded = mobileExpanded === item.label
-                  const toggleExpanded = () => setMobileExpanded(v => v === item.label ? null : item.label)
+                  const toggleExpanded = () => {
+                    setMobileExpanded((v) => (v === item.label ? null : item.label))
+                    setMobileSubExpanded(null)
+                  }
 
                   return (
                     <div key={item.label}>
@@ -292,7 +308,7 @@ export default function Navbar({
                             aria-current={isActive ? 'page' : undefined}
                             className={['flex-1 px-4 py-3.5 rounded-xl text-[15px] transition-colors duration-150', isActive ? 'text-[#EBBA6F] font-medium' : 'text-white/60 hover:text-white'].join(' ')}
                             style={{ fontFamily: 'var(--font-ui)' }}
-                            onClick={() => setMobileOpen(false)}
+                            onClick={closeMobile}
                           >
                             {item.label}
                           </Link>
@@ -301,6 +317,7 @@ export default function Navbar({
                           onClick={toggleExpanded}
                           className="px-4 py-3.5 text-white/40 hover:text-white transition-colors duration-150"
                           aria-label={`Toggle ${item.label} submenu`}
+                          aria-expanded={isExpanded}
                         >
                           <ChevronDown
                             size={15} strokeWidth={2}
@@ -320,26 +337,24 @@ export default function Navbar({
                             className="overflow-hidden"
                           >
                             <div className="ml-4 pl-4 border-l border-white/[0.07] flex flex-col pb-2">
-                              {item.children.slice(0, 5).map((child) => (
-                                <Link
+                              {item.children.slice(0, DESKTOP_ROW_CAP).map((child) => (
+                                <MobileRow
                                   key={child.href}
-                                  href={child.href}
-                                  className="flex flex-col py-2.5 text-white/55 hover:text-white transition-colors duration-150"
-                                  style={{ fontFamily: 'var(--font-ui)' }}
-                                  onClick={() => setMobileOpen(false)}
-                                >
-                                  <span className="text-[14px]">{child.label}</span>
-                                  <span className="text-[12px] text-white/30 mt-0.5" style={{ fontFamily: 'var(--font-body)' }}>
-                                    {child.description}
-                                  </span>
-                                </Link>
+                                  child={child}
+                                  isSubExpanded={mobileSubExpanded === (child.id ?? child.href)}
+                                  onToggleSub={() => setMobileSubExpanded((v) => {
+                                    const key = child.id ?? child.href
+                                    return v === key ? null : key
+                                  })}
+                                  onNavigate={closeMobile}
+                                />
                               ))}
-                              {!isDropdownOnly && item.children.length > 5 && (
+                              {!isDropdownOnly && (
                                 <Link
                                   href={item.href}
                                   className="flex items-center gap-2 py-2.5 text-[#EBBA6F] text-[13px] font-semibold tracking-[0.06em] uppercase hover:text-[#DDA85E] transition-colors duration-150"
                                   style={{ fontFamily: 'var(--font-ui)' }}
-                                  onClick={() => setMobileOpen(false)}
+                                  onClick={closeMobile}
                                 >
                                   {item.viewAllLabel ?? `View all ${item.label.toLowerCase()}`}
                                   <ArrowRight size={13} aria-hidden />
@@ -365,7 +380,7 @@ export default function Navbar({
                         : 'text-white/60 hover:text-white hover:bg-white/[0.05]',
                     ].join(' ')}
                     style={{ fontFamily: 'var(--font-ui)' }}
-                    onClick={() => setMobileOpen(false)}
+                    onClick={closeMobile}
                   >
                     {item.label}
                   </Link>
@@ -378,7 +393,7 @@ export default function Navbar({
                   href={ctaHref}
                   className="flex items-center justify-center gap-2 w-full py-3.5 bg-[#EBBA6F] text-[#0C0F1C] text-[14px] font-semibold rounded-full hover:bg-[#DDA85E] transition-colors duration-150"
                   style={{ fontFamily: 'var(--font-ui)' }}
-                  onClick={() => setMobileOpen(false)}
+                  onClick={closeMobile}
                 >
                   {ctaText}
                   <ArrowRight size={15} aria-hidden strokeWidth={2.5} />
@@ -389,5 +404,143 @@ export default function Navbar({
         )}
       </AnimatePresence>
     </header>
+  )
+}
+
+// ── Desktop dropdown row ──────────────────────────────────────────────────────
+
+/**
+ * One row of a dropdown panel. When the row has its own children it also
+ * renders a flyout to the right, revealed on hover or keyboard focus.
+ */
+function DesktopRow({ child }: { child: DropdownChild }) {
+  const link = (
+    <SiteLink
+      href={child.href}
+      className="flex items-center justify-between gap-3 px-4 py-3 hover:bg-white/[0.04] first:rounded-t-xl transition-colors duration-150 group/item"
+    >
+      <span className="flex flex-col">
+        <span className="text-white text-[13.5px] font-medium group-hover/item:text-[#EBBA6F] transition-colors duration-150" style={{ fontFamily: 'var(--font-ui)' }}>
+          {child.label}
+        </span>
+        <span className="text-white/35 text-[11.5px] mt-0.5" style={{ fontFamily: 'var(--font-body)' }}>
+          {child.description}
+        </span>
+      </span>
+      {child.children && (
+        <ChevronRight size={14} strokeWidth={2} className="text-white/30 shrink-0 group-hover/item:text-[#EBBA6F] transition-colors duration-150" aria-hidden />
+      )}
+    </SiteLink>
+  )
+
+  if (!child.children) return link
+
+  return (
+    <div className="relative group/cat" data-testid={`fleet-category-${child.id ?? child.href}`}>
+      {link}
+
+      {/* Sub-dropdown */}
+      <div className="absolute left-full top-0 pl-2 opacity-0 pointer-events-none group-hover/cat:opacity-100 group-hover/cat:pointer-events-auto group-focus-within/cat:opacity-100 group-focus-within/cat:pointer-events-auto transition-opacity duration-200 z-50">
+        <div
+          data-testid={`fleet-submenu-${child.id ?? child.href}`}
+          className="bg-[#0D1221] border border-white/[0.09] rounded-xl shadow-[0_16px_48px_rgba(0,0,0,0.5)] overflow-hidden min-w-[240px]"
+        >
+          {child.children.map((grandchild) => (
+            <Link
+              key={grandchild.href}
+              href={grandchild.href}
+              className="flex flex-col px-4 py-3 hover:bg-white/[0.04] transition-colors duration-150 group/sub"
+            >
+              <span className="text-white text-[13.5px] font-medium group-hover/sub:text-[#EBBA6F] transition-colors duration-150" style={{ fontFamily: 'var(--font-ui)' }}>
+                {grandchild.label}
+              </span>
+              <span className="text-white/35 text-[11.5px] mt-0.5" style={{ fontFamily: 'var(--font-body)' }}>
+                {grandchild.description}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Mobile drawer row ─────────────────────────────────────────────────────────
+
+/** One row of an expanded mobile section, with a nested accordion when it has children. */
+function MobileRow({
+  child,
+  isSubExpanded,
+  onToggleSub,
+  onNavigate,
+}: {
+  child:         DropdownChild
+  isSubExpanded: boolean
+  onToggleSub:   () => void
+  onNavigate:    () => void
+}) {
+  const link = (
+    <SiteLink
+      href={child.href}
+      className="flex flex-col flex-1 py-2.5 text-white/55 hover:text-white transition-colors duration-150"
+      style={{ fontFamily: 'var(--font-ui)' }}
+      onClick={onNavigate}
+    >
+      <span className="text-[14px]">{child.label}</span>
+      <span className="text-[12px] text-white/30 mt-0.5" style={{ fontFamily: 'var(--font-body)' }}>
+        {child.description}
+      </span>
+    </SiteLink>
+  )
+
+  if (!child.children) return link
+
+  return (
+    <div>
+      <div className="flex items-center">
+        {link}
+        <button
+          onClick={onToggleSub}
+          className="px-3 py-2.5 text-white/40 hover:text-white transition-colors duration-150"
+          aria-label={`Toggle ${child.label} vehicles`}
+          aria-expanded={isSubExpanded}
+        >
+          <ChevronDown
+            size={14} strokeWidth={2}
+            className={['transition-transform duration-200', isSubExpanded ? 'rotate-180' : ''].join(' ')}
+            aria-hidden
+          />
+        </button>
+      </div>
+
+      <AnimatePresence>
+        {isSubExpanded && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            className="overflow-hidden"
+          >
+            <div className="ml-3 pl-3 border-l border-white/[0.07] flex flex-col pb-1">
+              {child.children.map((grandchild) => (
+                <Link
+                  key={grandchild.href}
+                  href={grandchild.href}
+                  className="flex flex-col py-2 text-white/50 hover:text-white transition-colors duration-150"
+                  style={{ fontFamily: 'var(--font-ui)' }}
+                  onClick={onNavigate}
+                >
+                  <span className="text-[13.5px]">{grandchild.label}</span>
+                  <span className="text-[11.5px] text-white/30 mt-0.5" style={{ fontFamily: 'var(--font-body)' }}>
+                    {grandchild.description}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   )
 }
