@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { redirect } from 'next/navigation'
 import VehicleDetail from '../../../components/VehicleDetail'
 import { EXECUTIVE_COACHES } from '../../../components/VehicleList'
 
@@ -9,7 +9,8 @@ export function generateStaticParams() {
 export default async function CoachDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const vehicle = EXECUTIVE_COACHES.find((v) => v.slug === slug)
-  if (!vehicle) notFound()
+  // No such vehicle — send them to the category listing rather than a 404.
+  if (!vehicle) redirect('/fleet')
 
   const others = EXECUTIVE_COACHES.filter((v) => v.slug !== slug)
 
