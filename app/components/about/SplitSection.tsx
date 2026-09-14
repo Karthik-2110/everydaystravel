@@ -25,7 +25,7 @@ export default function SplitSection({
   return (
     <section
       aria-label={heading}
-      className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-14 lg:py-20"
+      className="site-container py-14 lg:py-20"
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-center">
 

@@ -65,7 +65,7 @@ export default function GalleryPage() {
     <div className="min-h-screen bg-[#0C0F1C]">
       <Navbar />
 
-      <main className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-32 pb-20 lg:pb-24">
+      <main className="site-container pt-32 pb-20 lg:pb-24">
 
         {/* Header */}
         <div className="flex flex-col items-center text-center mb-10 lg:mb-14">

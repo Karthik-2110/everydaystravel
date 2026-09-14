@@ -15,7 +15,7 @@ export default function StatBand({ stats }: { stats: BandStat[] }) {
       className="w-full border-t border-b border-[#EBBA6F]/20"
       style={{ background: 'linear-gradient(90deg, #2B1E06 0%, #3A2A0A 50%, #2B1E06 100%)' }}
     >
-      <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-6">
+      <div className="site-container py-6">
         <div className="flex flex-col sm:flex-row items-center justify-center divide-y sm:divide-y-0 sm:divide-x divide-[#EBBA6F]/25">
           {stats.map(({ icon: Icon, label }) => (
             <div

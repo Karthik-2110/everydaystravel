@@ -41,7 +41,7 @@ export default function BookPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#0C0F1C] via-transparent to-[#0C0F1C]/70" />
         </div>
 
-        <div className="relative max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-32 pb-12 lg:pt-36 lg:pb-14">
+        <div className="relative site-container pt-32 pb-12 lg:pt-36 lg:pb-14">
           <h1
             className="text-white leading-[0.95] tracking-[-0.02em]"
             style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(2.4rem, 5.2vw, 4.2rem)' }}
@@ -75,7 +75,7 @@ export default function BookPage() {
       </section>
 
       {/* ── Form ──────────────────────────────────────────────────────────── */}
-      <main className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-10 lg:py-14">
+      <main className="site-container py-10 lg:py-14">
         <BookingForm />
       </main>
 

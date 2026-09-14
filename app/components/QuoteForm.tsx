@@ -188,7 +188,7 @@ export default function QuoteForm() {
   }
 
   return (
-    <section className="relative z-20 px-5 sm:px-8 lg:px-12 mt-[42px]">
+    <section className="relative z-20 site-container mt-[42px]">
       <div ref={cardRef} onMouseEnter={focusFirstField} className="bg-[#0D1221] rounded-2xl border border-[#EBBA6F]/35 shadow-[0_0_0_1px_rgba(235,186,111,0.10),0_0_34px_rgba(235,186,111,0.14),0_20px_60px_rgba(0,0,0,0.45)] p-6 sm:p-7 lg:p-8 transition-[border-color,box-shadow] duration-300 hover:border-[#EBBA6F]/70 hover:shadow-[0_0_0_1px_rgba(235,186,111,0.28),0_0_70px_rgba(235,186,111,0.30),0_24px_70px_rgba(0,0,0,0.5)]">
 
         {/* ── Header ── */}

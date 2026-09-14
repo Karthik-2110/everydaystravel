@@ -137,7 +137,7 @@ export default function ServicesGrid({
 }: ServicesGridProps) {
   return (
     <section className="bg-[#0C0F1C]">
-      <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 lg:py-28">
+      <div className="site-container py-20 lg:py-28">
 
         {/* Header */}
         <div className="mb-12 lg:mb-16 flex flex-col items-center text-center">

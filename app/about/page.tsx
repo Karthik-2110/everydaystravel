@@ -54,7 +54,7 @@ export default function AboutPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#0C0F1C] via-transparent to-[#0C0F1C]/70" />
         </div>
 
-        <div className="relative max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-32 pb-14 lg:pt-36 lg:pb-16">
+        <div className="relative site-container pt-32 pb-14 lg:pt-36 lg:pb-16">
           <p
             className="text-[#EBBA6F] text-[11px] font-semibold tracking-[0.2em] uppercase mb-5"
             style={{ fontFamily: 'var(--font-ui)' }}
@@ -121,7 +121,7 @@ export default function AboutPage() {
         {/* ── Commitments ─────────────────────────────────────────────────── */}
         <section
           aria-label="We are committed to"
-          className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-14 lg:py-20"
+          className="site-container py-14 lg:py-20"
         >
           <div className="flex flex-col items-center text-center mb-10 lg:mb-12">
             <p

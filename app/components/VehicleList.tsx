@@ -160,7 +160,7 @@ function VehicleCard({ vehicle, category }: { vehicle: Vehicle; category?: strin
 export default function VehicleList({ vehicles, heading = 'Our vehicles', subtext, category }: VehicleListProps) {
   return (
     <section className="bg-[#0C0F1C]">
-      <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 lg:py-28">
+      <div className="site-container py-20 lg:py-28">
 
         {(heading || subtext) && (
           <div className="mb-12 lg:mb-16 flex flex-col items-center text-center">

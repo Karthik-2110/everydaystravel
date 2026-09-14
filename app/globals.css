@@ -170,3 +170,26 @@
   --background: #0C0F1C;
   --foreground: #FFFFFF;
 }
+
+/* ── Page container ──
+   Full-bleed width with a proportional 7% gutter on each side, so content
+   scales with the viewport instead of capping at a fixed max-width and
+   centring. Content therefore always occupies the middle 86%.
+
+   Every page/section container uses this one class — change the value here
+   and the whole site follows.
+
+   Note: 7% is proportional, so the gutter grows on small screens too
+   (≈26px each side on a 375px phone). To hold a flat gutter on phones and
+   only go proportional from the `sm` breakpoint up, use instead:
+
+     @utility site-container {
+       width: 100%;
+       padding-inline: 1.25rem;
+       @media (width >= 40rem) { padding-inline: 7%; }
+     }
+*/
+@utility site-container {
+  width: 100%;
+  padding-inline: 7%;
+}

@@ -55,7 +55,7 @@ export default function FleetCarousel() {
     <section className="bg-[#0C0F1C] py-20 lg:py-28 overflow-hidden">
 
       {/* ── Header ── */}
-      <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 mb-10 lg:mb-12 text-center">
+      <div className="site-container mb-10 lg:mb-12 text-center">
 
         {/* Kicker */}
         <div className="inline-flex items-center gap-2 mb-5">

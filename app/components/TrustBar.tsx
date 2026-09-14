@@ -11,7 +11,7 @@ const ITEMS: { icon: LucideIcon; label: string; subtitle: string }[] = [
 export default function TrustBar() {
   return (
     <div className="relative w-full">
-      <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-6 lg:py-8">
+      <div className="site-container py-6 lg:py-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:divide-x sm:divide-white/[0.12]">
           {ITEMS.map((item) => (
             <div

@@ -28,7 +28,7 @@ export default function ReviewsPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#0C0F1C] via-transparent to-[#0C0F1C]/70" />
         </div>
 
-        <div className="relative max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-32 pb-12 lg:pt-36 lg:pb-14">
+        <div className="relative site-container pt-32 pb-12 lg:pt-36 lg:pb-14">
           <p
             className="text-[#EBBA6F] text-[11px] font-semibold tracking-[0.2em] uppercase mb-5"
             style={{ fontFamily: 'var(--font-ui)' }}
@@ -61,7 +61,7 @@ export default function ReviewsPage() {
         <Testimonials />
 
         {/* ── CTA ─────────────────────────────────────────────────────────── */}
-        <section className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 lg:py-20 text-center">
+        <section className="site-container py-16 lg:py-20 text-center">
           <h2
             className="text-white leading-[1.05] tracking-[-0.02em] mb-5"
             style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.9rem, 3.4vw, 2.8rem)' }}

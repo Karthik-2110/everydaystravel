@@ -42,7 +42,7 @@ export default function ContactPage() {
       </div>
 
       {/* ── Get in touch ──────────────────────────────────────────────────── */}
-      <main className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 lg:py-20">
+      <main className="site-container py-16 lg:py-20">
 
         <div className="flex flex-col items-center text-center mb-10">
           <p className="flex items-center gap-2 mb-4">

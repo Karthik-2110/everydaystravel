@@ -158,7 +158,7 @@ export default function VehicleDetail({
     <div className="min-h-screen bg-[#0C0F1C]">
       <Navbar />
 
-      <main className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-28 pb-0">
+      <main className="site-container pt-28 pb-0">
 
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 mb-6">
@@ -299,7 +299,7 @@ export default function VehicleDetail({
       {/* ── Explore other vehicles ── */}
       {otherVehicles.length > 0 && (
         <section className="bg-[#0C0F1C] border-t border-white/[0.05]">
-          <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-20 lg:py-24">
+          <div className="site-container py-20 lg:py-24">
 
             {/* Header */}
             <div className="flex flex-col items-center text-center mb-12">

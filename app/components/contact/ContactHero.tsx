@@ -46,7 +46,7 @@ export default function ContactHero() {
 
   return (
     <section aria-label="Contact us" className="bg-[#0C0F1C] pt-24 lg:pt-28 pb-6">
-      <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12">
+      <div className="site-container">
         <div
           className="relative rounded-2xl lg:rounded-3xl overflow-hidden bg-[#0D1221]"
           onKeyDown={(e) => {

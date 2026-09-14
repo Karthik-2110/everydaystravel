@@ -117,7 +117,7 @@ export default function Hero({
       <div className="absolute inset-0 bg-gradient-to-t from-[#0C0F1C] via-[#0C0F1C]/20 to-transparent" />
 
       {/* Content */}
-      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-28 sm:pt-32 lg:pt-36 pb-10 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 lg:gap-10">
+      <div className="relative z-10 w-full site-container pt-28 sm:pt-32 lg:pt-36 pb-10 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 lg:gap-10">
         <div className="max-w-[560px] lg:max-w-[660px]">
 
           {/* Badge pill */}
@@ -266,7 +266,7 @@ export default function Hero({
       </div>
 
       {/* Quote form */}
-      <div className="relative z-10 w-full max-w-[1440px] mx-auto pb-10">
+      <div className="relative z-10 w-full pb-10">
         <QuoteForm />
       </div>
 

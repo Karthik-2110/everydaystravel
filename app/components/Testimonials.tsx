@@ -19,7 +19,7 @@ export default function Testimonials({ reviews = ALL_REVIEWS }: { reviews?: Revi
 
   return (
     <section aria-label="Customer reviews" className="bg-[#F4EFE8]">
-      <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 lg:py-16">
+      <div className="site-container py-16 lg:py-16">
 
         {/* ── Centered header ── */}
         <div className="flex flex-col items-center text-center mb-10">
