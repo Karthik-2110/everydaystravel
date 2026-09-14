@@ -9,8 +9,10 @@ const base =
 
 interface Prediction {
   placeId: string
+  /** Full formatted text — what we write back into the field on select. */
   description: string
   mainText: string
+  secondaryText: string
 }
 
 export interface PlacesAutocompleteFieldProps {
@@ -31,15 +33,9 @@ export default function PlacesAutocompleteField({
   const [predictions, setPredictions] = useState<Prediction[]>([])
   const [loading, setLoading]         = useState(false)
   const containerRef                  = useRef<HTMLDivElement>(null)
-  const serviceRef                    = useRef<google.maps.places.AutocompleteService | null>(null)
   const debounceRef                   = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  // Initialise Places service on mount
-  useEffect(() => {
-    loadGoogleMaps()
-      .then(() => { serviceRef.current = new google.maps.places.AutocompleteService() })
-      .catch(() => {})
-  }, [])
+  // Monotonic id so a slow response for an old query can't overwrite a newer one.
+  const requestIdRef                  = useRef(0)
 
   // Fetch predictions whenever value changes (debounced 300 ms)
   useEffect(() => {
@@ -50,30 +46,39 @@ export default function PlacesAutocompleteField({
       return
     }
 
-    debounceRef.current = setTimeout(() => {
-      if (!serviceRef.current) return
+    debounceRef.current = setTimeout(async () => {
+      const requestId = ++requestIdRef.current
       setLoading(true)
-      serviceRef.current.getPlacePredictions(
-        {
-          input: value,
-          componentRestrictions: { country: 'gb' },
-          types: ['geocode', 'establishment'],
-        },
-        (results, status) => {
-          setLoading(false)
-          if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-            setPredictions(
-              results.map((p) => ({
-                placeId: p.place_id,
-                description: p.description,
-                mainText: p.structured_formatting.main_text,
-              }))
-            )
-          } else {
-            setPredictions([])
-          }
-        }
-      )
+      try {
+        // Awaiting the singleton loader here (rather than priming a service on
+        // mount) means keystrokes that land before the SDK is ready still
+        // resolve once it loads, instead of silently returning nothing.
+        await loadGoogleMaps()
+
+        const { suggestions } =
+          await google.maps.places.AutocompleteSuggestion.fetchAutocompleteSuggestions({
+            input: value,
+            includedRegionCodes: ['gb'],
+          })
+
+        if (requestId !== requestIdRef.current) return // a newer query superseded this one
+
+        setPredictions(
+          suggestions
+            .map((s) => s.placePrediction)
+            .filter((p): p is google.maps.places.PlacePrediction => p !== null)
+            .map((p) => ({
+              placeId: p.placeId,
+              description: p.text.text,
+              mainText: p.mainText?.text ?? p.text.text,
+              secondaryText: p.secondaryText?.text ?? '',
+            }))
+        )
+      } catch {
+        if (requestId === requestIdRef.current) setPredictions([])
+      } finally {
+        if (requestId === requestIdRef.current) setLoading(false)
+      }
     }, 300)
 
     return () => {
@@ -152,9 +157,11 @@ export default function PlacesAutocompleteField({
                 <span className="block text-[13px]" style={{ fontFamily: 'var(--font-body)' }}>
                   {p.mainText}
                 </span>
-                <span className="block text-[11px] text-white/35 mt-0.5" style={{ fontFamily: 'var(--font-body)' }}>
-                  {p.description}
-                </span>
+                {p.secondaryText && (
+                  <span className="block text-[11px] text-white/35 mt-0.5" style={{ fontFamily: 'var(--font-body)' }}>
+                    {p.secondaryText}
+                  </span>
+                )}
               </div>
             ))}
           </div>

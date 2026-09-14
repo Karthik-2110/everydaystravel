@@ -1,5 +1,10 @@
 # Google Places Autocomplete — Implementation Plan
 
+> **Superseded detail (2026-09-14):** the env var is now `GOOGLE_MAPS_API_KEY`,
+> not `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`. It is bridged into the client bundle by
+> the `env` block in `next.config.ts`. References to the old name below are
+> historical; do not follow them.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Replace the static UK location dropdown in both quote forms with a Google Places Autocomplete field that returns live UK-biased predictions.

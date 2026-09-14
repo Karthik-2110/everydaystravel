@@ -6,17 +6,26 @@ vi.mock('@/app/lib/google-maps-loader', () => ({
   loadGoogleMaps: vi.fn().mockResolvedValue(undefined),
 }))
 
-const mockGetPredictions = vi.fn()
+const mockFetchSuggestions = vi.fn()
+
+/** Shapes a Places API (New) PlacePrediction the way the SDK returns it. */
+function suggestion(placeId: string, mainText: string, secondaryText: string) {
+  return {
+    placePrediction: {
+      placeId,
+      text: { text: secondaryText ? `${mainText}, ${secondaryText}` : mainText },
+      mainText: { text: mainText },
+      secondaryText: secondaryText ? { text: secondaryText } : null,
+    },
+  }
+}
 
 function setupGoogle() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ;(globalThis as any).google = {
     maps: {
       places: {
-        AutocompleteService: vi.fn().mockImplementation(function () {
-          return { getPlacePredictions: mockGetPredictions }
-        }),
-        PlacesServiceStatus: { OK: 'OK', ZERO_RESULTS: 'ZERO_RESULTS' },
+        AutocompleteSuggestion: { fetchAutocompleteSuggestions: mockFetchSuggestions },
       },
     },
   }
@@ -66,14 +75,9 @@ describe('PlacesAutocompleteField', () => {
 
   it('shows predictions after typing (debounced 300 ms)', async () => {
     vi.useFakeTimers()
-    mockGetPredictions.mockImplementation(
-      (_req: unknown, cb: (predictions: unknown[], status: string) => void) => {
-        cb(
-          [{ place_id: 'abc', description: 'Gatwick Airport, Horley, UK', structured_formatting: { main_text: 'Gatwick Airport' } }],
-          'OK',
-        )
-      },
-    )
+    mockFetchSuggestions.mockResolvedValue({
+      suggestions: [suggestion('abc', 'Gatwick Airport', 'Horley, UK')],
+    })
 
     renderField('Gatwick')
     await act(async () => { await vi.runAllTimersAsync() })
@@ -85,14 +89,9 @@ describe('PlacesAutocompleteField', () => {
   it('calls onChange with the full description when a prediction is selected', async () => {
     vi.useFakeTimers()
     const onChange = vi.fn()
-    mockGetPredictions.mockImplementation(
-      (_req: unknown, cb: (predictions: unknown[], status: string) => void) => {
-        cb(
-          [{ place_id: 'xyz', description: 'Gatwick Airport, Horley, UK', structured_formatting: { main_text: 'Gatwick Airport' } }],
-          'OK',
-        )
-      },
-    )
+    mockFetchSuggestions.mockResolvedValue({
+      suggestions: [suggestion('xyz', 'Gatwick Airport', 'Horley, UK')],
+    })
 
     renderField('Gatwick', onChange)
     await act(async () => { await vi.runAllTimersAsync() })
@@ -103,14 +102,9 @@ describe('PlacesAutocompleteField', () => {
 
   it('closes the dropdown on Escape key', async () => {
     vi.useFakeTimers()
-    mockGetPredictions.mockImplementation(
-      (_req: unknown, cb: (predictions: unknown[], status: string) => void) => {
-        cb(
-          [{ place_id: 'abc', description: 'Gatwick Airport', structured_formatting: { main_text: 'Gatwick Airport' } }],
-          'OK',
-        )
-      },
-    )
+    mockFetchSuggestions.mockResolvedValue({
+      suggestions: [suggestion('abc', 'Gatwick Airport', '')],
+    })
 
     renderField('Gatwick')
     await act(async () => { await vi.runAllTimersAsync() })
@@ -122,11 +116,7 @@ describe('PlacesAutocompleteField', () => {
 
   it('shows no dropdown when the query returns no results', async () => {
     vi.useFakeTimers()
-    mockGetPredictions.mockImplementation(
-      (_req: unknown, cb: (predictions: unknown[], status: string) => void) => {
-        cb([], 'ZERO_RESULTS')
-      },
-    )
+    mockFetchSuggestions.mockResolvedValue({ suggestions: [] })
 
     renderField('xyzzy')
     await act(async () => { await vi.runAllTimersAsync() })
