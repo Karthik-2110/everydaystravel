@@ -6,7 +6,7 @@ export function loadGoogleMaps(): Promise<void> {
   if (loaderPromise) return loaderPromise
 
   setOptions({
-    key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? '',
+    key: process.env.GOOGLE_MAPS_API_KEY ?? '',
     v: 'weekly',
   })
 

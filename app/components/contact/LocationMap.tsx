@@ -2,7 +2,7 @@ import { Phone, Mail, Clock, ExternalLink } from 'lucide-react'
 import { ADDRESS, CONTACT_LINES } from './contact-details'
 
 // The map uses the Google Maps **Embed API** — a different API from Places,
-// keyed off the same NEXT_PUBLIC_GOOGLE_MAPS_API_KEY. If the iframe renders an
+// keyed off the same GOOGLE_MAPS_API_KEY. If the iframe renders an
 // error, enable "Maps Embed API" for that key in Google Cloud Console.
 
 const MAPS_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS)}`
@@ -10,7 +10,7 @@ const MAPS_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
 const ICONS = { phone: Phone, mail: Mail, clock: Clock }
 
 export default function LocationMap() {
-  const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+  const key = process.env.GOOGLE_MAPS_API_KEY
   const embedSrc = key
     ? `https://www.google.com/maps/embed/v1/place?key=${key}&q=${encodeURIComponent(ADDRESS)}&zoom=14`
     : null
@@ -49,7 +49,7 @@ export default function LocationMap() {
 
       {/* Contact strip */}
       <div className="bg-[#EDE9E0]">
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-6">
+        <div className="site-container py-6">
           <ul className="flex flex-col sm:flex-row sm:flex-wrap items-center justify-center gap-x-10 gap-y-3">
             {CONTACT_LINES.map(({ icon, label, href }) => {
               const Icon = ICONS[icon]
