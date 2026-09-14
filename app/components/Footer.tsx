@@ -80,7 +80,7 @@ export default function Footer() {
         <div className="absolute inset-0 bg-gradient-to-r from-[#04060E]/95 via-[#04060E]/75 to-[#04060E]/90" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#04060E]/30 via-transparent to-[#04060E]/40" />
 
-        <div className="relative max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-16 lg:py-24">
+        <div className="relative site-container py-16 lg:py-24">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-12">
 
             {/* Left — heading + buttons */}
@@ -192,7 +192,7 @@ export default function Footer() {
 
       {/* ── Main body ── */}
       <div className="bg-[#0C0F1C]">
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 pt-14 pb-12 lg:pt-16 lg:pb-14">
+        <div className="site-container pt-14 pb-12 lg:pt-16 lg:pb-14">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr] gap-10 lg:gap-12">
 
             {/* Brand column */}
@@ -200,8 +200,8 @@ export default function Footer() {
               <Image
                 src="/images/everyday_logo.avif"
                 alt="Everyday Travels"
-                width={180}
-                height={80}
+                width={512}
+                height={267}
                 className="h-[80px] w-auto object-contain mb-5"
               />
               <p
@@ -323,7 +323,7 @@ export default function Footer() {
       {/* ── Bottom bar ── */}
       <div className="relative bg-[#06080F]">
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#EBBA6F]/20 to-transparent" />
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 py-5">
+        <div className="site-container py-5">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
             <p
               className="text-white/25 text-[12px]"

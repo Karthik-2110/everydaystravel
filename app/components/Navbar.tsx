@@ -131,7 +131,7 @@ export default function Navbar({
           : 'bg-transparent border-transparent',
       ].join(' ')}
     >
-      <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12">
+      <div className="site-container">
         <div className="flex items-center justify-between h-[72px] lg:h-[80px]">
 
           {/* ── Logo ── */}
@@ -140,11 +140,15 @@ export default function Navbar({
             aria-label="Everydays Travel home"
             className="flex-shrink-0 select-none"
           >
+            {/* width/height are the file's intrinsic 512x267 — declaring the real
+                ratio stops next/image warning; CSS below sets the display size.
+                `priority` because this logo is the above-the-fold LCP element. */}
             <Image
               src="/images/everyday_logo.avif"
               alt="Everydays Travel"
-              width={160}
-              height={62}
+              width={512}
+              height={267}
+              priority
               className="h-[62px] w-auto object-contain"
             />
           </Link>
@@ -276,7 +280,7 @@ export default function Navbar({
             className="lg:hidden bg-[#0C0F1C]/98 backdrop-blur-xl border-t border-white/[0.07] max-h-[calc(100dvh-72px)] overflow-y-auto overscroll-contain"
           >
             <nav
-              className="max-w-[1440px] mx-auto px-5 sm:px-8 py-4 flex flex-col"
+              className="site-container py-4 flex flex-col"
               aria-label="Mobile navigation"
             >
               {NAV_ITEMS.map((item) => {
