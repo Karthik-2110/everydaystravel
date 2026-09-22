@@ -1,16 +1,17 @@
 import Image from 'next/image'
-import type { Metadata } from 'next'
 import { UserCheck, ShieldCheck, Clock } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import BookingForm from '../components/booking/BookingForm'
 import Testimonials from '../components/Testimonials'
+import { createPageMetadata } from '../lib/seo'
 
-export const metadata: Metadata = {
-  title: 'Book Your Journey | Everyday Travels',
+export const metadata = createPageMetadata({
+  title: 'Book Your Journey',
   description:
-    'Tell us about your trip and we will prepare a personalised quotation — chauffeur cars, luxury minibuses and executive coaches across the UK.',
-}
+    'Tell us about your trip and we will prepare a personalised quotation — chauffeur cars, luxury minibuses and executive coaches across London, Surrey and the UK.',
+  path: '/book',
+})
 
 const HERO_IMAGE =
   'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_2400,c_limit/v1783785511/IMG_6138_n9khty.jpg'

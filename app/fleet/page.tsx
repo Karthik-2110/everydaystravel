@@ -2,6 +2,14 @@ import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
 import ServicesGrid from '../components/ServicesGrid'
 import Footer from '../components/Footer'
+import { createPageMetadata } from '../lib/seo'
+
+export const metadata = createPageMetadata({
+  title: 'Coach & Minibus Fleet',
+  description:
+    'Browse the Everydays Travel fleet — luxury minibuses, executive coaches and chauffeur-driven cars for hire across London, Surrey and the UK.',
+  path: '/fleet',
+})
 
 const PLACEHOLDER = 'https://res.cloudinary.com/dckyndryf/image/upload/f_auto,q_auto,w_800,c_limit/IMG_0938_fhylhh'
 

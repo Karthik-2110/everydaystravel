@@ -4,6 +4,14 @@ import StatBand from '../../components/StatBand'
 import VehicleList, { EXECUTIVE_COACHES } from '../../components/VehicleList'
 import Footer from '../../components/Footer'
 import { Users, Wifi, ShieldCheck } from 'lucide-react'
+import { createPageMetadata } from '../../lib/seo'
+
+export const metadata = createPageMetadata({
+  title: 'Executive Coach Hire London',
+  description:
+    'Executive coach hire from 35 to 55 seats for group travel across London, Surrey and the UK — Mercedes-Benz Turismo, Neoplan Tourliner and more.',
+  path: '/fleet/executive-coaches',
+})
 
 const STATS = [
   { icon: Users,       label: 'Up to 53 Passengers' },

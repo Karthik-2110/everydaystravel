@@ -1,16 +1,17 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import type { Metadata } from 'next'
 import { ArrowRight } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import Testimonials from '../components/Testimonials'
+import { createPageMetadata } from '../lib/seo'
 
-export const metadata: Metadata = {
-  title: 'Reviews | Everydays Travel',
+export const metadata = createPageMetadata({
+  title: 'Reviews',
   description:
-    'What our clients say — real reviews from weddings, school trips, airport transfers and corporate travel across the UK and Europe.',
-}
+    'What our clients say — real reviews from weddings, school trips, airport transfers and corporate travel across London, Surrey, the UK and Europe.',
+  path: '/reviews',
+})
 
 const HERO_PHOTO =
   'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_2400,c_limit/v1783787064/IMG_6170_fxbudt.jpg'

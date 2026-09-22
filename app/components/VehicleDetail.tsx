@@ -15,6 +15,7 @@ import Footer from './Footer'
 import VehicleBookingForm from './VehicleBookingForm'
 import VehicleImageGallery from './VehicleImageGallery'
 import type { Vehicle } from './VehicleList'
+import { serviceSchema } from '../lib/seo'
 
 const STARS_IMG = 'https://res.cloudinary.com/dckyndryf/image/upload/v1780237231/stars-5_w1ckxp.svg'
 
@@ -148,6 +149,13 @@ export default function VehicleDetail({
   preselectVehicle = true,
 }: VehicleDetailProps) {
   const base = hrefBase ?? `/fleet/${category}`
+  const path = `${base}/${vehicle.slug}`
+  const structuredData = serviceSchema({
+    name: vehicle.name,
+    description: vehicle.description,
+    path,
+    category: categoryLabel,
+  })
 
   // Real gallery photos when available, otherwise 4 placeholder slots
   const galleryImages = vehicle.images?.length
@@ -159,6 +167,12 @@ export default function VehicleDetail({
       <Navbar />
 
       <main className="site-container pt-28 pb-0">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData).replace(/</g, '\\u003c'),
+          }}
+        />
 
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 mb-6">

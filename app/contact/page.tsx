@@ -1,4 +1,3 @@
-import type { Metadata } from 'next'
 import { HeartHandshake, MessageSquareHeart, Phone, Mail, Clock } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -6,12 +5,14 @@ import ContactHero from '../components/contact/ContactHero'
 import EnquiryForm from '../components/contact/EnquiryForm'
 import LocationMap from '../components/contact/LocationMap'
 import { CONTACT_LINES } from '../components/contact/contact-details'
+import { createPageMetadata } from '../lib/seo'
 
-export const metadata: Metadata = {
-  title: 'Contact Us | Everyday Travels',
+export const metadata = createPageMetadata({
+  title: 'Contact Us',
   description:
-    'Share your travel requirements and receive a tailored quote — coach and minibus hire across the UK and Europe. Call 020 8941 8354 or send us an enquiry.',
-}
+    'Share your travel requirements and receive a tailored quote — coach and minibus hire across London, Surrey, the UK and Europe. Call 020 8941 8354 or send us an enquiry.',
+  path: '/contact',
+})
 
 const ICONS = { phone: Phone, mail: Mail, clock: Clock }
 

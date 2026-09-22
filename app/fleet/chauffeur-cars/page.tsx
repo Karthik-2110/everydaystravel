@@ -4,6 +4,14 @@ import StatBand from '../../components/StatBand'
 import VehicleList, { CHAUFFEUR_CARS } from '../../components/VehicleList'
 import Footer from '../../components/Footer'
 import { Users, Briefcase, UserCheck } from 'lucide-react'
+import { createPageMetadata } from '../../lib/seo'
+
+export const metadata = createPageMetadata({
+  title: 'Chauffeur Car Hire London',
+  description:
+    'Chauffeur-driven Mercedes-Benz, BMW and luxury cars for hire in London and Surrey — airport transfers, corporate travel and special occasions.',
+  path: '/fleet/chauffeur-cars',
+})
 
 const STATS = [
   { icon: Users,     label: '1–6 Passengers' },
