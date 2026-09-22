@@ -9,6 +9,7 @@ import {
 import { Input } from '@/components/ui/input'
 import DatePickerField from './DatePickerField'
 import PlacesAutocompleteField from './PlacesAutocompleteField'
+import { validateEmail, validateUkPhone } from '../lib/validation'
 
 // ── Style constants ─────────────────────────────────────────────────────────
 
@@ -101,7 +102,31 @@ function SelectField({
 
 // ── Component ───────────────────────────────────────────────────────────────
 
-export default function QuoteForm() {
+export interface QuoteFormProps {
+  /**
+   * 'panel' is the full-width card that sits below a hero.
+   * 'compact' is the narrow card that sits inside one, where the fields pair
+   * up two per row instead of spreading across five columns.
+   */
+  variant?: 'panel' | 'compact'
+}
+
+export default function QuoteForm({ variant = 'panel' }: QuoteFormProps = {}) {
+  const compact = variant === 'compact'
+
+  // Tailwind breakpoints track the viewport, not the container, so a narrow
+  // card on a wide screen needs its column counts set explicitly.
+  const sectionCls = compact ? 'relative z-20 w-full' : 'relative z-20 site-container mt-[42px]'
+  const cardPadCls = compact ? 'p-5 sm:p-6' : 'p-6 sm:p-7 lg:p-8'
+  const journeyRowCls = compact
+    ? 'grid grid-cols-1 sm:grid-cols-2 gap-4'
+    : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6'
+  const wideOnMobileCls = compact ? '' : 'sm:col-span-2 lg:col-span-1'
+  const contactRowCls = compact
+    ? 'grid grid-cols-1 sm:grid-cols-2 gap-4 items-start'
+    : 'grid grid-cols-1 sm:grid-cols-3 gap-6 items-start'
+  const submitWrapCls = compact ? 'sm:col-span-2' : ''
+
   const [journeyType, setJourneyType] = useState<'oneway' | 'return'>('oneway')
   const [pickup, setPickup]           = useState('')
   const [destination, setDestination] = useState('')
@@ -114,6 +139,8 @@ export default function QuoteForm() {
   const [phone, setPhone]               = useState('')
   const [emailError, setEmailError]     = useState('')
   const [emailTouched, setEmailTouched] = useState(false)
+  const [phoneError, setPhoneError]     = useState('')
+  const [phoneTouched, setPhoneTouched] = useState(false)
   const [submitting, setSubmitting]     = useState(false)
   const [submitted, setSubmitted]       = useState(false)
 
@@ -133,6 +160,8 @@ export default function QuoteForm() {
       setPhone('')
       setEmailTouched(false)
       setEmailError('')
+      setPhoneTouched(false)
+      setPhoneError('')
     }, 3000)
     return () => clearTimeout(t)
   }, [submitted])
@@ -140,25 +169,25 @@ export default function QuoteForm() {
   const isReturn       = journeyType === 'return'
   const showContactRow = Boolean(pickup && destination && passengers && travelDate && pickupTime)
 
-  const validateEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())
-
   const handleEmailBlur = () => {
     setEmailTouched(true)
-    if (!email) {
-      setEmailError('Email address is required')
-    } else if (!validateEmail(email)) {
-      setEmailError('Please enter a valid email address')
-    } else {
-      setEmailError('')
-    }
+    setEmailError(validateEmail(email))
+  }
+
+  const handlePhoneBlur = () => {
+    setPhoneTouched(true)
+    setPhoneError(validateUkPhone(phone))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setEmailTouched(true)
-    if (!email) { setEmailError('Email address is required'); return }
-    if (!validateEmail(email)) { setEmailError('Please enter a valid email address'); return }
-    setEmailError('')
+    setPhoneTouched(true)
+    const emailProblem = validateEmail(email)
+    const phoneProblem = validateUkPhone(phone)
+    setEmailError(emailProblem)
+    setPhoneError(phoneProblem)
+    if (emailProblem || phoneProblem) return
     setSubmitting(true)
     try {
       const res = await fetch('/api/quote', {
@@ -188,8 +217,8 @@ export default function QuoteForm() {
   }
 
   return (
-    <section className="relative z-20 site-container mt-[42px]">
-      <div ref={cardRef} onMouseEnter={focusFirstField} className="bg-[#0D1221] rounded-2xl border border-[#EBBA6F]/35 shadow-[0_0_0_1px_rgba(235,186,111,0.10),0_0_34px_rgba(235,186,111,0.14),0_20px_60px_rgba(0,0,0,0.45)] p-6 sm:p-7 lg:p-8 transition-[border-color,box-shadow] duration-300 hover:border-[#EBBA6F]/70 hover:shadow-[0_0_0_1px_rgba(235,186,111,0.28),0_0_70px_rgba(235,186,111,0.30),0_24px_70px_rgba(0,0,0,0.5)]">
+    <section className={sectionCls}>
+      <div ref={cardRef} onMouseEnter={focusFirstField} className={`bg-[#0D1221] rounded-2xl border border-[#EBBA6F]/35 shadow-[0_0_0_1px_rgba(235,186,111,0.10),0_0_34px_rgba(235,186,111,0.14),0_20px_60px_rgba(0,0,0,0.45)] ${cardPadCls} transition-[border-color,box-shadow] duration-300 hover:border-[#EBBA6F]/70 hover:shadow-[0_0_0_1px_rgba(235,186,111,0.28),0_0_70px_rgba(235,186,111,0.30),0_24px_70px_rgba(0,0,0,0.5)]`}>
 
         {/* ── Header ── */}
         <div className="flex flex-wrap items-center gap-3 mb-6">
@@ -246,8 +275,8 @@ export default function QuoteForm() {
         ) : (
         <form onSubmit={handleSubmit} noValidate>
 
-          {/* ── Row 1: stacks on mobile, 2-col sm, 5-col lg ── */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+          {/* ── Row 1: column count depends on the variant ── */}
+          <div className={journeyRowCls}>
 
             {/* Pickup location */}
             <div>
@@ -302,7 +331,7 @@ export default function QuoteForm() {
             </div>
 
             {/* Travel date — full row on mobile */}
-            <div className="sm:col-span-2 lg:col-span-1">
+            <div className={wideOnMobileCls}>
               <label htmlFor="travel-date">
                 <FieldLabel>Travel date</FieldLabel>
               </label>
@@ -315,7 +344,7 @@ export default function QuoteForm() {
             </div>
 
             {/* Pickup time — full row on mobile */}
-            <div className="sm:col-span-2 lg:col-span-1">
+            <div className={wideOnMobileCls}>
               <label htmlFor="pickup-time">
                 <FieldLabel>Pickup time</FieldLabel>
               </label>
@@ -374,7 +403,7 @@ export default function QuoteForm() {
           <AnimatePresence>
             {showContactRow && (
               <motion.div {...REVEAL} className="overflow-hidden">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-start">
+                <div className={contactRowCls}>
 
                   <div>
                     <label htmlFor="email">
@@ -387,12 +416,7 @@ export default function QuoteForm() {
                       value={email}
                       onChange={(e) => {
                         setEmail(e.target.value)
-                        if (emailTouched) {
-                          const v = e.target.value
-                          if (!v) setEmailError('Email address is required')
-                          else if (!validateEmail(v)) setEmailError('Please enter a valid email address')
-                          else setEmailError('')
-                        }
+                        if (emailTouched) setEmailError(validateEmail(e.target.value))
                       }}
                       onBlur={handleEmailBlur}
                       placeholder="your@email.com"
@@ -421,13 +445,29 @@ export default function QuoteForm() {
                       aria-label="Phone number"
                       type="tel"
                       value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
+                      onChange={(e) => {
+                        setPhone(e.target.value)
+                        if (phoneTouched) setPhoneError(validateUkPhone(e.target.value))
+                      }}
+                      onBlur={handlePhoneBlur}
                       placeholder="+44 7000 000000"
-                      className={inputCls}
+                      aria-invalid={phoneTouched && !!phoneError}
+                      aria-describedby={phoneTouched && phoneError ? 'phone-error' : undefined}
+                      className={`${inputCls} ${phoneTouched && phoneError ? '!border-red-500/70 focus-visible:!border-red-500' : ''}`}
                     />
+                    {phoneTouched && phoneError && (
+                      <p
+                        id="phone-error"
+                        role="alert"
+                        className="mt-1.5 text-[11px] text-red-400"
+                        style={{ fontFamily: 'var(--font-ui)' }}
+                      >
+                        {phoneError}
+                      </p>
+                    )}
                   </div>
 
-                  <div>
+                  <div className={submitWrapCls}>
                     <span className="block text-[11px] mb-1.5" aria-hidden>&#8203;</span>
                   <button
                     type="submit"

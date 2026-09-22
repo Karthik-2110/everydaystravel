@@ -8,16 +8,16 @@ export default function Home() {
   return (
     <>
       <Navbar />
+      {/* The story copy that used to sit here is coming back once the card
+          layout is settled — pass `story` and `storyCta` again to restore it. */}
       <Hero
         videoSrc="https://res.cloudinary.com/dckyndryf/video/upload/v1780222799/hero_xgrraa"
-        story={[
-          'Everydays Travel Limited began in 2009 with a single 16-seater minibus and a clear vision.',
-          "Founding director Thaya Nadarajah entered the passenger transport industry at age 23 as a London bus driver, quickly progressing to manage one of the capital's top startup transport companies within four years. Drawing on that rich operational experience, he launched Everydays Travel to deliver an unmatched standard of service.",
-          'Today, we have built an elite reputation across London for luxury vehicles, chauffeur-style drivers, and absolute reliability.',
+        lines={[
+          { text: 'Choose Everydays Travel', accent: false },
+          { text: 'for coach hire in London', accent: true },
         ]}
-        storyCta="Ready to Book Your Group Transport?"
         subtext=""
-        showContact
+        inlineForm
       />
       <FleetCarousel />
       <Testimonials />

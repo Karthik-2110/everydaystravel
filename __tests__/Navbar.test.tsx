@@ -42,7 +42,7 @@ describe('Navbar', () => {
 
   it('renders all top-level navigation items', () => {
     render(<Navbar />)
-    for (const label of ['Home', 'Services', 'Our Fleet', 'Reviews', 'About us', 'More', 'Contact us']) {
+    for (const label of ['Home', 'Services', 'Our Fleet', 'More', 'Contact us']) {
       expect(screen.getAllByText(label).length).toBeGreaterThan(0)
     }
   })
@@ -74,7 +74,7 @@ describe('Navbar', () => {
     render(<Navbar />)
     const toggle = openMobileMenu()
     const mobileDrawer = screen.getByTestId('mobile-nav')
-    fireEvent.click(within(mobileDrawer).getByRole('link', { name: 'Reviews' }))
+    fireEvent.click(within(mobileDrawer).getByRole('link', { name: 'Contact us' }))
     expect(toggle).toHaveAttribute('aria-expanded', 'false')
   })
 })

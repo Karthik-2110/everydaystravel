@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { ChevronDown, ChevronRight, Menu, X, ArrowRight } from 'lucide-react'
+import { ChevronDown, ChevronRight, Menu, X, ArrowRight, Phone, Mail, Clock } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { FLEET_CATEGORIES } from '../data/fleet'
 import SiteLink from './SiteLink'
+import { WhatsAppIcon, WHATSAPP_HREF } from './icons/social'
+import { EMAIL, EMAIL_HREF, PHONE, PHONE_HREF } from './contact/contact-details'
 
 interface SubChild {
   label:       string
@@ -28,6 +30,8 @@ interface DropdownChild {
 interface NavItem {
   label:         string
   href:          string
+  /** Overrides the shared desktop row cap for menus that should show in full. */
+  rowCap?:       number
   children?:     DropdownChild[]
   viewAllLabel?: string
 }
@@ -77,12 +81,13 @@ const NAV_ITEMS: NavItem[] = [
     ],
   },
   FLEET_NAV_ITEM,
-  { label: 'Reviews', href: '/reviews' },
-  { label: 'About us', href: '/about' },
   {
     label:    'More',
     href:     '#',
+    rowCap:   7,
     children: [
+      { label: 'Reviews',   href: '/reviews',   description: 'What our clients say' },
+      { label: 'About us',  href: '/about',     description: 'Our story and our promise' },
       { label: 'Gallery',   href: '/gallery',   description: 'Our vehicles and journeys' },
       { label: 'Our Team',  href: '/team',      description: 'Meet the people behind Everyday Travels' },
       { label: 'Vacancies', href: '/vacancies', description: 'Join our growing team' },
@@ -131,6 +136,58 @@ export default function Navbar({
           : 'bg-transparent border-transparent',
       ].join(' ')}
     >
+      {/* ── Top contact bar — solid, and only while the hero is still in view.
+             Collapses to nothing once the page scrolls, leaving the nav alone.
+             Desktop only; small screens keep the floating contact bar instead. ── */}
+      <div
+        className={[
+          'hidden lg:block overflow-hidden bg-[#0C0F1C] transition-[height,opacity] duration-300',
+          scrolled
+            ? 'h-0 opacity-0 invisible'
+            : 'h-12 opacity-100 border-b border-white/[0.07]',
+        ].join(' ')}
+      >
+        <div
+          className="site-container h-12 flex items-center justify-between text-[13px]"
+          style={{ fontFamily: 'var(--font-ui)' }}
+        >
+          <div className="flex items-center gap-4 text-white/55">
+            <a
+              href={EMAIL_HREF}
+              className="inline-flex items-center gap-2 hover:text-white transition-colors duration-150"
+            >
+              <Mail size={13} aria-hidden />
+              {EMAIL}
+            </a>
+            <span className="w-px h-3.5 bg-white/15" aria-hidden />
+            <span className="inline-flex items-center gap-2">
+              <Clock size={13} aria-hidden />
+              Mon – Fri: 7:00 AM – 7:00 PM
+            </span>
+          </div>
+
+          <div className="flex items-center gap-5">
+            <a
+              href={PHONE_HREF}
+              aria-label={`Call ${PHONE}`}
+              className="inline-flex items-center gap-2 font-medium text-white/80 hover:text-[#EBBA6F] transition-colors duration-150"
+            >
+              <Phone size={13} aria-hidden />
+              {PHONE}
+            </a>
+            <a
+              href={WHATSAPP_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 font-medium text-white/80 hover:text-white transition-colors duration-150"
+            >
+              <WhatsAppIcon size={14} />
+              WhatsApp us
+            </a>
+          </div>
+        </div>
+      </div>
+
       <div className="site-container">
         <div className="flex items-center justify-between h-[72px] lg:h-[80px]">
 
@@ -163,7 +220,7 @@ export default function Navbar({
 
               if (item.children) {
                 const isDropdownOnly = item.href === '#'
-                const rows = item.children.slice(0, DESKTOP_ROW_CAP)
+                const rows = item.children.slice(0, item.rowCap ?? DESKTOP_ROW_CAP)
                 const triggerCls = [
                   'flex items-center gap-[5px] px-4 py-2 text-[13.5px] font-medium rounded-full transition-all duration-200 select-none',
                   isActive ? 'text-[#EBBA6F]' : 'text-white/55 hover:text-white hover:bg-white/[0.05]',
@@ -341,7 +398,7 @@ export default function Navbar({
                             className="overflow-hidden"
                           >
                             <div className="ml-4 pl-4 border-l border-white/[0.07] flex flex-col pb-2">
-                              {item.children.slice(0, DESKTOP_ROW_CAP).map((child) => (
+                              {item.children.slice(0, item.rowCap ?? DESKTOP_ROW_CAP).map((child) => (
                                 <MobileRow
                                   key={child.href}
                                   child={child}

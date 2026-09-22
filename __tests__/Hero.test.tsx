@@ -51,19 +51,6 @@ describe('Hero', () => {
     ).toBeInTheDocument()
   })
 
-  it('renders the Trustpilot card with its score', () => {
-    render(<Hero />)
-    expect(screen.getByText('4.4')).toBeInTheDocument()
-    expect(screen.getByText(/write a review/i)).toBeInTheDocument()
-  })
-
-  it('gives the Trustpilot card an accessible label', () => {
-    render(<Hero />)
-    expect(
-      screen.getByLabelText(/trustpilot rating 4\.4 out of 5/i),
-    ).toBeInTheDocument()
-  })
-
   it('renders a section with full viewport height', () => {
     render(<Hero />)
     const section = screen.getByRole('region', { name: /hero/i })

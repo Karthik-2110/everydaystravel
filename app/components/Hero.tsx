@@ -49,6 +49,11 @@ export interface HeroProps {
   subtext?:  string
   videoSrc?: string
   imageSrc?: string
+  /**
+   * Moves the quote form into the hero as a narrow card in place of the copy,
+   * rather than sitting full-width underneath it.
+   */
+  inlineForm?: boolean
 }
 
 const DEFAULT_HERO_IMAGE =
@@ -71,6 +76,7 @@ export default function Hero({
   subtext  = 'Reliable, professional transport for airport transfers, events and group travel.',
   videoSrc,
   imageSrc = DEFAULT_HERO_IMAGE,
+  inlineForm = false,
 }: HeroProps = {}) {
   const videoRef = useRef<HTMLVideoElement>(null)
 
@@ -112,13 +118,12 @@ export default function Hero({
       )}
 
       {/* Gradient layers */}
-      <div className="absolute inset-y-0 left-0 w-full md:w-[80%] bg-gradient-to-r from-[#060810]/95 via-[#060810]/72 to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-b from-[#0C0F1C]/40 via-transparent to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-t from-[#0C0F1C] via-[#0C0F1C]/20 to-transparent" />
 
       {/* Content */}
-      <div className="relative z-10 w-full site-container pt-28 sm:pt-32 lg:pt-36 pb-10 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 lg:gap-10">
-        <div className="max-w-[560px] lg:max-w-[660px]">
+      <div className="relative z-10 w-full site-container pt-28 sm:pt-32 lg:pt-44 pb-10 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 lg:gap-10">
+        <div className={inlineForm ? 'w-full lg:w-[62%] lg:min-w-[520px]' : 'max-w-[560px] lg:max-w-[660px]'}>
 
           {/* Badge pill */}
           <motion.div
@@ -133,7 +138,36 @@ export default function Hero({
             </span>
           </motion.div>
 
-          {story ? (
+          {inlineForm ? (
+            /* Headline over the card. With the scrim gone the type carries its
+               own shadow so it stays legible on the brighter video frames. */
+            <>
+              <h1
+                className="mb-8 leading-[1.08] tracking-[-0.025em]"
+                style={{ fontFamily: 'var(--font-ui)', fontWeight: 600 }}
+              >
+                {lines.map((line, i) => (
+                  <motion.span
+                    key={line.text}
+                    className={[
+                      'block text-[clamp(2.25rem,4vw,3.75rem)]',
+                      line.accent ? 'text-[#EBBA6F]' : 'text-white',
+                    ].join(' ')}
+                    style={{ textShadow: '0 2px 24px rgba(6,8,16,0.75), 0 1px 4px rgba(6,8,16,0.5)' }}
+                    variants={lineVariants}
+                    initial="hidden"
+                    animate="visible"
+                    custom={i}
+                  >
+                    {line.text}
+                  </motion.span>
+                ))}
+              </h1>
+              <motion.div {...fadeUp(0.45)} className="max-w-[480px]">
+                <QuoteForm variant="compact" />
+              </motion.div>
+            </>
+          ) : story ? (
             /* Story block — replaces the large headline */
             <div className="mb-7 sm:mb-8 max-w-[640px]">
               <h1 className="sr-only">{lines.map((l) => l.text).join(' ')}</h1>
@@ -191,7 +225,7 @@ export default function Hero({
           )}
 
           {/* Subtext */}
-          {subtext && (
+          {subtext && !inlineForm && (
             <motion.p
               {...fadeUp(0.6)}
               className="text-white/70 text-[clamp(0.95rem,1.4vw,1.1rem)] leading-relaxed mb-5 max-w-[400px]"
@@ -205,7 +239,7 @@ export default function Hero({
           {showContact && (
             <motion.div
               {...fadeUp(0.8)}
-              className="flex flex-col sm:flex-row sm:items-center gap-3"
+              className={`flex flex-col sm:flex-row sm:items-center gap-3 ${inlineForm ? 'mt-6' : ''}`}
             >
               <a
                 href={PHONE_HREF}
@@ -231,47 +265,20 @@ export default function Hero({
 
         </div>
 
-        {/* Trustpilot card — sits opposite the copy, top-right of the hero */}
-        <motion.a
-          {...fadeUp(0.9)}
-          href="https://www.trustpilot.com/evaluate/everydaystravel.co.uk"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Trustpilot rating 4.4 out of 5 — write a review"
-          className="self-start lg:self-auto shrink-0 inline-flex items-center gap-2.5 sm:gap-3 bg-white rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 shadow-[0_4px_24px_rgba(0,0,0,0.18)] hover:shadow-[0_6px_32px_rgba(0,0,0,0.28)] transition-shadow duration-200 group"
-        >
-          {/* Score + stars */}
-          <div className="flex items-center gap-1.5 shrink-0">
-            <span className="text-[15px] sm:text-[17px] font-semibold text-[#191919] leading-none" style={{ fontFamily: 'var(--font-ui)' }}>
-              4.4
-            </span>
-            <img
-              src="https://res.cloudinary.com/dckyndryf/image/upload/v1780237231/stars-5_w1ckxp.svg"
-              alt="5 stars"
-              className="h-[13px] sm:h-[15px] w-auto"
-            />
-          </div>
-
-          {/* Divider */}
-          <div className="w-px h-5 sm:h-6 bg-black/10 shrink-0" />
-
-          {/* CTA */}
-          <span
-            className="text-[11px] sm:text-[12px] font-semibold text-white bg-[#00B67A] px-2.5 py-1.5 rounded-md shrink-0 group-hover:bg-[#00a368] transition-colors duration-150"
-            style={{ fontFamily: 'var(--font-ui)' }}
-          >
-            Write a review
-          </span>
-        </motion.a>
       </div>
 
-      {/* Quote form */}
-      <div className="relative z-10 w-full pb-10">
-        <QuoteForm />
-      </div>
+      {/* Quote form — only when it has not been moved into the hero above */}
+      {!inlineForm && (
+        <div className="relative z-10 w-full pb-10">
+          <QuoteForm />
+        </div>
+      )}
 
-      {/* Trust bar */}
-      <TrustBar />
+      {/* Trust bar — pinned to the foot of the hero so it reads against the
+          bottom fade rather than floating in the middle of the footage. */}
+      <div className="relative z-10 mt-auto">
+        <TrustBar />
+      </div>
     </section>
   )
 }
