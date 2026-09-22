@@ -4,6 +4,14 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { CHAUFFEUR_CARS, LUXURY_MINIBUSES, EXECUTIVE_COACHES, type Vehicle } from '../components/VehicleList'
 import { SERVICES } from '../components/ServiceList'
+import { createPageMetadata } from '../lib/seo'
+
+export const metadata = createPageMetadata({
+  title: 'Fleet Gallery',
+  description:
+    'Photographs of the Everydays Travel fleet — luxury minibuses, executive coaches and chauffeur cars serving London, Surrey and the UK.',
+  path: '/gallery',
+})
 
 // ── Gallery data ──────────────────────────────────────────────────────────────
 // Tiles are collected from the fleet & service data, so new photos added there

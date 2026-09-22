@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import type { Metadata } from 'next'
 import {
   ShieldCheck, Globe, Clock, Sparkles,
   Handshake, HeartHandshake, Route, Gem, Compass, Lightbulb,
@@ -10,12 +9,14 @@ import Footer from '../components/Footer'
 import StatBand from '../components/StatBand'
 import Testimonials from '../components/Testimonials'
 import SplitSection from '../components/about/SplitSection'
+import { createPageMetadata } from '../lib/seo'
 
-export const metadata: Metadata = {
-  title: 'About Us | Everydays Travel',
+export const metadata = createPageMetadata({
+  title: 'About Us',
   description:
-    'Our vision, mission and promise — coach and minibus hire built on personalised service, trusted partnerships and the belief that every journey matters.',
-}
+    'Our vision, mission and promise — coach and minibus hire across London and Surrey, built on personalised service, trusted partnerships and the belief that every journey matters.',
+  path: '/about',
+})
 
 const PHOTO = (path: string) =>
   `https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_1800,c_limit/${path}`

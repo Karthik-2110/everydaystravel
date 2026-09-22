@@ -3,6 +3,14 @@ import Hero from '../components/Hero'
 import ServicesGrid from '../components/ServicesGrid'
 import Testimonials from '../components/Testimonials'
 import Footer from '../components/Footer'
+import { createPageMetadata } from '../lib/seo'
+
+export const metadata = createPageMetadata({
+  title: 'Coach & Minibus Hire Services',
+  description:
+    'Coach and minibus hire across London, Surrey and the UK — airport transfers, corporate travel, weddings, school trips, group travel and private hire.',
+  path: '/services',
+})
 
 export default function ServicesPage() {
   return (

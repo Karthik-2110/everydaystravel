@@ -3,6 +3,7 @@ import { Inter, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import FloatingContactBar from "./components/FloatingContactBar";
+import { businessSchema, siteUrl, webSiteSchema } from './lib/seo';
 
 // Inter → drives --font-sans (shadcn) and --font-ui (brand)
 const inter = Inter({
@@ -20,8 +21,35 @@ const sourceSans3 = Source_Sans_3({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Everydays Travel | Luxury Coach & Minibus Hire Across the UK",
-  description: "Premium coach, minibus and private car hire across the UK. Airport transfers, corporate travel and group transport. Get a free quote.",
+  description: "Luxury coach, minibus and chauffeur-driven travel across London, Surrey, the UK and Europe. Airport transfers, corporate events, weddings and private tours.",
+  keywords: [
+    'Everydays Travel',
+    'Everydays Luxury Travel',
+    'coach hire Sunbury-on-Thames',
+    'minibus hire Richmond',
+    'minibus hire Hampton',
+    'Surrey coach operators',
+    'luxury minibus hire with driver',
+    'large coach hire London',
+    'wedding coach hire London',
+    'airport transfers London',
+    'guided London tours',
+  ],
+  alternates: {
+    canonical: '/',
+    languages: { 'en-GB': '/', 'x-default': '/' },
+  },
+  robots: { index: true, follow: true },
+  openGraph: {
+    type: 'website',
+    locale: 'en_GB',
+    url: '/',
+    siteName: 'Everydays Travel',
+    title: 'Everydays Travel | Luxury Coach & Minibus Hire Across the UK',
+    description: 'Luxury coach, minibus and chauffeur-driven travel across London, Surrey, the UK and Europe.',
+  },
 };
 
 export default function RootLayout({
@@ -39,6 +67,12 @@ export default function RootLayout({
       )}
     >
       <body className="min-h-full flex flex-col bg-[#0C0F1C] text-white">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([businessSchema, webSiteSchema]).replace(/</g, '\\u003c'),
+          }}
+        />
         {children}
         <FloatingContactBar />
       </body>

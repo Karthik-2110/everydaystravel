@@ -1,9 +1,22 @@
 import { redirect } from 'next/navigation'
+import { createPageMetadata } from '../../../lib/seo'
 import VehicleDetail from '../../../components/VehicleDetail'
 import { EXECUTIVE_COACHES } from '../../../components/VehicleList'
 
 export function generateStaticParams() {
   return EXECUTIVE_COACHES.map((v) => ({ slug: v.slug }))
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const vehicle = EXECUTIVE_COACHES.find((item) => item.slug === slug)
+  if (!vehicle) return {}
+
+  return createPageMetadata({
+    title: `${vehicle.name} Hire`,
+    description: vehicle.description,
+    path: `/fleet/executive-coaches/${vehicle.slug}`,
+  })
 }
 
 export default async function CoachDetailPage({ params }: { params: Promise<{ slug: string }> }) {

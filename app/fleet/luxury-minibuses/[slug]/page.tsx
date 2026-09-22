@@ -1,9 +1,22 @@
 import { redirect } from 'next/navigation'
+import { createPageMetadata } from '../../../lib/seo'
 import VehicleDetail from '../../../components/VehicleDetail'
 import { LUXURY_MINIBUSES } from '../../../components/VehicleList'
 
 export function generateStaticParams() {
   return LUXURY_MINIBUSES.map((v) => ({ slug: v.slug }))
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const vehicle = LUXURY_MINIBUSES.find((item) => item.slug === slug)
+  if (!vehicle) return {}
+
+  return createPageMetadata({
+    title: `${vehicle.name} Hire`,
+    description: vehicle.description,
+    path: `/fleet/luxury-minibuses/${vehicle.slug}`,
+  })
 }
 
 export default async function MinibusDetailPage({ params }: { params: Promise<{ slug: string }> }) {

@@ -4,6 +4,14 @@ import StatBand from '../../components/StatBand'
 import VehicleList, { LUXURY_MINIBUSES } from '../../components/VehicleList'
 import Footer from '../../components/Footer'
 import { Users, Wifi, UserCheck } from 'lucide-react'
+import { createPageMetadata } from '../../lib/seo'
+
+export const metadata = createPageMetadata({
+  title: 'Luxury Minibus Hire London',
+  description:
+    'Luxury minibus hire with driver across London and Surrey — 7 to 19 seaters with onboard WiFi, reclining seats and professional chauffeurs.',
+  path: '/fleet/luxury-minibuses',
+})
 
 const STATS = [
   { icon: Users,     label: 'Up to 16 Passengers' },
