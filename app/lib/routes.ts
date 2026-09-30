@@ -11,9 +11,7 @@
 export const UNAVAILABLE_ROUTES: readonly string[] = [
   '/blog',
   '/faqs',
-  '/privacy',
   '/team',
-  '/terms',
   '/vacancies',
 ]
 

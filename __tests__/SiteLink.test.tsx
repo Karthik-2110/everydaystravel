@@ -24,7 +24,7 @@ describe('isUnavailable', () => {
   it('ignores trailing slashes, query strings and fragments', () => {
     expect(isUnavailable('/faqs/')).toBe(true)
     expect(isUnavailable('/faqs#pricing')).toBe(true)
-    expect(isUnavailable('/terms?ref=footer')).toBe(true)
+    expect(isUnavailable('/vacancies?ref=footer')).toBe(true)
   })
 
   it('leaves real routes alone', () => {
@@ -70,8 +70,8 @@ describe('SiteLink', () => {
   })
 
   it('keeps the caller styling on an inert link so layout does not shift', () => {
-    render(<SiteLink href="/terms" className="text-[12px] font-medium">Terms of Use</SiteLink>)
-    const inert = screen.getByText('Terms of Use')
+    render(<SiteLink href="/vacancies" className="text-[12px] font-medium">Vacancies</SiteLink>)
+    const inert = screen.getByText('Vacancies')
     expect(inert.className).toContain('text-[12px]')
     expect(inert.className).toContain('font-medium')
   })
