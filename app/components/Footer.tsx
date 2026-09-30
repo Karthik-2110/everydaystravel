@@ -16,6 +16,13 @@ const QUICK_LINKS = [
   { label: 'Contact Us', href: '/contact' },
 ]
 
+const LEGAL_LINKS = [
+  { label: 'Privacy Policy',      href: '/privacy' },
+  { label: 'Terms of Use',        href: '/terms' },
+  { label: 'Conditions of Hire',  href: '/conditions-of-hire' },
+  { label: 'Cookie Policy',       href: '/cookies' },
+]
+
 const SERVICES = [
   { label: 'Airport Transfers', href: '/services/airport-transfers' },
   { label: 'Weddings & Events', href: '/services/weddings-events' },
@@ -344,30 +351,19 @@ export default function Footer() {
             >
               © 2026 Everydays Travel. All rights reserved
             </p>
-            <div className="flex items-center gap-5">
-              <SiteLink
-                href="/privacy"
-                className="text-white/28 text-[12px] hover:text-[#EBBA6F]/70 transition-colors duration-150"
-                style={{ fontFamily: 'var(--font-ui)' }}
-              >
-                Privacy Policy
-              </SiteLink>
-              <span className="text-white/12 select-none">·</span>
-              <SiteLink
-                href="/terms"
-                className="text-white/28 text-[12px] hover:text-[#EBBA6F]/70 transition-colors duration-150"
-                style={{ fontFamily: 'var(--font-ui)' }}
-              >
-                Terms of Use
-              </SiteLink>
-              <span className="text-white/12 select-none">·</span>
-              <SiteLink
-                href="/cookies"
-                className="text-white/28 text-[12px] hover:text-[#EBBA6F]/70 transition-colors duration-150"
-                style={{ fontFamily: 'var(--font-ui)' }}
-              >
-                Cookie Policy
-              </SiteLink>
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+              {LEGAL_LINKS.map(({ label, href }, i) => (
+                <div key={href} className="flex items-center gap-4">
+                  {i > 0 && <span className="text-white/12 select-none">·</span>}
+                  <SiteLink
+                    href={href}
+                    className="text-white/28 text-[12px] hover:text-[#EBBA6F]/70 transition-colors duration-150"
+                    style={{ fontFamily: 'var(--font-ui)' }}
+                  >
+                    {label}
+                  </SiteLink>
+                </div>
+              ))}
               <span className="text-white/12 select-none">·</span>
               {/* Withdrawing consent has to be as easy as giving it, so this
                   sits on every page beside the policy it belongs to. */}

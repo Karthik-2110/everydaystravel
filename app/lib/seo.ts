@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { DRAFT as HIRE_TERMS_DRAFT } from '../components/legal/hire-terms'
 
 export const siteUrl = 'https://everydaystravel.co.uk'
 
@@ -244,6 +245,8 @@ export const sitemapEntries = [
   { path: '/cookies', priority: 0.3 },
   { path: '/privacy', priority: 0.3 },
   { path: '/terms', priority: 0.3 },
+  // Kept out of the sitemap while the commercial figures are unconfirmed.
+  ...(HIRE_TERMS_DRAFT ? [] : [{ path: '/conditions-of-hire', priority: 0.5 }]),
   { path: '/fleet/luxury-minibuses/7-seater-mpv-v-class', priority: 0.7 },
   { path: '/fleet/luxury-minibuses/16-seater-minibus', priority: 0.8 },
   { path: '/fleet/luxury-minibuses/16-seater-vip-sprinter', priority: 0.8 },

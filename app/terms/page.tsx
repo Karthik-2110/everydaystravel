@@ -50,8 +50,9 @@ export default function TermsPage() {
         />
         <P>
           The terms on which a confirmed hire runs — payment, cancellation, luggage,
-          liability and the rest — are set out in the conditions of hire supplied with your
-          quotation, which take precedence over anything on this page.
+          liability and the rest — are set out in our{' '}
+          <A href="/conditions-of-hire">conditions of hire</A> and in the version supplied
+          with your quotation, which takes precedence over anything on this page.
         </P>
       </Section>
 
