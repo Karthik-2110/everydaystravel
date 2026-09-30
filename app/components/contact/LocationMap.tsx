@@ -1,5 +1,6 @@
 import { Phone, Mail, Clock, ExternalLink } from 'lucide-react'
 import { ADDRESS, CONTACT_LINES } from './contact-details'
+import MapEmbed from './MapEmbed'
 
 // The map uses the Google Maps **Embed API** — a different API from Places,
 // keyed off the same GOOGLE_MAPS_API_KEY. If the iframe renders an
@@ -18,22 +19,8 @@ export default function LocationMap() {
   return (
     <section aria-label="Find us">
       <div className="relative h-[320px] sm:h-[420px] bg-[#0D1221]">
-        {embedSrc ? (
-          <iframe
-            src={embedSrc}
-            title={`Map showing ${ADDRESS}`}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            allowFullScreen
-            className="absolute inset-0 w-full h-full border-0"
-          />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <p className="text-white/40 text-[13px]" style={{ fontFamily: 'var(--font-body)' }}>
-              {ADDRESS}
-            </p>
-          </div>
-        )}
+        {/* Held back until the visitor allows Google's cookies. */}
+        <MapEmbed src={embedSrc} address={ADDRESS} />
 
         <a
           href={MAPS_LINK}

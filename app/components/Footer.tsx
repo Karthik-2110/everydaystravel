@@ -3,6 +3,7 @@ import { cdnUrl, videoVariants, LEAD_CLIP } from '@/app/lib/cloudinary'
 import { Phone, Mail, Clock, MapPin, ArrowRight, ArrowUpRight } from 'lucide-react'
 import { WhatsAppIcon, InstagramIcon, FacebookIcon, LinkedInIcon, WHATSAPP_HREF, INSTAGRAM_HREF, FACEBOOK_HREF, LINKEDIN_HREF, SOCIAL_BRAND } from './icons/social'
 import SiteLink from './SiteLink'
+import CookieSettingsButton from './CookieSettingsButton'
 import { ADDRESS } from './contact/contact-details'
 
 // ── Data ─────────────────────────────────────────────────────────────────────
@@ -359,6 +360,20 @@ export default function Footer() {
               >
                 Terms of Use
               </SiteLink>
+              <span className="text-white/12 select-none">·</span>
+              <SiteLink
+                href="/cookies"
+                className="text-white/28 text-[12px] hover:text-[#EBBA6F]/70 transition-colors duration-150"
+                style={{ fontFamily: 'var(--font-ui)' }}
+              >
+                Cookie Policy
+              </SiteLink>
+              <span className="text-white/12 select-none">·</span>
+              {/* Withdrawing consent has to be as easy as giving it, so this
+                  sits on every page beside the policy it belongs to. */}
+              <CookieSettingsButton
+                className="text-white/28 text-[12px] hover:text-[#EBBA6F]/70 transition-colors duration-150"
+              />
             </div>
           </div>
         </div>

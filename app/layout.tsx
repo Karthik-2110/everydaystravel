@@ -3,6 +3,7 @@ import { Inter, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import FloatingContactBar from "./components/FloatingContactBar";
+import CookieConsent from "./components/CookieConsent";
 import { businessSchema, siteUrl, webSiteSchema } from './lib/seo';
 
 // Inter → drives --font-sans (shadcn) and --font-ui (brand)
@@ -75,6 +76,7 @@ export default function RootLayout({
         />
         {children}
         <FloatingContactBar />
+        <CookieConsent />
       </body>
     </html>
   );

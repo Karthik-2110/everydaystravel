@@ -241,6 +241,7 @@ export const sitemapEntries = [
   { path: '/gallery', priority: 0.6 },
   { path: '/reviews', priority: 0.6 },
   { path: '/book', priority: 0.7 },
+  { path: '/cookies', priority: 0.3 },
   { path: '/fleet/luxury-minibuses/7-seater-mpv-v-class', priority: 0.7 },
   { path: '/fleet/luxury-minibuses/16-seater-minibus', priority: 0.8 },
   { path: '/fleet/luxury-minibuses/16-seater-vip-sprinter', priority: 0.8 },
