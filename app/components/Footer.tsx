@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { cdnUrl } from '@/app/lib/cloudinary'
+import { cdnUrl, videoVariants, LEAD_CLIP } from '@/app/lib/cloudinary'
 import { Phone, Mail, Clock, MapPin, ArrowRight, ArrowUpRight } from 'lucide-react'
 import { WhatsAppIcon, InstagramIcon, FacebookIcon, LinkedInIcon, WHATSAPP_HREF, INSTAGRAM_HREF, FACEBOOK_HREF, LINKEDIN_HREF, SOCIAL_BRAND } from './icons/social'
 import SiteLink from './SiteLink'
@@ -46,6 +46,10 @@ const SOCIAL_LINKS = [
   { label: 'LinkedIn',  href: LINKEDIN_HREF,  brand: SOCIAL_BRAND.linkedin,  svg: <LinkedInIcon  size={20} /> },
 ]
 
+// With a lighter scrim the footage shows through behind the CTA copy, so the
+// type carries its own shadow rather than leaning on the overlay for contrast.
+const COPY_SHADOW = '0 2px 20px rgba(4,6,14,0.8), 0 1px 4px rgba(4,6,14,0.55)'
+
 // ── Sub-components ────────────────────────────────────────────────────────────
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -67,18 +71,25 @@ export default function Footer() {
 
       {/* ── Pre-footer CTA ── */}
       <div className="relative overflow-hidden">
-        {/* Background image */}
-        <Image
-          src={cdnUrl('IMG_0938_fhylhh', 2400)}
-          alt=""
+        {/* Background footage — the same clip that opens the hero. The old
+            still stands in as the poster, so the first paint is never empty. */}
+        <video
           aria-hidden
-          fill
-          unoptimized
-          className="object-cover object-center"
-        />
-        {/* Gradient overlay — dark on both sides, lighter in centre */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#04060E]/95 via-[#04060E]/75 to-[#04060E]/90" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#04060E]/30 via-transparent to-[#04060E]/40" />
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          poster={cdnUrl('IMG_0938_fhylhh', 2400)}
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        >
+          <source src={videoVariants(LEAD_CLIP).webm} type="video/webm" />
+          <source src={videoVariants(LEAD_CLIP).mp4} type="video/mp4" />
+        </video>
+        {/* Gradient overlay — light enough to let the footage read, with just
+            enough weight behind the copy on either side to hold contrast. */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#04060E]/70 via-[#04060E]/30 to-[#04060E]/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#04060E]/20 via-transparent to-[#04060E]/25" />
 
         <div className="relative site-container py-16 lg:py-24">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-12">
@@ -88,7 +99,7 @@ export default function Footer() {
               <div>
                 <p
                   className="text-[#EBBA6F] text-[11px] font-medium tracking-[0.18em] uppercase mb-4"
-                  style={{ fontFamily: 'var(--font-ui)' }}
+                  style={{ fontFamily: 'var(--font-ui)', textShadow: COPY_SHADOW }}
                 >
                   Book with us
                 </p>
@@ -98,6 +109,7 @@ export default function Footer() {
                     fontFamily: 'var(--font-display)',
                     fontWeight: 300,
                     fontSize: 'clamp(2.8rem, 5vw, 5rem)',
+                    textShadow: COPY_SHADOW,
                   }}
                 >
                   Ready to travel<br />in style?
@@ -130,8 +142,8 @@ export default function Footer() {
             <div className="flex flex-col gap-5 lg:max-w-[420px] w-full">
 
               <p
-                className="text-white/70 text-[10.5px] tracking-[0.18em] uppercase"
-                style={{ fontFamily: 'var(--font-ui)' }}
+                className="text-white/80 text-[10.5px] tracking-[0.18em] uppercase"
+                style={{ fontFamily: 'var(--font-ui)', textShadow: COPY_SHADOW }}
               >
                 Get in touch
               </p>
@@ -145,7 +157,7 @@ export default function Footer() {
                 <Phone size={16} className="text-[#EBBA6F] shrink-0" strokeWidth={1.5} aria-hidden />
                 <span
                   className="text-white group-hover:text-[#EBBA6F] transition-colors duration-150 tracking-[-0.01em]"
-                  style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.8rem, 2.8vw, 2.5rem)', lineHeight: 1 }}
+                  style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.8rem, 2.8vw, 2.5rem)', lineHeight: 1, textShadow: COPY_SHADOW }}
                 >
                   020 8941 8354
                 </span>
@@ -160,7 +172,7 @@ export default function Footer() {
                 <Mail size={16} className="text-[#EBBA6F] shrink-0" strokeWidth={1.5} aria-hidden />
                 <span
                   className="text-white group-hover:text-[#EBBA6F] transition-colors duration-150 tracking-[-0.01em]"
-                  style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.8rem, 2.8vw, 2.5rem)', lineHeight: 1 }}
+                  style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.8rem, 2.8vw, 2.5rem)', lineHeight: 1, textShadow: COPY_SHADOW }}
                 >
                   info@everydaystravel.co.uk
                 </span>
@@ -172,13 +184,13 @@ export default function Footer() {
                 <div className="flex flex-col gap-2">
                   <span
                     className="text-white tracking-[-0.01em]"
-                    style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.8rem, 2.8vw, 2.5rem)', lineHeight: 1 }}
+                    style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.8rem, 2.8vw, 2.5rem)', lineHeight: 1, textShadow: COPY_SHADOW }}
                   >
                     Mon – Fri: 7:00 AM – 7:00 PM
                   </span>
                   <span
-                    className="text-white/50 tracking-[-0.01em]"
-                    style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.8rem, 2.8vw, 2.5rem)', lineHeight: 1 }}
+                    className="text-white/65 tracking-[-0.01em]"
+                    style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.8rem, 2.8vw, 2.5rem)', lineHeight: 1, textShadow: COPY_SHADOW }}
                   >
                     Sat &amp; Sun: 8:00 AM – 4:00 PM
                   </span>

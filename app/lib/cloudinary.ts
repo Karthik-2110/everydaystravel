@@ -11,3 +11,23 @@ export function cdnUrl(publicId: string, widthPx?: number): string {
   const transforms = ['f_auto', 'q_auto', ...(widthPx ? [`w_${widthPx},c_limit`] : [])]
   return `https://res.cloudinary.com/${CLOUD}/image/upload/${transforms.join(',')}/${publicId}`
 }
+
+/**
+ * The clip that opens the homepage hero and backs the footer CTA. Kept here so
+ * both read the same source — swapping the footage is a one-line change.
+ */
+export const LEAD_CLIP =
+  'https://res.cloudinary.com/dp4cbs8c2/video/upload/v1787915285/IMG_5928_1_esggvf.mov'
+
+/**
+ * Cloudinary serves whatever codec the delivery URL asks for, so each clip is
+ * offered twice: VP9/WebM for Chrome & Firefox, H.264/MP4 for Safari. The
+ * source's own extension is dropped first — the public ID is what matters.
+ */
+export function videoVariants(src: string) {
+  const base = src.replace(/\.(mov|mp4|m4v|webm)$/i, '')
+  return {
+    webm: base.replace('/upload/', '/upload/vc_vp9,q_auto/') + '.webm',
+    mp4:  base.replace('/upload/', '/upload/vc_h264,q_auto/') + '.mp4',
+  }
+}

@@ -8,6 +8,7 @@ import QuoteForm from './QuoteForm'
 import TrustBar from './TrustBar'
 import { WhatsAppIcon, WHATSAPP_HREF, SOCIAL_BRAND } from './icons/social'
 import { PHONE, PHONE_HREF } from './contact/contact-details'
+import { videoVariants } from '@/app/lib/cloudinary'
 
 // ── Animation helpers ───────────────────────────────────────────────────────
 
@@ -55,19 +56,6 @@ export interface HeroProps {
    * rather than sitting full-width underneath it.
    */
   inlineForm?: boolean
-}
-
-/**
- * Cloudinary serves whatever codec the delivery URL asks for, so each clip is
- * offered twice: VP9/WebM for Chrome & Firefox, H.264/MP4 for Safari. The
- * source's own extension is dropped first — the public ID is what matters.
- */
-const videoVariants = (src: string) => {
-  const base = src.replace(/\.(mov|mp4|m4v|webm)$/i, '')
-  return {
-    webm: base.replace('/upload/', '/upload/vc_vp9,q_auto/') + '.webm',
-    mp4:  base.replace('/upload/', '/upload/vc_h264,q_auto/') + '.mp4',
-  }
 }
 
 const DEFAULT_HERO_IMAGE =
