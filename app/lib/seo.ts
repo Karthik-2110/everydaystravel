@@ -241,6 +241,7 @@ export const sitemapEntries = [
   { path: '/contact', priority: 0.7 },
   { path: '/gallery', priority: 0.6 },
   { path: '/reviews', priority: 0.6 },
+  { path: '/faqs', priority: 0.6 },
   { path: '/book', priority: 0.7 },
   { path: '/cookies', priority: 0.3 },
   { path: '/privacy', priority: 0.3 },

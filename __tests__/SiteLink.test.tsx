@@ -22,8 +22,8 @@ describe('isUnavailable', () => {
   })
 
   it('ignores trailing slashes, query strings and fragments', () => {
-    expect(isUnavailable('/faqs/')).toBe(true)
-    expect(isUnavailable('/faqs#pricing')).toBe(true)
+    expect(isUnavailable('/blog/')).toBe(true)
+    expect(isUnavailable('/blog#latest')).toBe(true)
     expect(isUnavailable('/vacancies?ref=footer')).toBe(true)
   })
 
@@ -57,11 +57,11 @@ describe('SiteLink', () => {
   })
 
   it('renders an unbuilt route as an inert, non-navigating element', () => {
-    render(<SiteLink href="/faqs">FAQs</SiteLink>)
+    render(<SiteLink href="/blog">Travel Inspirations</SiteLink>)
 
     expect(screen.queryByRole('link')).not.toBeInTheDocument()
 
-    const inert = screen.getByText('FAQs')
+    const inert = screen.getByText('Travel Inspirations')
     expect(inert.tagName).toBe('SPAN')
     expect(inert).not.toHaveAttribute('href')
     expect(inert).toHaveAttribute('aria-disabled', 'true')

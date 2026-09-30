@@ -142,7 +142,7 @@ describe('Navbar — Our Fleet menu', () => {
 })
 
 describe('Navbar — links to pages that do not exist yet', () => {
-  const UNBUILT = ['Our Team', 'Vacancies', 'Travel Inspirations', 'FAQs']
+  const UNBUILT = ['Our Team', 'Vacancies', 'Travel Inspirations']
 
   it('renders unbuilt "More" entries as inert, not as links', () => {
     render(<Navbar />)
@@ -165,8 +165,8 @@ describe('Navbar — links to pages that do not exist yet', () => {
     const drawer = screen.getByTestId('mobile-nav')
     fireEvent.click(within(drawer).getByRole('button', { name: /toggle more submenu/i }))
 
-    const faqs = within(drawer).getByText('FAQs').closest('[aria-disabled="true"]')
-    expect(faqs).not.toBeNull()
-    expect(faqs).not.toHaveAttribute('href')
+    const vacancies = within(drawer).getByText('Vacancies').closest('[aria-disabled="true"]')
+    expect(vacancies).not.toBeNull()
+    expect(vacancies).not.toHaveAttribute('href')
   })
 })

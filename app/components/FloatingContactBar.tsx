@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { AnimatePresence, motion } from 'motion/react'
 import { Phone, Mail } from 'lucide-react'
 import { MOBILE, MOBILE_HREF, EMAIL, EMAIL_HREF } from './contact/contact-details'
@@ -14,21 +15,44 @@ const SOCIALS = [
 
 /**
  * Call, email, Facebook, WhatsApp and Instagram pill that docks to the bottom
- * of the viewport once the reader has scrolled clear of the hero. Hidden while
- * the hero is still on screen so it never competes with the hero's own CTAs.
+ * of the viewport for the middle of the page.
+ *
+ * It stays out of the way at both ends. While the hero is on screen it would
+ * compete with the hero's own CTAs, and over the footer it would sit on top of
+ * the "Ready to travel in style?" panel, which offers the same actions at full
+ * size. So it fades out as the footer arrives and fades back in on the way up.
  */
 export default function FloatingContactBar() {
-  const [visible, setVisible] = useState(false)
+  const [pastHero, setPastHero]         = useState(false)
+  const [footerInView, setFooterInView] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     const onScroll = () => {
       // Roughly one hero's worth of scrolling — the hero fills the viewport.
-      setVisible(window.scrollY > window.innerHeight * 0.75)
+      setPastHero(window.scrollY > window.innerHeight * 0.75)
     }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  // Watching the footer itself rather than guessing at a scroll offset, so
+  // this holds however long a page happens to be. Re-queried per route, since
+  // a client navigation swaps the element out.
+  useEffect(() => {
+    const footer = document.querySelector('footer')
+    if (!footer) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setFooterInView(entry.isIntersecting),
+      { threshold: 0 },
+    )
+    observer.observe(footer)
+    return () => observer.disconnect()
+  }, [pathname])
+
+  const visible = pastHero && !footerInView
 
   return (
     <AnimatePresence>
