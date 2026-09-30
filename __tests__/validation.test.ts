@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { validateEmail, validateUkPhone } from '@/app/lib/validation'
+import { validateEmail, validatePhone, validateFullName } from '@/app/lib/validation'
 
 describe('validateEmail', () => {
   it('accepts ordinary addresses', () => {
@@ -45,38 +45,107 @@ describe('validateEmail', () => {
   })
 })
 
-describe('validateUkPhone', () => {
+describe('validatePhone', () => {
   it('treats an empty value as acceptable because the field is optional', () => {
-    expect(validateUkPhone('')).toBe('')
-    expect(validateUkPhone('   ')).toBe('')
+    expect(validatePhone('')).toBe('')
+    expect(validatePhone('   ')).toBe('')
   })
 
   it('accepts UK mobiles in the formats people actually type', () => {
     for (const phone of ['07538724000', '+447538724000', '+44 7538 724000', '07538 724 000', '(07538) 724000']) {
-      expect(validateUkPhone(phone)).toBe('')
+      expect(validatePhone(phone)).toBe('')
     }
   })
 
   it('accepts UK landlines including the London area code', () => {
     for (const phone of ['02089418354', '020 8941 8354', '+442089418354', '01932 123456']) {
-      expect(validateUkPhone(phone)).toBe('')
+      expect(validatePhone(phone)).toBe('')
     }
   })
 
-  it('rejects numbers that are too short or too long', () => {
-    expect(validateUkPhone('0753872')).toBe('Please enter a valid UK phone number')
-    expect(validateUkPhone('075387240001234')).toBe('Please enter a valid UK phone number')
+  it('accepts numbers from outside the UK, with or without a country code', () => {
+    for (const phone of [
+      '+1 415 555 2671',    // US
+      '96774 34707',        // India, no country code
+      '+91 96774 34707',    // the same number dialled internationally
+      '0033 1 42 68 53 00', // France via the 00 international prefix
+      '+61 2 9374 4000',    // Australia
+    ]) {
+      expect(validatePhone(phone)).toBe('')
+    }
   })
 
-  it('rejects anything that is not a UK number', () => {
-    for (const phone of ['+1 415 555 2671', '12345678901', 'not a phone']) {
-      expect(validateUkPhone(phone)).toBe('Please enter a valid UK phone number')
+  it('rejects numbers that are too short or too long for E.164', () => {
+    expect(validatePhone('0753872')).toBe('Please enter a valid phone number')
+    expect(validatePhone('07538724000123456')).toBe('Please enter a valid phone number')
+  })
+
+  it('rejects anything that is not a number at all', () => {
+    for (const phone of ['not a phone', '+44 7538 ABCDEF', '@@@@@@@@@@']) {
+      expect(validatePhone(phone)).toBe('Please enter a valid phone number')
     }
   })
 
   it('rejects filler like repeated or sequential digits', () => {
-    for (const phone of ['00000000000', '07777777777', '01234567890']) {
-      expect(validateUkPhone(phone)).toBe('Please enter a real phone number')
+    for (const phone of ['00000000000', '07777777777', '01234567890', '12345678901']) {
+      expect(validatePhone(phone)).toBe('Please enter a real phone number')
+    }
+  })
+})
+
+describe('validateFullName', () => {
+  it('requires a value', () => {
+    expect(validateFullName('')).toBe('Full name is required')
+    expect(validateFullName('   ')).toBe('Full name is required')
+  })
+
+  it('accepts the many shapes a real name takes', () => {
+    for (const name of [
+      'Karthik',
+      'Jane Smith',
+      "Siobhán O'Connor",
+      'Anne-Marie Dupont',
+      'Ng Wei Ming',
+      'Flaherty',          // contains "erty" — a keyboard run, but a real surname
+      'Doherty',
+      'Rafferty',
+      'Krzysztof Wójcik',
+      '李伟',               // no Latin vowel to look for
+      'Нина Иванова',
+    ]) {
+      expect(validateFullName(name)).toBe('')
+    }
+  })
+
+  it('rejects keyboard runs and held-down keys', () => {
+    for (const name of ['asdf', 'qwerty', 'zxcvb', 'asdfasdf', 'aaaa', 'jjjjjj', 'hjkl']) {
+      expect(validateFullName(name)).toBe('Please enter your full name')
+    }
+  })
+
+  it('rejects placeholders people type to get past the field', () => {
+    for (const name of ['test', 'Test Test', 'n/a', 'none', 'unknown', 'John Doe', 'xyz', 'dummy']) {
+      expect(validateFullName(name)).toBe('Please enter your full name')
+    }
+  })
+
+  it('rejects digits and consonant soup', () => {
+    expect(validateFullName('User123')).toBe('Please enter your full name')
+    expect(validateFullName('bcdfg')).toBe('Please enter your full name')
+    expect(validateFullName('K')).toBe('Please enter your full name')
+  })
+})
+
+describe('validateEmail — gibberish local parts', () => {
+  it('rejects a local part that is only a keyboard run', () => {
+    for (const email of ['asdf@gmail.com', 'qwerty@outlook.com', 'aaaa@company.co.uk']) {
+      expect(validateEmail(email)).toBe('Please enter a valid email address')
+    }
+  })
+
+  it('still accepts short or consonant-heavy real addresses', () => {
+    for (const email of ['jsmth@company.com', 'hr@company.com', 'k.p@example.org']) {
+      expect(validateEmail(email)).toBe('')
     }
   })
 })

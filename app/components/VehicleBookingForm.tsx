@@ -9,6 +9,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { ALL_VEHICLE_OPTIONS } from './VehicleList'
 import PlacesAutocompleteField from './PlacesAutocompleteField'
+import { validateEmail, validatePhone } from '../lib/validation'
 
 // ── Shared style tokens ───────────────────────────────────────────────────────
 
@@ -93,26 +94,32 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
   const [emailError, setEmailError]   = useState('')
   const [emailTouched, setEmailTouched] = useState(false)
   const [phone, setPhone]             = useState('')
+  const [phoneError, setPhoneError]   = useState('')
+  const [phoneTouched, setPhoneTouched] = useState(false)
   const [submitting, setSubmitting]   = useState(false)
   const [submitted, setSubmitted]     = useState(false)
 
   const isReturn = journeyType === 'return'
 
-  const validateEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())
-
   const handleEmailBlur = () => {
     setEmailTouched(true)
-    if (!email) setEmailError('Email address is required')
-    else if (!validateEmail(email)) setEmailError('Please enter a valid email address')
-    else setEmailError('')
+    setEmailError(validateEmail(email))
+  }
+
+  const handlePhoneBlur = () => {
+    setPhoneTouched(true)
+    setPhoneError(validatePhone(phone))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setEmailTouched(true)
-    if (!email) { setEmailError('Email address is required'); return }
-    if (!validateEmail(email)) { setEmailError('Please enter a valid email address'); return }
-    setEmailError('')
+    setPhoneTouched(true)
+    const emailProblem = validateEmail(email)
+    const phoneProblem = validatePhone(phone)
+    setEmailError(emailProblem)
+    setPhoneError(phoneProblem)
+    if (emailProblem || phoneProblem) return
     setSubmitting(true)
     try {
       const res = await fetch('/api/quote', {
@@ -298,8 +305,19 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
           <div>
             <label htmlFor="vbf-phone"><FieldLabel>Phone number</FieldLabel></label>
             <Input id="vbf-phone" type="tel" value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="+44 7000 000000" className={inputCls} />
+              onChange={(e) => {
+                setPhone(e.target.value)
+                if (phoneTouched) setPhoneError(validatePhone(e.target.value))
+              }}
+              onBlur={handlePhoneBlur}
+              placeholder="Your phone number"
+              aria-invalid={phoneTouched && !!phoneError}
+              className={`${inputCls} ${phoneTouched && phoneError ? '!border-red-500/70' : ''}`} />
+            {phoneTouched && phoneError && (
+              <p role="alert" className="mt-1.5 text-[11px] text-red-400" style={{ fontFamily: 'var(--font-ui)' }}>
+                {phoneError}
+              </p>
+            )}
           </div>
 
           {/* Submit */}

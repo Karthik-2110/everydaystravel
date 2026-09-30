@@ -9,7 +9,7 @@ import {
 import { Input } from '@/components/ui/input'
 import DatePickerField from './DatePickerField'
 import PlacesAutocompleteField from './PlacesAutocompleteField'
-import { validateEmail, validateUkPhone } from '../lib/validation'
+import { validateEmail, validatePhone, validateFullName } from '../lib/validation'
 
 // ── Style constants ─────────────────────────────────────────────────────────
 
@@ -124,8 +124,7 @@ export default function QuoteForm({ variant = 'panel' }: QuoteFormProps = {}) {
   const wideOnMobileCls = compact ? '' : 'sm:col-span-2 lg:col-span-1'
   const contactRowCls = compact
     ? 'grid grid-cols-1 sm:grid-cols-2 gap-4 items-start'
-    : 'grid grid-cols-1 sm:grid-cols-3 gap-6 items-start'
-  const submitWrapCls = compact ? 'sm:col-span-2' : ''
+    : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-start'
 
   const [journeyType, setJourneyType] = useState<'oneway' | 'return'>('oneway')
   const [pickup, setPickup]           = useState('')
@@ -135,6 +134,9 @@ export default function QuoteForm({ variant = 'panel' }: QuoteFormProps = {}) {
   const [pickupTime, setPickupTime]   = useState('')
   const [returnDate, setReturnDate]   = useState('')
   const [returnTime, setReturnTime]   = useState('')
+  const [fullName, setFullName]         = useState('')
+  const [nameError, setNameError]       = useState('')
+  const [nameTouched, setNameTouched]   = useState(false)
   const [email, setEmail]               = useState('')
   const [phone, setPhone]               = useState('')
   const [emailError, setEmailError]     = useState('')
@@ -156,8 +158,11 @@ export default function QuoteForm({ variant = 'panel' }: QuoteFormProps = {}) {
       setPickupTime('')
       setReturnDate('')
       setReturnTime('')
+      setFullName('')
       setEmail('')
       setPhone('')
+      setNameTouched(false)
+      setNameError('')
       setEmailTouched(false)
       setEmailError('')
       setPhoneTouched(false)
@@ -169,6 +174,11 @@ export default function QuoteForm({ variant = 'panel' }: QuoteFormProps = {}) {
   const isReturn       = journeyType === 'return'
   const showContactRow = Boolean(pickup && destination && passengers && travelDate && pickupTime)
 
+  const handleNameBlur = () => {
+    setNameTouched(true)
+    setNameError(validateFullName(fullName))
+  }
+
   const handleEmailBlur = () => {
     setEmailTouched(true)
     setEmailError(validateEmail(email))
@@ -176,24 +186,27 @@ export default function QuoteForm({ variant = 'panel' }: QuoteFormProps = {}) {
 
   const handlePhoneBlur = () => {
     setPhoneTouched(true)
-    setPhoneError(validateUkPhone(phone))
+    setPhoneError(validatePhone(phone))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setNameTouched(true)
     setEmailTouched(true)
     setPhoneTouched(true)
+    const nameProblem  = validateFullName(fullName)
     const emailProblem = validateEmail(email)
-    const phoneProblem = validateUkPhone(phone)
+    const phoneProblem = validatePhone(phone)
+    setNameError(nameProblem)
     setEmailError(emailProblem)
     setPhoneError(phoneProblem)
-    if (emailProblem || phoneProblem) return
+    if (nameProblem || emailProblem || phoneProblem) return
     setSubmitting(true)
     try {
       const res = await fetch('/api/quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ journeyType, pickup, destination, passengers, travelDate, pickupTime, returnDate, returnTime, email, phone }),
+        body: JSON.stringify({ journeyType, pickup, destination, passengers, travelDate, pickupTime, returnDate, returnTime, fullName, email, phone }),
       })
       if (!res.ok) throw new Error('Failed')
       setSubmitted(true)
@@ -406,6 +419,38 @@ export default function QuoteForm({ variant = 'panel' }: QuoteFormProps = {}) {
                 <div className={contactRowCls}>
 
                   <div>
+                    <label htmlFor="full-name">
+                      <FieldLabel>Full name</FieldLabel>
+                    </label>
+                    <Input
+                      id="full-name"
+                      aria-label="Full name"
+                      type="text"
+                      autoComplete="name"
+                      value={fullName}
+                      onChange={(e) => {
+                        setFullName(e.target.value)
+                        if (nameTouched) setNameError(validateFullName(e.target.value))
+                      }}
+                      onBlur={handleNameBlur}
+                      placeholder="Your full name"
+                      aria-invalid={nameTouched && !!nameError}
+                      aria-describedby={nameTouched && nameError ? 'name-error' : undefined}
+                      className={`${inputCls} ${nameTouched && nameError ? '!border-red-500/70 focus-visible:!border-red-500' : ''}`}
+                    />
+                    {nameTouched && nameError && (
+                      <p
+                        id="name-error"
+                        role="alert"
+                        className="mt-1.5 text-[11px] text-red-400"
+                        style={{ fontFamily: 'var(--font-ui)' }}
+                      >
+                        {nameError}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
                     <label htmlFor="email">
                       <FieldLabel>Email address</FieldLabel>
                     </label>
@@ -447,10 +492,10 @@ export default function QuoteForm({ variant = 'panel' }: QuoteFormProps = {}) {
                       value={phone}
                       onChange={(e) => {
                         setPhone(e.target.value)
-                        if (phoneTouched) setPhoneError(validateUkPhone(e.target.value))
+                        if (phoneTouched) setPhoneError(validatePhone(e.target.value))
                       }}
                       onBlur={handlePhoneBlur}
-                      placeholder="+44 7000 000000"
+                      placeholder="Your phone number"
                       aria-invalid={phoneTouched && !!phoneError}
                       aria-describedby={phoneTouched && phoneError ? 'phone-error' : undefined}
                       className={`${inputCls} ${phoneTouched && phoneError ? '!border-red-500/70 focus-visible:!border-red-500' : ''}`}
@@ -467,7 +512,9 @@ export default function QuoteForm({ variant = 'panel' }: QuoteFormProps = {}) {
                     )}
                   </div>
 
-                  <div className={submitWrapCls}>
+                  {/* Four fields fill the row evenly, so the button no longer
+                      spans it. The blank label keeps it aligned with the inputs. */}
+                  <div>
                     <span className="block text-[11px] mb-1.5" aria-hidden>&#8203;</span>
                   <button
                     type="submit"

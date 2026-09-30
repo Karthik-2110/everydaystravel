@@ -11,6 +11,7 @@ import { WhatsAppIcon, WHATSAPP_HREF } from '../icons/social'
 import PlacesAutocompleteField from '../PlacesAutocompleteField'
 import DatePickerField from '../DatePickerField'
 import { SERVICES } from '../ServiceList'
+import { validateEmail, validatePhone, validateFullName } from '@/app/lib/validation'
 import VehiclePicker, { DEFAULT_VEHICLE_SLUG } from './VehiclePicker'
 import { WhyTravelCard } from './Sidebar'
 import {
@@ -50,7 +51,6 @@ type Errors = Partial<Record<
   'serviceType' | 'fullName' | 'email' | 'phone', string
 >>
 
-const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
@@ -106,10 +106,17 @@ export default function BookingForm() {
     if (!pickupTime)         e.pickupTime  = 'Pickup time is required'
     if (!passengers)         e.passengers  = 'Passenger count is required'
     if (!serviceType)        e.serviceType = 'Journey type is required'
-    if (!fullName.trim())    e.fullName    = 'Full name is required'
-    if (!email.trim())       e.email       = 'Email address is required'
-    else if (!isEmail(email)) e.email      = 'Please enter a valid email address'
-    if (!phone.trim())       e.phone       = 'Phone number is required'
+    // The shared validators reject placeholders and keyboard runs, not just
+    // empty fields, and the API applies the very same rules on arrival.
+    const nameProblem  = validateFullName(fullName)
+    const emailProblem = validateEmail(email)
+    if (nameProblem)  e.fullName = nameProblem
+    if (emailProblem) e.email    = emailProblem
+    if (!phone.trim()) e.phone   = 'Phone number is required'
+    else {
+      const phoneProblem = validatePhone(phone)
+      if (phoneProblem) e.phone = phoneProblem
+    }
     return e
   }
 

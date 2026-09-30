@@ -88,8 +88,9 @@ describe('QuoteForm', () => {
     expect(screen.getByText('Pickup time')).toBeInTheDocument()
   })
 
-  it('does not show email and phone fields initially', () => {
+  it('does not show name, email and phone fields initially', () => {
     render(<QuoteForm />)
+    expect(screen.queryByLabelText(/full name/i)).not.toBeInTheDocument()
     expect(screen.queryByLabelText(/email/i)).not.toBeInTheDocument()
     expect(screen.queryByLabelText(/phone/i)).not.toBeInTheDocument()
   })
@@ -130,10 +131,17 @@ describe('QuoteForm', () => {
     fireEvent.change(pickupTimeInput, { target: { value: '09:00' } })
 
     await waitFor(() => {
+      expect(screen.getByLabelText(/full name/i)).toBeInTheDocument()
       expect(screen.getByLabelText(/email address/i)).toBeInTheDocument()
       expect(screen.getByLabelText(/phone number/i)).toBeInTheDocument()
       expect(screen.getByRole('button', { name: /get a free quote/i })).toBeInTheDocument()
     })
+
+    // Full name leads the contact row, ahead of email.
+    const contactFields = screen.getAllByRole('textbox').map((el) => el.id)
+    expect(contactFields).toContain('full-name')
+    expect(contactFields).toContain('email')
+    expect(contactFields.indexOf('full-name')).toBeLessThan(contactFields.indexOf('email'))
   })
 
   it('shows return date and time fields when Return is selected', async () => {

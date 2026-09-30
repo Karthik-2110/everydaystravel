@@ -56,7 +56,7 @@ function fillRequired() {
   fireEvent.change(screen.getByLabelText('Journey Type'), { target: { value: 'Airport Transfers' } })
   fireEvent.change(screen.getByLabelText('Full Name'), { target: { value: 'Ada Lovelace' } })
   fireEvent.change(screen.getByLabelText('Email Address'), { target: { value: 'ada@example.com' } })
-  fireEvent.change(screen.getByLabelText('Phone Number'), { target: { value: '07000 000000' } })
+  fireEvent.change(screen.getByLabelText('Phone Number'), { target: { value: '07538 724000' } })
 }
 
 const submit = () => fireEvent.click(screen.getByRole('button', { name: /request my quote/i }))
@@ -155,7 +155,7 @@ describe('BookingForm', () => {
       serviceType: 'Airport Transfers',
       fullName: 'Ada Lovelace',
       email: 'ada@example.com',
-      phone: '07000 000000',
+      phone: '07538 724000',
       company: 'Analytical Engines Ltd',
       flightDetails: 'BA123, T5',
       extraStops: ['Watford Junction'],
