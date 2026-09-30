@@ -52,7 +52,6 @@ export default function FleetPage() {
         services={FLEET}
         heading="Our Fleet"
         subtext="Explore our range of premium vehicles designed to offer exceptional comfort and safety for all your travel needs."
-        showKicker={false}
       />
       <Footer />
     </>

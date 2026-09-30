@@ -55,7 +55,7 @@ export default function AboutPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#0C0F1C] via-transparent to-[#0C0F1C]/70" />
         </div>
 
-        <div className="relative site-container pt-32 pb-14 lg:pt-36 lg:pb-16">
+        <div className="relative site-container pt-32 pb-14 lg:pt-40 lg:pb-16">
           <p
             className="text-[#EBBA6F] text-[11px] font-semibold tracking-[0.2em] uppercase mb-5"
             style={{ fontFamily: 'var(--font-ui)' }}

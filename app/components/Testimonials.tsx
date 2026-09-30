@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronDown, Sparkles } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { ALL_REVIEWS, type Review } from '@/app/data/reviews'
 import ReviewCard from './ReviewCard'
 
@@ -23,17 +23,6 @@ export default function Testimonials({ reviews = ALL_REVIEWS }: { reviews?: Revi
 
         {/* ── Centered header ── */}
         <div className="flex flex-col items-center text-center mb-10">
-
-          {/* Kicker */}
-          <div className="inline-flex items-center gap-1.5 mb-4">
-            <Sparkles size={14} strokeWidth={1} className="text-[#0C0F1C]/70" aria-hidden />
-            <span
-              className="text-[#0C0F1C]/70 text-[11px] font-semibold tracking-[0.2em] uppercase"
-              style={{ fontFamily: 'var(--font-ui)' }}
-            >
-              Testimonials
-            </span>
-          </div>
 
           {/* Heading */}
           <h2

@@ -11,7 +11,10 @@ export default function Home() {
       {/* The story copy that used to sit here is coming back once the card
           layout is settled — pass `story` and `storyCta` again to restore it. */}
       <Hero
-        videoSrc="https://res.cloudinary.com/dckyndryf/video/upload/v1780222799/hero_xgrraa"
+        videoSrc={[
+          'https://res.cloudinary.com/dp4cbs8c2/video/upload/v1787915285/IMG_5928_1_esggvf.mov',
+          'https://res.cloudinary.com/dckyndryf/video/upload/v1780222799/hero_xgrraa',
+        ]}
         lines={[
           { text: 'Choose Everydays Travel', accent: false },
           { text: 'for coach hire in London', accent: true },

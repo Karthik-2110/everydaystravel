@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState, useMemo } from 'react'
 import { motion } from 'motion/react'
 import Image from 'next/image'
 import { Phone } from 'lucide-react'
@@ -47,13 +47,27 @@ export interface HeroProps {
   /** Show the call + WhatsApp buttons under the copy. */
   showContact?: boolean
   subtext?:  string
-  videoSrc?: string
+  /** One clip, or several played back to back in order then looped. */
+  videoSrc?: string | string[]
   imageSrc?: string
   /**
    * Moves the quote form into the hero as a narrow card in place of the copy,
    * rather than sitting full-width underneath it.
    */
   inlineForm?: boolean
+}
+
+/**
+ * Cloudinary serves whatever codec the delivery URL asks for, so each clip is
+ * offered twice: VP9/WebM for Chrome & Firefox, H.264/MP4 for Safari. The
+ * source's own extension is dropped first — the public ID is what matters.
+ */
+const videoVariants = (src: string) => {
+  const base = src.replace(/\.(mov|mp4|m4v|webm)$/i, '')
+  return {
+    webm: base.replace('/upload/', '/upload/vc_vp9,q_auto/') + '.webm',
+    mp4:  base.replace('/upload/', '/upload/vc_h264,q_auto/') + '.mp4',
+  }
 }
 
 const DEFAULT_HERO_IMAGE =
@@ -78,34 +92,52 @@ export default function Hero({
   imageSrc = DEFAULT_HERO_IMAGE,
   inlineForm = false,
 }: HeroProps = {}) {
-  const videoRef = useRef<HTMLVideoElement>(null)
+  const clips = useMemo(
+    () => (Array.isArray(videoSrc) ? videoSrc : videoSrc ? [videoSrc] : []),
+    [videoSrc],
+  )
+  const [current, setCurrent] = useState(0)
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
 
+  // Every clip is mounted so the next one is buffered before its turn; only
+  // the current one is visible and playing.
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.muted = true
-      videoRef.current.play().catch(() => {})
-    }
-  }, [])
+    const el = videoRefs.current[current]
+    if (!el) return
+    el.muted = true
+    el.currentTime = 0
+    el.play().catch(() => {})
+  }, [current, clips])
   return (
     <section
       aria-label="hero"
       className="relative flex flex-col min-h-screen bg-[#0C0F1C]"
     >
       {/* Background — video or image */}
-      {videoSrc ? (
-        <video
-          ref={videoRef}
-          loop
-          muted
-          playsInline
-          autoPlay
-          className="absolute inset-0 w-full h-full object-cover object-center"
-        >
-          {/* WebM/VP9 for Chrome & Firefox */}
-          <source src={videoSrc.replace('/upload/', '/upload/vc_vp9,q_auto/')} type="video/webm" />
-          {/* H.264 MP4 for Safari — universally supported */}
-          <source src={videoSrc.replace('/upload/', '/upload/vc_h264,q_auto/') + '.mp4'} type="video/mp4" />
-        </video>
+      {clips.length > 0 ? (
+        clips.map((clip, i) => {
+          const { webm, mp4 } = videoVariants(clip)
+          return (
+            <video
+              key={clip}
+              ref={(el) => { videoRefs.current[i] = el }}
+              loop={clips.length === 1}
+              muted
+              playsInline
+              autoPlay={i === 0}
+              preload="auto"
+              onEnded={() => setCurrent((n) => (n + 1) % clips.length)}
+              className={[
+                'absolute inset-0 w-full h-full object-cover object-center',
+                'transition-opacity duration-700',
+                i === current ? 'opacity-100' : 'opacity-0',
+              ].join(' ')}
+            >
+              <source src={webm} type="video/webm" />
+              <source src={mp4} type="video/mp4" />
+            </video>
+          )
+        })
       ) : (
         <Image
           src={imageSrc}
@@ -143,14 +175,14 @@ export default function Hero({
                own shadow so it stays legible on the brighter video frames. */
             <>
               <h1
-                className="mb-8 leading-[1.08] tracking-[-0.025em]"
+                className="mb-8 leading-[1.22] tracking-[-0.025em]"
                 style={{ fontFamily: 'var(--font-ui)', fontWeight: 600 }}
               >
                 {lines.map((line, i) => (
                   <motion.span
                     key={line.text}
                     className={[
-                      'block text-[clamp(2.25rem,4vw,3.75rem)]',
+                      'block text-[clamp(1.625rem,2.75vw,2.5rem)]',
                       line.accent ? 'text-[#EBBA6F]' : 'text-white',
                     ].join(' ')}
                     style={{ textShadow: '0 2px 24px rgba(6,8,16,0.75), 0 1px 4px rgba(6,8,16,0.5)' }}

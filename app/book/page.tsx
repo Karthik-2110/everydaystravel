@@ -42,7 +42,7 @@ export default function BookPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#0C0F1C] via-transparent to-[#0C0F1C]/70" />
         </div>
 
-        <div className="relative site-container pt-32 pb-12 lg:pt-36 lg:pb-14">
+        <div className="relative site-container pt-32 pb-12 lg:pt-40 lg:pb-14">
           <h1
             className="text-white leading-[0.95] tracking-[-0.02em]"
             style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(2.4rem, 5.2vw, 4.2rem)' }}

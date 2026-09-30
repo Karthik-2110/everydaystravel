@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowUpRight, Sparkles } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -15,7 +15,6 @@ interface ServicesGridProps {
   services?:    ServiceItem[]
   heading?:     string
   subtext?:     string
-  showKicker?:  boolean
 }
 
 // ── Default data ──────────────────────────────────────────────────────────────
@@ -133,7 +132,6 @@ export default function ServicesGrid({
   services    = DEFAULT_SERVICES,
   heading     = 'What we offer',
   subtext     = 'We provide luxury coach, minibus, and executive travel services across London, the South East, and the UK for private, corporate, and official travel.',
-  showKicker  = true,
 }: ServicesGridProps) {
   return (
     <section className="bg-[#0C0F1C]">
@@ -141,17 +139,6 @@ export default function ServicesGrid({
 
         {/* Header */}
         <div className="mb-12 lg:mb-16 flex flex-col items-center text-center">
-          {showKicker && (
-            <div className="inline-flex items-center gap-1.5 mb-4">
-              <Sparkles size={14} strokeWidth={1} className="text-[#EBBA6F]" aria-hidden />
-              <p
-                className="text-[#EBBA6F] text-[11px] font-semibold tracking-[0.2em] uppercase"
-                style={{ fontFamily: 'var(--font-ui)' }}
-              >
-                Our services
-              </p>
-            </div>
-          )}
           <h2
             className="text-white leading-[0.93] tracking-[-0.02em] mb-5"
             style={{

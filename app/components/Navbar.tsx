@@ -179,9 +179,13 @@ export default function Navbar({
               href={WHATSAPP_HREF}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-medium text-white/80 hover:text-white transition-colors duration-150"
+              className="group inline-flex items-center gap-2 font-medium text-white/80 hover:text-[#EBBA6F] transition-colors duration-150"
             >
-              <WhatsAppIcon size={14} />
+              {/* The glyph fills with currentColor, so it needs its own brand
+                  green to stay put while the label turns gold on hover. */}
+              <span className="text-[#25D366]" aria-hidden>
+                <WhatsAppIcon size={14} />
+              </span>
               WhatsApp us
             </a>
           </div>

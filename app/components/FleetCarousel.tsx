@@ -2,7 +2,7 @@
 
 import { useRef, useState, useCallback } from 'react'
 import Image from 'next/image'
-import { Sparkles, ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import { FLEET_CATEGORIES } from '../data/fleet'
 
 // The vehicles we lead with on the homepage, as [category slug, vehicle slug].
@@ -56,17 +56,6 @@ export default function FleetCarousel() {
 
       {/* ── Header ── */}
       <div className="site-container mb-10 lg:mb-12 text-center">
-
-        {/* Kicker */}
-        <div className="inline-flex items-center gap-2 mb-5">
-          <Sparkles size={12} className="text-[#EBBA6F]" aria-hidden />
-          <span
-            className="text-[#EBBA6F] text-[11px] font-medium tracking-[0.18em] uppercase"
-            style={{ fontFamily: 'var(--font-ui)' }}
-          >
-            Must see
-          </span>
-        </div>
 
         <h2
           className="text-white leading-[0.93] tracking-[-0.02em] mb-4"

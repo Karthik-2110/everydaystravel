@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { LucideIcon } from 'lucide-react'
 import {
-  ArrowLeft, ArrowUpRight,
+  ArrowUpRight,
   Armchair, EyeOff, Wind, Flame, Zap, Droplets,
   Wifi, Volume2, Lightbulb, DoorOpen, Maximize2,
   Briefcase, GlassWater, MonitorPlay, Speaker,
@@ -166,29 +166,13 @@ export default function VehicleDetail({
     <div className="min-h-screen bg-[#0C0F1C]">
       <Navbar />
 
-      <main className="site-container pt-28 pb-0">
+      <main className="site-container pt-28 sm:pt-32 lg:pt-40 pb-0">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(structuredData).replace(/</g, '\\u003c'),
           }}
         />
-
-        {/* Breadcrumb */}
-        <div className="flex items-center gap-2 mb-6">
-          <Link
-            href={base}
-            className="flex items-center gap-1.5 text-white/40 text-[12.5px] hover:text-white/70 transition-colors duration-150"
-            style={{ fontFamily: 'var(--font-ui)' }}
-          >
-            <ArrowLeft size={13} aria-hidden />
-            {categoryLabel}
-          </Link>
-          <span className="text-white/20 text-[12px]">/</span>
-          <span className="text-white/50 text-[12.5px] truncate" style={{ fontFamily: 'var(--font-ui)' }}>
-            {vehicle.name}
-          </span>
-        </div>
 
         {/* Two-column layout */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] xl:grid-cols-[1fr_440px] gap-8 lg:gap-10 items-start">
