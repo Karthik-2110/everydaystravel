@@ -5,7 +5,7 @@ import { validateEmail, validatePhone, validateFullName } from '@/app/lib/valida
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-const TO_EMAILS = ['thaya@everydaystravel.co.uk', 'info@everydaystravel.co.uk', 'web@everydaystravel.co.uk']
+const TO_EMAILS = ['info@everydaystravel.co.uk', 'web@everydaystravel.co.uk']
 
 const ALL_VEHICLES = [...CHAUFFEUR_CARS, ...LUXURY_MINIBUSES, ...EXECUTIVE_COACHES]
 
@@ -87,7 +87,7 @@ export async function POST(request: Request) {
     <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a2e;">
       <div style="background: #0C0F1C; padding: 32px 24px; border-radius: 12px 12px 0 0;">
         <h1 style="color: #EBBA6F; font-size: 22px; margin: 0 0 4px;">New Quote Request</h1>
-        <p style="color: rgba(255,255,255,0.45); font-size: 13px; margin: 0;">Everyday Travels</p>
+        <p style="color: rgba(255,255,255,0.45); font-size: 13px; margin: 0;">Everydays Travel</p>
       </div>
 
       <div style="background: #f9f9f9; padding: 28px 24px; border-radius: 0 0 12px 12px; border: 1px solid #e5e5e5; border-top: none;">
@@ -141,7 +141,7 @@ export async function POST(request: Request) {
   `
 
   const { error } = await resend.emails.send({
-    from: 'Everyday Travels <noreply@email.everydaystravel.co.uk>',
+    from: 'Everydays Travel <noreply@email.everydaystravel.co.uk>',
     to: TO_EMAILS,
     replyTo: email,
     subject,

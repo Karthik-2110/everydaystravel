@@ -89,7 +89,7 @@ const NAV_ITEMS: NavItem[] = [
       { label: 'Reviews',   href: '/reviews',   description: 'What our clients say' },
       { label: 'About us',  href: '/about',     description: 'Our story and our promise' },
       { label: 'Gallery',   href: '/gallery',   description: 'Our vehicles and journeys' },
-      { label: 'Our Team',  href: '/team',      description: 'Meet the people behind Everyday Travels' },
+      { label: 'Our Team',  href: '/team',      description: 'Meet the people behind Everydays Travel' },
       { label: 'Vacancies', href: '/vacancies', description: 'Join our growing team' },
       { label: 'Travel Inspirations', href: '/blog', description: 'News, tips and travel guides' },
       { label: 'FAQs',      href: '/faqs',      description: 'Answers to common questions' },

@@ -162,7 +162,7 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
           </div>
           <p className="text-white text-[15px] font-medium" style={{ fontFamily: 'var(--font-body)' }}>Quote request sent!</p>
           <p className="text-white/45 text-[13px]" style={{ fontFamily: 'var(--font-body)' }}>
-            The Everyday Travels team will get in touch with you shortly.
+            The Everydays Travel team will get in touch with you shortly.
           </p>
         </div>
       ) : (

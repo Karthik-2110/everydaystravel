@@ -212,7 +212,7 @@ export default function Footer() {
             <div>
               <Image
                 src="/images/everyday_logo.avif"
-                alt="Everyday Travels"
+                alt="Everydays Travel"
                 width={512}
                 height={267}
                 className="h-[80px] w-auto object-contain mb-5"

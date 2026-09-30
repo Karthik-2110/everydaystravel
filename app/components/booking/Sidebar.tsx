@@ -31,14 +31,14 @@ const REASONS: { icon: LucideIcon; title: string; text: string }[] = [
 export function WhyTravelCard() {
   return (
     <section
-      aria-label="Why travel with Everyday Travels"
+      aria-label="Why travel with Everydays Travel"
       className="bg-[#0D1221] rounded-2xl border border-white/[0.08] shadow-[0_0_0_1px_rgba(235,186,111,0.06),0_18px_50px_rgba(0,0,0,0.45)] p-5 sm:p-6"
     >
       <h2
         className="text-white text-[19px] sm:text-[21px] leading-none tracking-[-0.01em] mb-5"
         style={{ fontFamily: 'var(--font-display)', fontWeight: 400 }}
       >
-        Why Travel With Everyday Travels?
+        Why Travel With Everydays Travel?
       </h2>
 
       <ul className="flex flex-col gap-4">

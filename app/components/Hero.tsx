@@ -129,7 +129,7 @@ export default function Hero({
       ) : (
         <Image
           src={imageSrc}
-          alt="Everyday Travels fleet of luxury coaches"
+          alt="Everydays Travel fleet of luxury coaches"
           fill
           priority
           unoptimized
