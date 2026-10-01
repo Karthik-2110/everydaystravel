@@ -25,4 +25,4 @@ export const COMPANY_NUMBER   = ''
 export const OPERATOR_LICENCE = ''
 
 /** The date the legal wording last changed — not the date of the last deploy. */
-export const LEGAL_UPDATED = '30 September 2026'
+export const LEGAL_UPDATED = '1 October 2026'

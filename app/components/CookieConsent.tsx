@@ -41,8 +41,9 @@ const CATEGORIES: Category[] = [
     key:   'analytics',
     label: 'Analytics',
     detail:
-      'Would let us count visits and see which pages are useful. We do not currently ' +
-      'run any analytics — leaving this off changes nothing today.',
+      'Google Analytics, which counts visits and shows us which pages people actually ' +
+      'use, so we know what to improve. It sets two cookies on this site. Google\'s ' +
+      'advertising features are switched off, so none of it feeds ad targeting.',
   },
 ]
 
@@ -264,9 +265,10 @@ export default function CookieConsent() {
                 style={{ fontFamily: 'var(--font-body)' }}
               >
                 We use cookies and similar storage that are strictly necessary to run this
-                site and its booking forms. We would also like to load the interactive
-                Google map on our Contact page, which sets cookies of its own. That only
-                happens if you agree — and you can change your mind at any time.{' '}
+                site and its booking forms. We would also like to count visits with Google
+                Analytics, and to load the interactive Google map on our Contact page. Both
+                set cookies of their own, and neither happens unless you agree — you can
+                change your mind at any time.{' '}
                 <Link href="/cookies" className="text-[#EBBA6F] underline underline-offset-2 hover:text-[#DDA85E]">
                   Read our cookie policy
                 </Link>

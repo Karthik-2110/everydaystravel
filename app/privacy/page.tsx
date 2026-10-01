@@ -36,7 +36,7 @@ const LAWFUL_BASES: string[][] = [
   [
     'Optional cookies',
     'Whatever the relevant third party sets — see the cookie policy',
-    'To load the map on our Contact page, and any future measurement',
+    'To count visits with Google Analytics, and to load the map on our Contact page',
     'Your consent, which you can withdraw at any time',
   ],
 ]
@@ -44,7 +44,7 @@ const LAWFUL_BASES: string[][] = [
 const PROCESSORS: string[][] = [
   ['Resend', 'Delivers the enquiry email to our inbox', 'United States'],
   ['Vercel', 'Hosts the website and runs the form endpoints', 'United States / EU'],
-  ['Google', 'Address suggestions on the forms, and the Contact page map if you allow it', 'United States'],
+  ['Google', 'Address suggestions on the forms; visit measurement and the Contact page map, if you allow them', 'United States'],
   ['Cloudinary', 'Serves the photography and video on the site', 'United States / EU'],
 ]
 
@@ -83,7 +83,7 @@ export default function PrivacyPage() {
         <P>
           We only ask for what we need to quote and run a journey. We do not collect
           special category data, we do not buy data from anyone, and we do not build
-          profiles of visitors.
+          advertising or marketing profiles of visitors.
         </P>
         <DataTable
           headings={['Why', 'What', 'What we do with it', 'Our lawful basis']}
@@ -102,6 +102,12 @@ export default function PrivacyPage() {
           to identify you or to advertise to you. The only other storage on your device is
           covered by our <A href="/cookies">cookie policy</A>, and nothing optional is set
           without your consent.
+        </P>
+        <P>
+          If you agree to the analytics cookie, we use Google Analytics to count visits and
+          see which pages get used. We read it as totals, not as individuals; Google&rsquo;s
+          advertising features are switched off, so it cannot feed ad targeting; and turning
+          the category off deletes those cookies and stops the measurement immediately.
         </P>
         <CookieSettingsButton className="mt-1 mb-2 h-10 px-5 inline-flex items-center rounded-full border border-white/25 text-white text-[13.5px] font-medium hover:border-[#EBBA6F]/60 hover:text-[#EBBA6F] transition-colors duration-150" />
       </Section>

@@ -2,6 +2,7 @@ import LegalPage, { Section, SubHeading, P, A, DataTable } from '../components/l
 import CookieSettingsButton from '../components/CookieSettingsButton'
 import { createPageMetadata } from '../lib/seo'
 import { LEGAL_UPDATED } from '../components/legal/company-details'
+import { GA_MEASUREMENT_ID } from '../lib/analytics'
 
 export const metadata = createPageMetadata({
   title: 'Cookie Policy',
@@ -20,6 +21,18 @@ const ROWS: string[][] = [
     '6 months',
   ],
   [
+    '_ga',
+    'Google Analytics, set as a first-party cookie by us',
+    'Tells one visitor apart from another so visits can be counted. Only set if you turn Analytics on.',
+    '6 months',
+  ],
+  [
+    `_ga_${GA_MEASUREMENT_ID.replace(/^G-/, '')}`,
+    'Google Analytics, set as a first-party cookie by us',
+    'Holds the state of your visit for the same count. Only set if you turn Analytics on.',
+    '6 months',
+  ],
+  [
     'Google Maps cookies (NID and similar)',
     'Google (third party)',
     'Set by Google when our maps load — either the address suggestions you request by typing into a booking form, or the Contact page map, which waits for your consent.',
@@ -32,10 +45,11 @@ export default function CookiePolicyPage() {
     <LegalPage title="Cookie Policy" updated={LEGAL_UPDATED}>
       <Section title="The short version">
         <P>
-          We store as little as we can. Only two things are ever placed on your device: a
-          cookie that remembers your choice here, and the cookies Google sets when one of
-          its maps loads. We run no advertising or tracking cookies, and we do not sell or
-          share what we hold.
+          We store as little as we can. Three things can end up on your device: a cookie
+          that remembers the choice you make here, two Google Analytics cookies that count
+          visits if you allow them, and the cookies Google sets when one of its maps loads.
+          We run no advertising cookies, nothing that follows you to other websites, and we
+          do not sell or share what we hold.
         </P>
         <P>
           Nothing optional is stored until you say yes. Refusing is one click, exactly like
@@ -87,10 +101,17 @@ export default function CookiePolicyPage() {
 
         <SubHeading>Analytics — off unless you turn it on</SubHeading>
         <P>
-          We do not currently run any analytics, so this category sets nothing today. The
-          control exists so that if we ever add audience measurement, it cannot run until
-          you have agreed to it. We will update this page and ask again before anything
-          changes.
+          Google Analytics, which counts visits and shows us which pages people actually
+          use, so we know what is worth improving. Nothing is loaded and nothing is sent to
+          Google until you turn this on. Leave it off and we count nothing.
+        </P>
+        <P>
+          Where we have been able to narrow it, we have. Google Signals and ad
+          personalisation are switched off, so the measurement cannot be folded into
+          advertising audiences. The two cookies are set to expire after six months rather
+          than Google&rsquo;s default two years, so they never outlive the consent that
+          allowed them. And if you switch this category off, we delete both cookies and
+          stop sending straight away.
         </P>
       </Section>
 
@@ -105,9 +126,14 @@ export default function CookiePolicyPage() {
           immediately.
         </P>
         <P>
-          Cookies already set by Google live on Google&rsquo;s own domain, so we cannot
-          delete them for you. Your browser&rsquo;s privacy settings will clear them, and
-          every major browser lets you block third-party cookies outright.
+          Turning Analytics off deletes the two Google Analytics cookies there and then,
+          and stops the tag sending, without you having to reload the page. Those are set
+          on our own domain, so they are ours to clear.
+        </P>
+        <P>
+          The Maps cookies are different: they live on Google&rsquo;s own domain, so we
+          cannot delete them for you. Your browser&rsquo;s privacy settings will clear
+          them, and every major browser lets you block third-party cookies outright.
         </P>
         <P>
           We ask again after six months, so a choice you made long ago never stands in for

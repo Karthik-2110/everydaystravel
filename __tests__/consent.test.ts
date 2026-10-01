@@ -79,3 +79,19 @@ describe('consent record', () => {
     expect(readConsent()?.version).toBe(CONSENT_VERSION)
   })
 })
+
+describe('the arrival of Google Analytics in the analytics category', () => {
+  it('does not let a yes given when analytics meant nothing stand for one now', () => {
+    // Under version 1 the analytics category set nothing at all, and the cookie
+    // policy promised in writing to ask again before that changed. So a version 1
+    // acceptance cannot authorise the GA4 tag — the banner has to come back.
+    const givenBeforeGA = {
+      version: 1, functional: true, analytics: true, decidedAt: '2026-01-01T00:00:00.000Z',
+    }
+    document.cookie =
+      `${CONSENT_COOKIE}=${encodeURIComponent(JSON.stringify(givenBeforeGA))}; Path=/`
+
+    expect(readConsent()).toBeNull()
+    expect(hasConsent('analytics')).toBe(false)
+  })
+})

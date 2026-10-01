@@ -9,7 +9,7 @@ import { useSyncExternalStore } from 'react'
  *
  *  - Nothing non-essential may be stored on, or read from, a device before the
  *    visitor agrees. So consent is checked *before* a third party loads, not
- *    after — see `google-maps-loader` and `MapEmbed`.
+ *    after — see `MapEmbed` for the map and `Analytics` for the GA4 tag.
  *  - Refusing has to be as easy as agreeing: one click either way, no extra
  *    screens on the refusal path, no pre-ticked boxes. Hence `ALL_OFF` is the
  *    default state and every optional category starts false.
@@ -29,7 +29,7 @@ export const CONSENT_COOKIE = 'et_cookie_consent'
  * one. An unrecognised version reads as "not asked yet", so the banner returns
  * and consent is taken again rather than assumed to carry over.
  */
-export const CONSENT_VERSION = 1
+export const CONSENT_VERSION = 2
 
 /** Roughly six months. The ICO expects consent to be refreshed, not banked forever. */
 const MAX_AGE_SECONDS = 182 * 24 * 60 * 60
@@ -43,7 +43,7 @@ export const OPEN_PREFERENCES_EVENT = 'et:open-cookie-preferences'
 export interface ConsentChoice {
   /** Google Maps — address autocomplete on the forms, the map on Contact. */
   functional: boolean
-  /** Audience measurement. Nothing is set under this today; the gate is ready. */
+  /** Google Analytics 4 — visit counts and which pages get used. */
   analytics: boolean
 }
 
@@ -111,9 +111,10 @@ export function saveConsent(choice: ConsentChoice): ConsentRecord {
 }
 
 /**
- * Forgets the decision entirely, so the banner asks again. Third-party storage
- * already dropped by Google sits on their domain and cannot be cleared from
- * ours — the cookie policy tells visitors how to clear it themselves.
+ * Forgets the decision entirely, so the banner asks again. `Analytics` sees the
+ * change and clears the GA4 cookies, which are first party and so ours to
+ * delete; the Maps cookies sit on Google's own domain and cannot be cleared
+ * from here — the cookie policy tells visitors how to clear those themselves.
  */
 export function withdrawConsent(): void {
   if (typeof document === 'undefined') return

@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import FloatingContactBar from "./components/FloatingContactBar";
 import CookieConsent from "./components/CookieConsent";
+import Analytics from "./components/Analytics";
 import { businessSchema, siteUrl, webSiteSchema } from './lib/seo';
 
 // Inter → drives --font-sans (shadcn) and --font-ui (brand)
@@ -77,6 +78,7 @@ export default function RootLayout({
         {children}
         <FloatingContactBar />
         <CookieConsent />
+        <Analytics />
       </body>
     </html>
   );
