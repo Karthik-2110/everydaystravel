@@ -69,7 +69,11 @@ describe('CookieConsent', () => {
     expect(screen.queryByRole('button', { name: 'Accept all' })).not.toBeInTheDocument()
   })
 
-  it('opens preferences with every optional toggle off — nothing pre-ticked', async () => {
+  it('opens preferences with Analytics pre-selected, and Functional still off', async () => {
+    // A deliberate product decision, against the ICO's position on pre-ticked
+    // boxes: Analytics starts on so measurement is the default outcome. The
+    // visitor can still switch it off, and refusing all of it is still one
+    // click. Functional stays off because the map loads Google on sight.
     render(<CookieConsent />)
     await waitFor(() => expect(accept()).toBeInTheDocument())
 
@@ -84,7 +88,36 @@ describe('CookieConsent', () => {
     expect(necessary).toBeDisabled()
     expect(necessary).toHaveAttribute('aria-checked', 'true')
     expect(functional).toHaveAttribute('aria-checked', 'false')
-    expect(analytics).toHaveAttribute('aria-checked', 'false')
+    expect(analytics).toHaveAttribute('aria-checked', 'true')
+  })
+
+  it('saves analytics consent for someone who opens the panel and just saves', async () => {
+    render(<CookieConsent />)
+    await waitFor(() => expect(accept()).toBeInTheDocument())
+    fireEvent.click(screen.getByRole('button', { name: 'Manage' }))
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Save my choices' }))
+
+    await waitFor(() => expect(readConsent()).toMatchObject({ functional: false, analytics: true }))
+  })
+
+  it('still treats silence as a refusal — a pre-ticked box is not a decision', async () => {
+    // The pre-selection is a default *offer*, not a stored yes. Until a button
+    // is pressed there is no record, and the gate keeps Google out.
+    render(<CookieConsent />)
+    await waitFor(() => expect(accept()).toBeInTheDocument())
+    expect(readConsent()).toBeNull()
+  })
+
+  it('lets the pre-selection be switched off before saving', async () => {
+    render(<CookieConsent />)
+    await waitFor(() => expect(accept()).toBeInTheDocument())
+    fireEvent.click(screen.getByRole('button', { name: 'Manage' }))
+
+    fireEvent.click(await screen.findByRole('switch', { name: 'Analytics' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Save my choices' }))
+
+    await waitFor(() => expect(readConsent()).toMatchObject({ functional: false, analytics: false }))
   })
 
   it('saves a partial choice from the preferences panel', async () => {
@@ -95,7 +128,9 @@ describe('CookieConsent', () => {
     fireEvent.click(await screen.findByRole('switch', { name: 'Functional' }))
     fireEvent.click(screen.getByRole('button', { name: 'Save my choices' }))
 
-    await waitFor(() => expect(readConsent()).toMatchObject({ functional: true, analytics: false }))
+    // Analytics rides along because it is pre-selected; Functional is the part
+    // this visitor actually turned on.
+    await waitFor(() => expect(readConsent()).toMatchObject({ functional: true, analytics: true }))
   })
 
   it('offers both choices inside the preferences panel too', async () => {

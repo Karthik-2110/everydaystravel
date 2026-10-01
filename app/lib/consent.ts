@@ -56,6 +56,20 @@ export interface ConsentRecord extends ConsentChoice {
 export const ALL_OFF: ConsentChoice = { functional: false, analytics: false }
 export const ALL_ON:  ConsentChoice = { functional: true,  analytics: true  }
 
+/**
+ * What the preferences panel shows before the visitor touches anything.
+ *
+ * Analytics is pre-selected by decision of the business, so measurement is the
+ * default outcome for someone who opens the panel and saves. The ICO's position
+ * is that consent cannot be pre-ticked, so this is a known departure from it —
+ * see the note in `/cookies`.
+ *
+ * This is a pre-selection in the UI only. `ALL_OFF` is still what *no decision*
+ * means: until a button is pressed nothing is stored and nothing optional
+ * loads, so silence is never read as a yes.
+ */
+export const DEFAULT_CHOICE: ConsentChoice = { functional: false, analytics: true }
+
 function readCookie(name: string): string | null {
   if (typeof document === 'undefined') return null
   const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`))

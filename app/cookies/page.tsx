@@ -52,8 +52,9 @@ export default function CookiePolicyPage() {
           do not sell or share what we hold.
         </P>
         <P>
-          Nothing optional is stored until you say yes. Refusing is one click, exactly like
-          accepting, and you can change your answer whenever you like.
+          Nothing optional is stored until you answer. Refusing is one click, exactly like
+          accepting, and you can change your answer whenever you like. Note that the
+          Analytics switch starts on &mdash; the rest start off.
         </P>
         <CookieSettingsButton className="mt-2 h-11 px-6 inline-flex items-center rounded-full bg-[#EBBA6F] text-[#0C0F1C] text-[14px] font-semibold hover:bg-[#DDA85E] transition-colors duration-150">
           Change your cookie settings
@@ -65,9 +66,15 @@ export default function CookiePolicyPage() {
           The Privacy and Electronic Communications Regulations (PECR) and the UK GDPR say
           we must tell you what we store on your device, and get your consent before
           storing anything that is not strictly necessary. Consent has to be freely given
-          and unambiguous, which means we cannot pre-tick boxes, cannot read continued
-          browsing as agreement, and cannot make refusing harder than accepting. You may
-          withdraw consent at any point.
+          and unambiguous: continued browsing is not agreement, refusing may not be made
+          harder than accepting, and you may withdraw at any point. We store nothing
+          optional until you press a button, and rejecting everything is a single click.
+        </P>
+        <P>
+          One thing to know, because we would rather say it than bury it: the Analytics
+          switch in our preferences panel starts in the on position. Nothing is stored
+          until you choose, and switching it off takes one tap &mdash; but it is
+          pre-selected rather than blank, so please do look at it before you save.
         </P>
         <P>
           Cookies are not the only thing covered. The same rules apply to anything that
@@ -99,11 +106,13 @@ export default function CookiePolicyPage() {
           Maps yourself if you want to.
         </P>
 
-        <SubHeading>Analytics — off unless you turn it on</SubHeading>
+        <SubHeading>Analytics — pre-selected, and yours to switch off</SubHeading>
         <P>
           Google Analytics, which counts visits and shows us which pages people actually
           use, so we know what is worth improving. Nothing is loaded and nothing is sent to
-          Google until you turn this on. Leave it off and we count nothing.
+          Google until you make a choice &mdash; but this switch starts on, so accepting or
+          saving without changing it means we count your visit. Switch it off, or press
+          Reject all, and we count nothing.
         </P>
         <P>
           Where we have been able to narrow it, we have. Google Signals and ad

@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { X } from 'lucide-react'
 import Link from 'next/link'
 import {
-  ALL_OFF, ALL_ON, OPEN_PREFERENCES_EVENT,
+  ALL_OFF, ALL_ON, DEFAULT_CHOICE, OPEN_PREFERENCES_EVENT,
   readConsent, saveConsent, useConsent, useHydrated,
   type ConsentChoice,
 } from '../lib/consent'
@@ -42,8 +42,9 @@ const CATEGORIES: Category[] = [
     label: 'Analytics',
     detail:
       'Google Analytics, which counts visits and shows us which pages people actually ' +
-      'use, so we know what to improve. It sets two cookies on this site. Google\'s ' +
-      'advertising features are switched off, so none of it feeds ad targeting.',
+      'use, so we know what to improve. It sets two cookies on this site, and starts ' +
+      'switched on — turn it off here if you would rather we did not count your visit. ' +
+      'Google\'s advertising features are off, so none of it feeds ad targeting.',
   },
 ]
 
@@ -111,7 +112,7 @@ export default function CookieConsent() {
 
   const [reopened, setReopened] = useState(false)
   const [showPrefs, setPrefs]   = useState(false)
-  const [draft, setDraft]       = useState<ConsentChoice>(ALL_OFF)
+  const [draft, setDraft]       = useState<ConsentChoice>(DEFAULT_CHOICE)
   const panelRef                = useRef<HTMLDivElement>(null)
 
   // No decision means no optional storage, so the banner stays up rather than
@@ -123,7 +124,7 @@ export default function CookieConsent() {
   useEffect(() => {
     const open = () => {
       const current = readConsent()
-      setDraft(current ? { functional: current.functional, analytics: current.analytics } : ALL_OFF)
+      setDraft(current ? { functional: current.functional, analytics: current.analytics } : DEFAULT_CHOICE)
       setReopened(true)
       setPrefs(true)
     }
