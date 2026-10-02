@@ -193,3 +193,13 @@
   width: 100%;
   padding-inline: 7%;
 }
+
+/* ── Trust bar icon shimmer ──
+   The sweep itself is an animated SVG gradient (see components/TrustBar). A
+   presentation attribute loses to this rule, so anyone who has asked for less
+   motion simply gets the flat accent stroke. */
+@media (prefers-reduced-motion: reduce) {
+  .trust-icon {
+    stroke: var(--color-accent);
+  }
+}
