@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import { FLEET_CATEGORIES } from '../data/fleet'
 
@@ -110,10 +111,11 @@ export default function FleetCarousel() {
           style={{ scrollbarWidth: 'none' }}
         >
         {FLEET.map((item) => (
-          <div
+          <Link
             key={item.href}
+            href={item.href}
             data-fleet-card
-            className="relative flex-shrink-0 rounded-2xl overflow-hidden group cursor-pointer w-[82vw] sm:w-[45vw] lg:w-[29vw] max-w-[400px]"
+            className="relative flex-shrink-0 rounded-2xl overflow-hidden group block w-[82vw] sm:w-[45vw] lg:w-[29vw] max-w-[400px]"
             style={{ aspectRatio: '3/4' }}
           >
             {/* Image */}
@@ -158,16 +160,17 @@ export default function FleetCarousel() {
               >
                 {item.features.join(' • ')}
               </p>
-              <a
-                href={item.href}
-                className="inline-flex items-center gap-1.5 px-4 py-2 bg-white text-[#0C0F1C] text-[12.5px] font-semibold rounded-full hover:bg-[#EBBA6F] transition-colors duration-200 select-none"
+              {/* A span, not a nested link — the whole card is already the
+                  link, and the pill golds on hover anywhere over the card. */}
+              <span
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-white text-[#0C0F1C] text-[12.5px] font-semibold rounded-full group-hover:bg-[#EBBA6F] transition-colors duration-200 select-none"
                 style={{ fontFamily: 'var(--font-ui)' }}
               >
                 Explore
                 <ArrowUpRight size={13} strokeWidth={2.5} aria-hidden />
-              </a>
+              </span>
             </div>
-          </div>
+          </Link>
         ))}
         </div>
       </div>
