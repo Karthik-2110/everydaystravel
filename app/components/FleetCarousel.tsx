@@ -9,14 +9,14 @@ import { FLEET_CATEGORIES } from '../data/fleet'
 // The vehicles we lead with on the homepage, as [category slug, vehicle slug].
 // Resolved against the real fleet below so names, photos and links can never go
 // stale — an unknown slug is dropped rather than rendered as a broken card.
-const HIGHLIGHTS: { category: string; vehicle: string; tag?: string }[] = [
-  { category: 'executive-coaches', vehicle: '53-seater-coach', tag: 'Most popular' },
+const HIGHLIGHTS: { category: string; vehicle: string }[] = [
+  { category: 'executive-coaches', vehicle: '53-seater-coach' },
   { category: 'executive-coaches', vehicle: '55-seater-neoplan-tourliner' },
   { category: 'luxury-minibuses',  vehicle: '7-seater-mpv-v-class' },
   { category: 'chauffeur-cars',    vehicle: 'mercedes-s-class' },
 ]
 
-const FLEET = HIGHLIGHTS.flatMap(({ category, vehicle, tag }) => {
+const FLEET = HIGHLIGHTS.flatMap(({ category, vehicle }) => {
   const found = FLEET_CATEGORIES
     .find((c) => c.slug === category)
     ?.vehicles.find((v) => v.slug === vehicle)
@@ -28,7 +28,6 @@ const FLEET = HIGHLIGHTS.flatMap(({ category, vehicle, tag }) => {
     href:     `/fleet/${category}/${found.slug}`,
     features: found.features.slice(0, 3),
     image:    found.image,
-    tag:      tag ?? null,
   }]
 })
 
@@ -129,18 +128,6 @@ export default function FleetCarousel() {
 
             {/* Gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#04060E]/95 via-[#04060E]/35 to-transparent" />
-
-            {/* Tag */}
-            {item.tag && (
-              <div className="absolute top-4 left-4">
-                <span
-                  className="px-3 py-1 bg-[#EBBA6F] text-[#0C0F1C] text-[11px] font-semibold rounded-full"
-                  style={{ fontFamily: 'var(--font-ui)' }}
-                >
-                  {item.tag}
-                </span>
-              </div>
-            )}
 
             {/* Content */}
             <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
