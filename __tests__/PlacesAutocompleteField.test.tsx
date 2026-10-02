@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, fireEvent, act } from '@testing-library/react'
 import PlacesAutocompleteField from '@/app/components/PlacesAutocompleteField'
@@ -98,6 +99,37 @@ describe('PlacesAutocompleteField', () => {
 
     fireEvent.mouseDown(screen.getByText('Gatwick Airport'))
     expect(onChange).toHaveBeenCalledWith('Gatwick Airport, Horley, UK')
+  })
+
+  // Choosing a prediction writes it into the field, which used to look like a
+  // fresh query and bring the whole list straight back.
+  it('stays closed once a prediction is chosen', async () => {
+    vi.useFakeTimers()
+    mockFetchSuggestions.mockResolvedValue({
+      suggestions: [suggestion('xyz', 'Thetford', 'UK')],
+    })
+
+    function Controlled() {
+      const [value, setValue] = useState('Thet')
+      return (
+        <PlacesAutocompleteField
+          id="test-field"
+          ariaLabel="Pickup location"
+          value={value}
+          onChange={setValue}
+          placeholder="Enter pickup location"
+        />
+      )
+    }
+
+    render(<Controlled />)
+    await act(async () => { await vi.runAllTimersAsync() })
+
+    fireEvent.mouseDown(screen.getByText('Thetford'))
+    await act(async () => { await vi.runAllTimersAsync() })
+
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
+    expect(screen.getByRole('combobox')).toHaveValue('Thetford, UK')
   })
 
   it('closes the dropdown on Escape key', async () => {

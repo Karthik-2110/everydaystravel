@@ -36,10 +36,18 @@ export default function PlacesAutocompleteField({
   const debounceRef                   = useRef<ReturnType<typeof setTimeout> | null>(null)
   // Monotonic id so a slow response for an old query can't overwrite a newer one.
   const requestIdRef                  = useRef(0)
+  // Writing a chosen place into the field changes `value`, which otherwise
+  // reads as a fresh query and fetches the same list straight back.
+  const justSelectedRef               = useRef(false)
 
   // Fetch predictions whenever value changes (debounced 300 ms)
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current)
+
+    if (justSelectedRef.current) {
+      justSelectedRef.current = false   // the list is already closed; leave it be
+      return
+    }
 
     if (!value.trim()) {
       setPredictions([])
@@ -99,6 +107,7 @@ export default function PlacesAutocompleteField({
   }, [predictions.length])
 
   const handleSelect = (description: string) => {
+    justSelectedRef.current = true
     onChange(description)
     setPredictions([])
   }
