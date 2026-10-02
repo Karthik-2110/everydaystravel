@@ -12,8 +12,9 @@ export default function Home() {
           layout is settled — pass `story` and `storyCta` again to restore it. */}
       <Hero
         videoSrc={[
+          'https://res.cloudinary.com/dp4cbs8c2/video/upload/v1790949398/IMG_3033_unp5tm.mov',
           'https://res.cloudinary.com/dp4cbs8c2/video/upload/v1787915285/IMG_5928_1_esggvf.mov',
-          'https://res.cloudinary.com/dckyndryf/video/upload/v1780222799/hero_xgrraa',
+          'https://res.cloudinary.com/dp4cbs8c2/video/upload/v1790949007/white_bus_hunczq.mov',
         ]}
         lines={[
           { text: 'Choose Everydays Travel', accent: false },
