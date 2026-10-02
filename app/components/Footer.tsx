@@ -63,7 +63,7 @@ const COPY_SHADOW = '0 2px 20px rgba(4,6,14,0.8), 0 1px 4px rgba(4,6,14,0.55)'
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <h3
-      className="text-[#EBBA6F]/80 text-[10.5px] font-semibold tracking-[0.18em] uppercase pb-3.5 mb-5 border-b border-[#EBBA6F]/15"
+      className="text-[#EBBA6F]/80 text-[11.5px] font-semibold tracking-[0.18em] uppercase pb-3.5 mb-5 border-b border-[#EBBA6F]/15"
       style={{ fontFamily: 'var(--font-ui)' }}
     >
       {children}
@@ -225,10 +225,11 @@ export default function Footer() {
                 className="h-[80px] w-auto object-contain mb-5"
               />
               <p
-                className="text-white text-[13.5px] leading-relaxed mb-6 max-w-[210px]"
+                className="text-white text-[14.5px] leading-relaxed mb-6 max-w-[250px]"
                 style={{ fontFamily: 'var(--font-body)' }}
               >
-                Premium coach &amp; minibus hire across the UK and Europe.
+                Coach and minibus hire across London and the UK. Airport transfers,
+                weddings, corporate and group travel — every day.
               </p>
               <div className="flex items-center gap-2" data-testid="footer-socials">
                 {SOCIAL_LINKS.map(({ svg, href, label, brand }) => (
@@ -253,7 +254,7 @@ export default function Footer() {
                   <li key={label}>
                     <SiteLink
                       href={href}
-                      className="group inline-flex items-center gap-1.5 text-white/50 text-[14px] hover:text-[#EBBA6F] transition-colors duration-150"
+                      className="group inline-flex items-center gap-1.5 text-white/50 text-[15px] hover:text-[#EBBA6F] transition-colors duration-150"
                       style={{ fontFamily: 'var(--font-body)' }}
                     >
                       {label}
@@ -277,7 +278,7 @@ export default function Footer() {
                   <li key={label}>
                     <SiteLink
                       href={href}
-                      className="group inline-flex items-center gap-1.5 text-white/50 text-[14px] hover:text-[#EBBA6F] transition-colors duration-150"
+                      className="group inline-flex items-center gap-1.5 text-white/50 text-[15px] hover:text-[#EBBA6F] transition-colors duration-150"
                       style={{ fontFamily: 'var(--font-body)' }}
                     >
                       {label}
@@ -309,14 +310,14 @@ export default function Footer() {
                       {href ? (
                         <a
                           href={href}
-                          className="text-white/70 text-[13px] hover:text-white transition-colors duration-150 leading-snug block"
+                          className="text-white/70 text-[14px] hover:text-white transition-colors duration-150 leading-snug block"
                           style={{ fontFamily: 'var(--font-body)' }}
                         >
                           {primary}
                         </a>
                       ) : (
                         <span
-                          className="text-white/70 text-[13px] leading-snug block"
+                          className="text-white/70 text-[14px] leading-snug block"
                           style={{ fontFamily: 'var(--font-body)' }}
                         >
                           {primary}
@@ -324,7 +325,7 @@ export default function Footer() {
                       )}
                       {secondary && (
                         <span
-                          className="text-white/35 text-[12px] leading-snug block mt-0.5"
+                          className="text-white/35 text-[13px] leading-snug block mt-0.5"
                           style={{ fontFamily: 'var(--font-body)' }}
                         >
                           {secondary}
