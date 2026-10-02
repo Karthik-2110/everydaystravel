@@ -1,10 +1,15 @@
 import type { Vehicle } from './VehicleList'
-import { AIRPORT_TRANSFER_IMAGES } from './ServicesGrid'
 
 // Services reuse the Vehicle shape so service pages render through VehicleDetail
 // with an identical layout. `seats` holds the card tagline; `luggage` is unused.
 
 const PH = 'https://res.cloudinary.com/dckyndryf/image/upload/f_auto,q_auto,w_900,c_limit/IMG_0938_fhylhh'
+
+/** Real airport photos — first is the card, the rest fill the service gallery. */
+export const AIRPORT_TRANSFER_IMAGES = [
+  'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_1200,c_limit/v1783787064/IMG_6170_fxbudt.jpg',
+  'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_1200,c_limit/v1783784630/20260211_134438550_iOS_okfp39.jpg',
+]
 
 export const SERVICES: Vehicle[] = [
   {

@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
+import { SERVICES, AIRPORT_TRANSFER_IMAGES } from './ServiceList'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -21,50 +22,49 @@ interface ServicesGridProps {
 
 const PLACEHOLDER = 'https://res.cloudinary.com/dckyndryf/image/upload/f_auto,q_auto,w_800,c_limit/IMG_0938_fhylhh'
 
-// Real service photos — first is used on the card; extras for future service pages
-export const AIRPORT_TRANSFER_IMAGES = [
-  'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_1200,c_limit/v1783787064/IMG_6170_fxbudt.jpg',
-  'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_1200,c_limit/v1783784630/20260211_134438550_iOS_okfp39.jpg',
-]
-
-export const DEFAULT_SERVICES: ServiceItem[] = [
+// Only the card copy and photo live here. Names and links are resolved against
+// the service catalogue, so this list cannot name a page that does not exist —
+// it used to carry a 'Race Days & Events' card pointing at /services/race-days,
+// which was never built.
+const CARDS: { slug: string; description: string; image: string }[] = [
   {
-    name:        'Private Hire',
+    slug:        'private-hire',
     description: 'Flexible transport for any occasion, from day trips to bespoke journeys across the UK.',
     image:       PLACEHOLDER,
-    href:        '/services/private-hire',
   },
   {
-    name:        'Corporate Travel',
+    slug:        'corporate',
     description: 'Executive transport for business — punctual, professional, and properly presented.',
     image:       PLACEHOLDER,
-    href:        '/services/corporate',
   },
   {
-    name:        'Weddings',
+    slug:        'weddings-events',
     description: 'Seamless guest and bridal transport so your day runs exactly as planned.',
     image:       PLACEHOLDER,
-    href:        '/services/weddings-events',
   },
   {
-    name:        'Airport Transfers',
+    slug:        'airport-transfers',
     description: 'Reliable group airport travel to and from all major UK airports.',
     image:       AIRPORT_TRANSFER_IMAGES[0],
-    href:        '/services/airport-transfers',
   },
   {
-    name:        'Race Days & Events',
-    description: 'Ascot, Cheltenham and all major events — we handle the logistics, you enjoy the day.',
+    slug:        'sports-team-travel',
+    description: 'Match-day travel for clubs and teams, with room for the kit and a driver who knows the routine.',
     image:       PLACEHOLDER,
-    href:        '/services/race-days',
   },
   {
-    name:        'Tours (UK & Europe)',
+    slug:        'group-travel',
     description: 'Day trips and extended tours across the UK and into Europe, fully catered to your group.',
     image:       PLACEHOLDER,
-    href:        '/services/group-travel',
   },
 ]
+
+export const DEFAULT_SERVICES: ServiceItem[] = CARDS.flatMap(({ slug, description, image }) => {
+  const service = SERVICES.find((s) => s.slug === slug)
+  if (!service) return []
+
+  return [{ name: service.name, description, image, href: `/services/${slug}` }]
+})
 
 // ── Card ──────────────────────────────────────────────────────────────────────
 

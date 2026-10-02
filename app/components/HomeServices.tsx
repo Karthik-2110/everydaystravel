@@ -2,8 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 import { FLEET_CATEGORIES, PH } from '../data/fleet'
-import { SERVICES } from './ServiceList'
-import { AIRPORT_TRANSFER_IMAGES } from './ServicesGrid'
+import { SERVICES, AIRPORT_TRANSFER_IMAGES } from './ServiceList'
 
 // The six services the homepage leads with, in the order people search for
 // them. Names and links are resolved against the real service catalogue below,
@@ -148,8 +147,8 @@ export default function HomeServices() {
             }}
           >
             Tell us where you are going and we will match the right vehicle and
-            driver. Coach and minibus hire across London, the South East and the
-            rest of the UK.
+            driver — one team covering London, the South East and the rest of
+            the UK.
           </p>
         </div>
 
