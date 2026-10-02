@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { ChevronDown, ChevronRight, Menu, X, ArrowRight, Phone, Mail, Clock } from 'lucide-react'
+import { ChevronDown, ChevronRight, Menu, X, ArrowRight, Phone, PhoneCall, Mail, Clock } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { FLEET_CATEGORIES } from '../data/fleet'
 import SiteLink from './SiteLink'
@@ -164,6 +164,20 @@ export default function Navbar({
               <Clock size={13} aria-hidden />
               Mon – Fri: 7:00 AM – 7:00 PM
             </span>
+            {/* Weekend cover. Held back to xl so it never crowds the phone and
+                WhatsApp links on a narrower laptop. */}
+            <span className="hidden xl:block w-px h-3.5 bg-white/15" aria-hidden />
+            <a
+              href={PHONE_HREF}
+              aria-label={`Call ${PHONE} — we are one call away at weekends for emergencies and unplanned bookings`}
+              className="hidden xl:inline-flex items-center gap-2 hover:text-white transition-colors duration-150"
+            >
+              <PhoneCall size={13} className="shrink-0" aria-hidden />
+              <span>
+                <span className="text-[#EBBA6F]">Weekends</span>{' — '}
+                one call away for emergencies &amp; unplanned bookings
+              </span>
+            </a>
           </div>
 
           <div className="flex items-center gap-5">
