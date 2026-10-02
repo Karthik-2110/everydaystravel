@@ -3,13 +3,14 @@
 import { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import {
-  Users, Clock, Car,
+  Users, Car,
   ArrowRight, ArrowRightLeft, ChevronDown, Check,
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { ALL_VEHICLE_OPTIONS } from './VehicleList'
 import PlacesAutocompleteField from './PlacesAutocompleteField'
-import { validateEmail, validatePhone } from '../lib/validation'
+import TimePickerField from './TimePickerField'
+import { validateEmail, validatePhone, digitsOnly } from '../lib/validation'
 
 // ── Shared style tokens ───────────────────────────────────────────────────────
 
@@ -30,13 +31,6 @@ const REVEAL = {
   exit:       { opacity: 0, height: 0, marginTop: 0 },
   transition: { duration: 0.2, ease: 'easeOut' },
 } as const
-
-const TIME_OPTIONS = Array.from({ length: 38 }, (_, i) => {
-  const total = 5 * 60 + i * 30
-  const h = Math.floor(total / 60) % 24
-  const m = total % 60
-  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
-})
 
 const today = new Date().toISOString().split('T')[0]
 
@@ -226,8 +220,8 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
             <label htmlFor="vbf-pax"><FieldLabel>Passengers</FieldLabel></label>
             <div className="relative">
               <Users size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35 pointer-events-none z-10" aria-hidden />
-              <Input id="vbf-pax" type="number" min="1" value={passengers}
-                onChange={(e) => setPassengers(e.target.value)}
+              <Input id="vbf-pax" type="text" inputMode="numeric" autoComplete="off" value={passengers}
+                onChange={(e) => setPassengers(digitsOnly(e.target.value))}
                 placeholder="Number of passengers" className={`pl-8 ${inputCls}`} />
             </div>
           </div>
@@ -244,9 +238,7 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
             </div>
             <div>
               <label htmlFor="vbf-time"><FieldLabel>Pickup time</FieldLabel></label>
-              <SimpleSelect id="vbf-time" ariaLabel="Pickup time" value={pickupTime} onChange={setPickupTime} icon={Clock} placeholder="Time">
-                {TIME_OPTIONS.map((t) => <option key={t} value={t}>{t}</option>)}
-              </SimpleSelect>
+              <TimePickerField id="vbf-time" title="Pickup time" value={pickupTime} onChange={setPickupTime} />
             </div>
           </div>
 
@@ -265,9 +257,7 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
                   </div>
                   <div>
                     <label htmlFor="vbf-rtime"><FieldLabel>Return time</FieldLabel></label>
-                    <SimpleSelect id="vbf-rtime" ariaLabel="Return time" value={returnTime} onChange={setReturnTime} icon={Clock} placeholder="Time">
-                      {TIME_OPTIONS.map((t) => <option key={t} value={t}>{t}</option>)}
-                    </SimpleSelect>
+                    <TimePickerField id="vbf-rtime" title="Return time" value={returnTime} onChange={setReturnTime} />
                   </div>
                 </div>
               </motion.div>

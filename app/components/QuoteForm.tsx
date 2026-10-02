@@ -3,13 +3,14 @@
 import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import {
-  Users, Clock,
+  Users,
   ArrowRight, ArrowRightLeft, ChevronDown,
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import DatePickerField from './DatePickerField'
+import TimePickerField from './TimePickerField'
 import PlacesAutocompleteField from './PlacesAutocompleteField'
-import { validateEmail, validatePhone, validateFullName } from '../lib/validation'
+import { validateEmail, validatePhone, validateFullName, digitsOnly } from '../lib/validation'
 
 // ── Style constants ─────────────────────────────────────────────────────────
 
@@ -34,13 +35,6 @@ const REVEAL = {
   exit:       { opacity: 0, height: 0, marginTop: 0 },
   transition: { duration: 0.2, ease: 'easeOut' },
 } as const
-
-const TIME_OPTIONS = Array.from({ length: 38 }, (_, i) => {
-  const total = 5 * 60 + i * 30
-  const h = Math.floor(total / 60) % 24
-  const m = total % 60
-  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
-})
 
 const today = new Date().toISOString().split('T')[0]
 
@@ -333,10 +327,11 @@ export default function QuoteForm({ variant = 'panel' }: QuoteFormProps = {}) {
                 <Input
                   id="passengers"
                   aria-label="Passengers"
-                  type="number"
-                  min="1"
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="off"
                   value={passengers}
-                  onChange={e => setPassengers(e.target.value)}
+                  onChange={e => setPassengers(digitsOnly(e.target.value))}
                   placeholder="Number of passengers"
                   className={`pl-8 ${inputCls}`}
                 />
@@ -361,16 +356,12 @@ export default function QuoteForm({ variant = 'panel' }: QuoteFormProps = {}) {
               <label htmlFor="pickup-time">
                 <FieldLabel>Pickup time</FieldLabel>
               </label>
-              <div className="relative">
-                <Clock size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35 pointer-events-none z-10" aria-hidden />
-                <Input
-                  id="pickup-time"
-                  type="time"
-                  value={pickupTime}
-                  onChange={(e) => setPickupTime(e.target.value)}
-                  className={`pl-8 [color-scheme:dark] ${base} focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#EBBA6F] ${pickupTime ? 'text-white' : 'text-white/30'}`}
-                />
-              </div>
+              <TimePickerField
+                id="pickup-time"
+                title="Pickup time"
+                value={pickupTime}
+                onChange={setPickupTime}
+              />
             </div>
           </div>
 
@@ -396,16 +387,12 @@ export default function QuoteForm({ variant = 'panel' }: QuoteFormProps = {}) {
                     <label htmlFor="return-time">
                       <FieldLabel>Return time</FieldLabel>
                     </label>
-                    <div className="relative">
-                      <Clock size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35 pointer-events-none z-10" aria-hidden />
-                      <Input
-                        id="return-time"
-                        type="time"
-                        value={returnTime}
-                        onChange={(e) => setReturnTime(e.target.value)}
-                        className={`pl-8 [color-scheme:dark] ${base} focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#EBBA6F] ${returnTime ? 'text-white' : 'text-white/30'}`}
-                      />
-                    </div>
+                    <TimePickerField
+                      id="return-time"
+                      title="Return time"
+                      value={returnTime}
+                      onChange={setReturnTime}
+                    />
                   </div>
                 </div>
               </motion.div>

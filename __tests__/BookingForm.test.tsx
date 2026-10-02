@@ -47,11 +47,22 @@ vi.mock('@/app/components/DatePickerField', () => ({
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 /** Fill every required field so submit is expected to succeed. */
+// Pickup time is a clock dial now: open it, tap round the face, apply. Picking
+// an hour swaps the dial over to minutes on its own.
+function pickTime(id: string, hour: number, minute: number, period: string) {
+  fireEvent.click(document.getElementById(id) as HTMLElement)
+  const panel = screen.getByRole('dialog')
+  fireEvent.click(within(panel).getByRole('button', { name: `${hour} hours` }))
+  fireEvent.click(within(panel).getByRole('button', { name: `${minute} minutes` }))
+  fireEvent.click(within(panel).getByRole('button', { name: period }))
+  fireEvent.click(within(panel).getByRole('button', { name: /apply/i }))
+}
+
 function fillRequired() {
   fireEvent.change(screen.getByLabelText('Pickup Location'), { target: { value: 'Heathrow Airport' } })
   fireEvent.change(screen.getByLabelText('Destination'), { target: { value: 'Central London' } })
   fireEvent.change(document.getElementById('bk-date')!, { target: { value: '2026-09-01' } })
-  fireEvent.change(screen.getByLabelText('Pickup Time'), { target: { value: '09:00' } })
+  pickTime('bk-time', 9, 0, 'AM')
   fireEvent.change(screen.getByLabelText('Passenger Count'), { target: { value: '12' } })
   fireEvent.change(screen.getByLabelText('Journey Type'), { target: { value: 'Airport Transfers' } })
   fireEvent.change(screen.getByLabelText('Full Name'), { target: { value: 'Ada Lovelace' } })

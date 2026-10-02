@@ -24,12 +24,6 @@ export const selectCls = (hasValue: boolean) =>
 export const errorRing = '!border-red-500/70'
 
 /** Pickup / return times, 05:00 → 23:30 in half-hour steps. */
-export const TIME_OPTIONS = Array.from({ length: 38 }, (_, i) => {
-  const total = 5 * 60 + i * 30
-  const h = Math.floor(total / 60) % 24
-  const m = total % 60
-  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
-})
 
 export const todayISO = () => new Date().toISOString().split('T')[0]
 

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import {
-  Users, Clock, User, Mail, Phone, Building2, Plane, Luggage, Accessibility,
+  Users, User, Mail, Phone, Building2, Plane, Luggage, Accessibility,
   MapPin, Plus, X, ArrowRight, Check, Route,
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
@@ -13,10 +13,11 @@ import DatePickerField from '../DatePickerField'
 import { SERVICES } from '../ServiceList'
 import { validateEmail, validatePhone, validateFullName } from '@/app/lib/validation'
 import VehiclePicker, { DEFAULT_VEHICLE_SLUG } from './VehiclePicker'
+import TimePickerField from '../TimePickerField'
 import { WhyTravelCard } from './Sidebar'
 import {
   SectionCard, FieldLabel, FieldError, SimpleSelect,
-  inputCls, textareaCls, errorRing, TIME_OPTIONS, todayISO,
+  inputCls, textareaCls, errorRing, todayISO,
 } from '../form-fields'
 
 // ── Options ───────────────────────────────────────────────────────────────────
@@ -235,13 +236,11 @@ export default function BookingForm() {
               <div className="flex items-end gap-4">
                 <div className="flex-1 min-w-0">
                   <FieldLabel htmlFor="bk-time" required>Pickup Time</FieldLabel>
-                  <SimpleSelect
-                    id="bk-time" ariaLabel="Pickup Time" value={pickupTime}
+                  <TimePickerField
+                    id="bk-time" title="Pickup Time" value={pickupTime}
                     onChange={(v) => { setPickupTime(v); clearError('pickupTime') }}
-                    icon={Clock} placeholder="Select time" invalid={!!errors.pickupTime}
-                  >
-                    {TIME_OPTIONS.map((t) => <option key={t} value={t}>{t}</option>)}
-                  </SimpleSelect>
+                    invalid={!!errors.pickupTime}
+                  />
                   <FieldError message={errors.pickupTime} />
                 </div>
 
@@ -289,12 +288,9 @@ export default function BookingForm() {
                     </div>
                     <div>
                       <FieldLabel htmlFor="bk-rtime">Return Time</FieldLabel>
-                      <SimpleSelect
-                        id="bk-rtime" ariaLabel="Return Time" value={returnTime}
-                        onChange={setReturnTime} icon={Clock} placeholder="Select time"
-                      >
-                        {TIME_OPTIONS.map((t) => <option key={t} value={t}>{t}</option>)}
-                      </SimpleSelect>
+                      <TimePickerField
+                        id="bk-rtime" title="Return Time" value={returnTime} onChange={setReturnTime}
+                      />
                     </div>
                   </div>
                 </motion.div>
