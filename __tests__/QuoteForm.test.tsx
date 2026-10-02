@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react'
 import { vi, describe, it, expect } from 'vitest'
 import QuoteForm from '@/app/components/QuoteForm'
 import React from 'react'
@@ -126,9 +126,13 @@ describe('QuoteForm', () => {
       fireEvent.click(days[days.length - 1])
     })
 
-    // Set pickup time
-    const pickupTimeInput = document.getElementById('pickup-time') as HTMLInputElement
-    fireEvent.change(pickupTimeInput, { target: { value: '09:00' } })
+    // Set pickup time — a clock dial, so it is tapped rather than typed into
+    fireEvent.click(document.getElementById('pickup-time') as HTMLElement)
+    const timePanel = screen.getByRole('dialog')
+    fireEvent.click(within(timePanel).getByRole('button', { name: '9 hours' }))
+    fireEvent.click(within(timePanel).getByRole('button', { name: '0 minutes' }))
+    fireEvent.click(within(timePanel).getByRole('button', { name: 'AM' }))
+    fireEvent.click(within(timePanel).getByRole('button', { name: /apply/i }))
 
     await waitFor(() => {
       expect(screen.getByLabelText(/full name/i)).toBeInTheDocument()
@@ -142,6 +146,24 @@ describe('QuoteForm', () => {
     expect(contactFields).toContain('full-name')
     expect(contactFields).toContain('email')
     expect(contactFields.indexOf('full-name')).toBeLessThan(contactFields.indexOf('email'))
+  })
+
+  // A spinner on a passenger count invites stray scroll-wheel edits, and the
+  // native number input also accepts 'e', '+' and '-'. It is a plain text box
+  // that keeps digits and nothing else.
+  it('keeps the passenger count to digits, with no spinner', () => {
+    render(<QuoteForm />)
+    const pax = screen.getByLabelText('Passengers')
+
+    expect(pax).toHaveAttribute('type', 'text')
+    expect(pax).toHaveAttribute('inputmode', 'numeric')
+
+    fireEvent.change(pax, { target: { value: '4e2abc' } })
+    expect(pax).toHaveValue('42')
+
+    // Nobody travels with zero passengers, so a leading zero never takes.
+    fireEvent.change(pax, { target: { value: '0' } })
+    expect(pax).toHaveValue('')
   })
 
   it('shows return date and time fields when Return is selected', async () => {

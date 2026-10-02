@@ -172,3 +172,11 @@ export function validateFullName(value: string): string {
 
   return ''
 }
+
+/**
+ * Keeps a typed passenger count to digits. Leading zeros go too, so '0' can
+ * never be entered — nobody travels with no passengers.
+ */
+export function digitsOnly(value: string): string {
+  return value.replace(/\D/g, '').replace(/^0+/, '')
+}
