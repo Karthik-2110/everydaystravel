@@ -1,5 +1,6 @@
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
+import HomeServices from './components/HomeServices'
 import FleetCarousel from './components/FleetCarousel'
 import Testimonials from './components/Testimonials'
 import Footer from './components/Footer'
@@ -23,6 +24,7 @@ export default function Home() {
         subtext=""
         inlineForm
       />
+      <HomeServices />
       <FleetCarousel />
       <Testimonials />
       <Footer />
