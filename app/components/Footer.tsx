@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import { cdnUrl, videoVariants, LEAD_CLIP } from '@/app/lib/cloudinary'
 import { Phone, Mail, Clock, MapPin, ArrowRight, ArrowUpRight } from 'lucide-react'
 import { WhatsAppIcon, InstagramIcon, FacebookIcon, LinkedInIcon, WHATSAPP_HREF, INSTAGRAM_HREF, FACEBOOK_HREF, LINKEDIN_HREF, SOCIAL_BRAND } from './icons/social'
 import SiteLink from './SiteLink'
@@ -71,6 +70,9 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   )
 }
 
+const CTA_BACKGROUND =
+  'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_2400,c_limit/v1783787285/IMG_0513_o5cs0k.heic'
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function Footer() {
@@ -79,25 +81,22 @@ export default function Footer() {
 
       {/* ── Pre-footer CTA ── */}
       <div className="relative overflow-hidden">
-        {/* Background footage — the same clip that opens the hero. The old
-            still stands in as the poster, so the first paint is never empty. */}
-        <video
+        {/* Background still. The source is a HEIC, which only Safari can
+            draw, so it is delivered through f_auto — Cloudinary hands every
+            browser a format it understands. */}
+        <Image
+          src={CTA_BACKGROUND}
+          alt=""
           aria-hidden
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          poster={cdnUrl('IMG_0938_fhylhh', 2400)}
-          className="absolute inset-0 w-full h-full object-cover object-center"
-        >
-          <source src={videoVariants(LEAD_CLIP).webm} type="video/webm" />
-          <source src={videoVariants(LEAD_CLIP).mp4} type="video/mp4" />
-        </video>
-        {/* Gradient overlay — light enough to let the footage read, with just
-            enough weight behind the copy on either side to hold contrast. */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#04060E]/70 via-[#04060E]/30 to-[#04060E]/60" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#04060E]/20 via-transparent to-[#04060E]/25" />
+          fill
+          unoptimized
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        {/* Gradient overlay — kept light so the coaches read, leaning on the
+            copy's own shadow rather than a scrim to hold contrast. */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#04060E]/50 via-[#04060E]/10 to-[#04060E]/40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#04060E]/10 via-transparent to-[#04060E]/15" />
 
         <div className="relative site-container py-16 lg:py-24">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-12">

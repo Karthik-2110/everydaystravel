@@ -13,13 +13,6 @@ export function cdnUrl(publicId: string, widthPx?: number): string {
 }
 
 /**
- * The clip that opens the homepage hero and backs the footer CTA. Kept here so
- * both read the same source — swapping the footage is a one-line change.
- */
-export const LEAD_CLIP =
-  'https://res.cloudinary.com/dp4cbs8c2/video/upload/v1787915285/IMG_5928_1_esggvf.mov'
-
-/**
  * Cloudinary serves whatever codec the delivery URL asks for, so each clip is
  * offered twice: VP9/WebM for Chrome & Firefox, H.264/MP4 for Safari. The
  * source's own extension is dropped first — the public ID is what matters.
