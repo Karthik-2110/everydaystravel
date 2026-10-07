@@ -203,3 +203,38 @@
     stroke: var(--color-accent);
   }
 }
+
+/* ── Accordion open and close ──
+   A native <details> snaps between states, which is the one thing it does
+   badly. `::details-content` gives the panel something to animate, and
+   `interpolate-size` lets it animate to its natural height rather than needing
+   a fixed one measured in JavaScript.
+
+   This stays progressive enhancement on purpose: the rows keep working with the
+   keyboard, with find-in-page and with no JavaScript at all, and a browser
+   without the pseudo-element simply snaps the way it already did. Converting
+   these to a div-and-state accordion would have bought the animation by giving
+   all of that up. */
+@supports (interpolate-size: allow-keywords) {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+}
+
+.accordion-row::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition:
+    block-size 260ms ease,
+    content-visibility 260ms allow-discrete;
+}
+
+.accordion-row[open]::details-content {
+  block-size: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accordion-row::details-content {
+    transition: none;
+  }
+}

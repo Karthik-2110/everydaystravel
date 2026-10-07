@@ -1,5 +1,7 @@
 import { redirect } from 'next/navigation'
 import VehicleDetail from './VehicleDetail'
+import ServiceSections from './service/ServiceSections'
+import ServiceSpecBlocks from './service/ServiceSpecBlocks'
 import { SERVICES } from './ServiceList'
 
 export default function ServiceDetail({ slug }: { slug: string }) {
@@ -17,6 +19,8 @@ export default function ServiceDetail({ slug }: { slug: string }) {
       exploreHeading="Explore other services"
       cardCta="View service"
       preselectVehicle={false}
+      specSections={<ServiceSpecBlocks slug={slug} />}
+      extraSections={<ServiceSections slug={slug} />}
     />
   )
 }

@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input'
 import { ALL_VEHICLE_OPTIONS } from './VehicleList'
 import PlacesAutocompleteField from './PlacesAutocompleteField'
 import TimePickerField from './TimePickerField'
+import DatePickerField from './DatePickerField'
 import { validateEmail, validatePhone, digitsOnly } from '../lib/validation'
 
 // ── Shared style tokens ───────────────────────────────────────────────────────
@@ -137,17 +138,19 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
   }
 
   return (
-    <div className="bg-[#0D1221] rounded-2xl border border-white/[0.08] shadow-[0_0_0_1px_rgba(235,186,111,0.08),0_24px_60px_rgba(0,0,0,0.5)] overflow-hidden">
+    <div>
 
-      {/* Header */}
-      <div className="px-5 py-4 border-b border-white/[0.07] bg-[#EBBA6F]/[0.05]">
-        <p className="text-[#EBBA6F] text-[11px] font-semibold tracking-[0.18em] uppercase mb-0.5" style={{ fontFamily: 'var(--font-ui)' }}>
-          Get a free quote
-        </p>
-        <p className="text-white/40 text-[12px]" style={{ fontFamily: 'var(--font-body)' }}>
-          Fill in your journey details below
-        </p>
-      </div>
+      {/* The title sits above the card, not in it, set like "Features &
+          Amenities" across the page so the two columns start on the same line
+          — the values match `VehicleDetail`'s own headings. */}
+      <h2
+        className="text-[#EBBA6F] mb-5 tracking-[-0.01em]"
+        style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.5rem, 2vw, 2rem)' }}
+      >
+        Get a free quote
+      </h2>
+
+      <div className="bg-[#0D1221] rounded-2xl border border-white/[0.08] shadow-[0_0_0_1px_rgba(235,186,111,0.08),0_24px_60px_rgba(0,0,0,0.5)] overflow-hidden">
 
       {submitted ? (
         <div className="flex flex-col items-center justify-center py-10 gap-3 text-center px-5">
@@ -230,11 +233,7 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label htmlFor="vbf-date"><FieldLabel>Travel date</FieldLabel></label>
-              <div className="relative min-w-0 overflow-hidden">
-                <Input id="vbf-date" type="date" value={travelDate} min={today}
-                  onChange={(e) => setTravelDate(e.target.value)}
-                  className={`w-full [color-scheme:dark] ${base} focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#EBBA6F] ${travelDate ? 'text-white' : 'text-white/30'}`} />
-              </div>
+              <DatePickerField id="vbf-date" value={travelDate} minDate={today} onChange={setTravelDate} />
             </div>
             <div>
               <label htmlFor="vbf-time"><FieldLabel>Pickup time</FieldLabel></label>
@@ -249,11 +248,7 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label htmlFor="vbf-rdate"><FieldLabel>Return date</FieldLabel></label>
-                    <div className="relative min-w-0 overflow-hidden">
-                      <Input id="vbf-rdate" type="date" value={returnDate} min={travelDate || today}
-                        onChange={(e) => setReturnDate(e.target.value)}
-                        className={`w-full [color-scheme:dark] ${base} focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#EBBA6F] ${returnDate ? 'text-white' : 'text-white/30'}`} />
-                    </div>
+                    <DatePickerField id="vbf-rdate" value={returnDate} minDate={travelDate || today} onChange={setReturnDate} />
                   </div>
                   <div>
                     <label htmlFor="vbf-rtime"><FieldLabel>Return time</FieldLabel></label>
@@ -323,6 +318,8 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
 
         </form>
       )}
+      </div>
+
     </div>
   )
 }

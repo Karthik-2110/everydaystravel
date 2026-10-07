@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import type { ReactNode } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import {
   ArrowUpRight,
@@ -141,12 +142,24 @@ interface VehicleDetailProps {
   exploreHeading?:   string
   cardCta?:          string
   preselectVehicle?: boolean  // false for pages (e.g. services) not tied to one vehicle
+  /**
+   * Extra full-width sections, rendered after the spec and before "explore
+   * other …". Service pages pass their content here; fleet pages pass nothing
+   * and render exactly as they did before.
+   */
+  extraSections?:    ReactNode
+  /**
+   * Extra blocks inside the spec column, rendered after "preferred for" as a
+   * further sibling of it. For content that belongs with the specification
+   * rather than in a band of its own.
+   */
+  specSections?:     ReactNode
 }
 
 export default function VehicleDetail({
   vehicle, category, categoryLabel, otherVehicles, popular = true,
   hrefBase, exploreHeading = 'Explore other vehicles', cardCta = 'View vehicle',
-  preselectVehicle = true,
+  preselectVehicle = true, extraSections, specSections,
 }: VehicleDetailProps) {
   const base = hrefBase ?? `/fleet/${category}`
   const path = `${base}/${vehicle.slug}`
@@ -283,6 +296,7 @@ export default function VehicleDetail({
               </ul>
             </div>
 
+            {specSections}
 
           </div>
 
@@ -293,6 +307,8 @@ export default function VehicleDetail({
 
         </div>
       </main>
+
+      {extraSections}
 
       {/* ── Explore other vehicles ── */}
       {otherVehicles.length > 0 && (

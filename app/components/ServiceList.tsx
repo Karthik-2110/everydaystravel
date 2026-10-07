@@ -22,7 +22,7 @@ export const SERVICES: Vehicle[] = [
     luggage:     'Luggage assistance included',
     description: 'Reliable airport transfers to and from all major UK airports — on-time pickups, luggage assistance and stress-free journeys for individuals and groups.',
     features:    ['Live flight tracking', 'Meet & greet service', '24/7 availability', 'Luggage assistance', 'Professional uniformed drivers', 'Child seats on request'],
-    idealFor:    ['Business Travellers', 'Family Holidays', 'Group Travel'],
+    idealFor:    ['Business Travellers', 'Family Holidays', 'Group Travel', 'Wedding Parties', 'Sports Teams', 'Tour Groups'],
   },
   {
     slug:        'corporate',
