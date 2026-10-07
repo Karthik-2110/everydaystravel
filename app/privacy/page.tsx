@@ -35,7 +35,7 @@ const LAWFUL_BASES: string[][] = [
   ],
   [
     'Optional cookies',
-    'Whatever the relevant third party sets — see the cookie policy',
+    'Whatever the relevant third party sets, see the cookie policy',
     'To count visits with Google Analytics, and to load the map on our Contact page',
     'Your consent, which you can withdraw at any time',
   ],
@@ -63,7 +63,7 @@ export default function PrivacyPage() {
     >
       <Section title="Who is responsible for your data">
         <P>
-          {LEGAL_NAME} is the data controller — the business that decides why and how your
+          {LEGAL_NAME} is the data controller, the business that decides why and how your
           data is used. We operate from {ADDRESS}.
         </P>
         {COMPANY_NUMBER && <P>We are registered in England and Wales, company number {COMPANY_NUMBER}.</P>}
@@ -97,8 +97,8 @@ export default function PrivacyPage() {
 
       <Section title="Technical data">
         <P>
-          Our hosting provider keeps standard server logs — IP address, browser, the pages
-          requested — which are used to keep the site running and secure, and are not used
+          Our hosting provider keeps standard server logs covering IP address, browser and the pages
+          requested, which are used to keep the site running and secure, and are not used
           to identify you or to advertise to you. The only other storage on your device is
           covered by our <A href="/cookies">cookie policy</A>, and nothing optional is set
           without your consent.
@@ -126,7 +126,7 @@ export default function PrivacyPage() {
           the safeguard the UK GDPR requires.
         </P>
         <P>
-          We will also disclose data where the law requires it — for example to HMRC, or to
+          We will also disclose data where the law requires it, for example to HMRC, or to
           the police in response to a lawful request.
         </P>
       </Section>
@@ -139,16 +139,16 @@ export default function PrivacyPage() {
           items={[
             <>
               <strong className="text-white/85 font-medium">Enquiries that do not become a
-              booking</strong> — kept for 24 months, then deleted. Long enough to recognise
+              booking</strong>: kept for 24 months, then deleted. Long enough to recognise
               you if you come back, short enough not to hoard.
             </>,
             <>
-              <strong className="text-white/85 font-medium">Bookings that go ahead</strong> —
+              <strong className="text-white/85 font-medium">Bookings that go ahead</strong>:
               kept for 6 years after the end of the tax year they fall in, because tax and
               accounting law requires it.
             </>,
             <>
-              <strong className="text-white/85 font-medium">Your cookie choice</strong> —
+              <strong className="text-white/85 font-medium">Your cookie choice</strong>:
               6 months, after which we ask again.
             </>,
           ]}
@@ -201,7 +201,7 @@ export default function PrivacyPage() {
         <P>
           This site is aimed at people booking travel, not at children, and we do not
           knowingly collect data from anyone under 16. We do of course carry children as
-          passengers — their details reach us from the adult or the school making the
+          passengers, and their details reach us from the adult or the school making the
           booking, and are held under the same terms as the rest of that booking.
         </P>
       </Section>

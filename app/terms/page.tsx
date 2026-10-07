@@ -17,8 +17,8 @@ export default function TermsPage() {
       updated={LEGAL_UPDATED}
       intro={
         <P>
-          These terms govern your use of this website. They are not the terms of a hire —
-          those are agreed with your quotation when you book a journey.
+          These terms govern your use of this website. They are not the terms of a hire.
+          Those are agreed with your quotation when you book a journey.
         </P>
       }
     >
@@ -49,8 +49,8 @@ export default function TermsPage() {
           ]}
         />
         <P>
-          The terms on which a confirmed hire runs — payment, cancellation, luggage,
-          liability and the rest — are set out in our{' '}
+          The terms on which a confirmed hire runs, covering payment, cancellation, luggage,
+          liability and the rest, are set out in our{' '}
           <A href="/conditions-of-hire">conditions of hire</A> and in the version supplied
           with your quotation, which takes precedence over anything on this page.
         </P>
@@ -93,7 +93,7 @@ export default function TermsPage() {
 
       <Section title="Links to other sites">
         <P>
-          Where we link to another website — a map, a review platform, a social account —
+          Where we link to another website, such as a map, a review platform or a social account,
           we do so for your convenience. We do not control those sites and are not
           responsible for their content or their handling of your data.
         </P>

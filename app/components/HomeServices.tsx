@@ -28,7 +28,7 @@ const PICKS: { slug: string; description: string; image: string }[] = [
   },
   {
     slug:        'group-travel',
-    description: 'Day trips and longer tours across the UK and Europe — one coach, one driver, the group together.',
+    description: 'Day trips and longer tours across the UK and Europe. One coach, one driver, the group together.',
     image:       vehiclePhoto('executive-coaches', '55-seater-neoplan-tourliner'),
   },
   {
@@ -95,7 +95,7 @@ function ServiceCard({ service }: { service: HomeService }) {
           className="text-white leading-tight mb-2"
           style={{
             fontFamily: 'var(--font-display)',
-            fontWeight: 300,
+            fontWeight: 500,
             fontSize:   'clamp(1.5rem, 2.2vw, 2rem)',
           }}
         >
@@ -133,7 +133,7 @@ export default function HomeServices() {
             className="text-white leading-[0.93] tracking-[-0.02em] mb-4"
             style={{
               fontFamily: 'var(--font-display)',
-              fontWeight: 300,
+              fontWeight: 500,
               fontSize:   'clamp(2.4rem, 5vw, 4.5rem)',
             }}
           >
@@ -147,7 +147,7 @@ export default function HomeServices() {
             }}
           >
             Tell us where you are going and we will match the right vehicle and
-            driver — one team covering London, the South East and the rest of
+            driver. One team covering London, the South East and the rest of
             the UK.
           </p>
         </div>

@@ -25,7 +25,7 @@ const CATEGORIES: Category[] = [
     key:    'necessary',
     label:  'Strictly necessary',
     detail:
-      'Remembers the choice you make here, and runs the enquiry forms — including ' +
+      'Remembers the choice you make here, and runs the enquiry forms, including ' +
       'the address suggestions you asked for by typing into them. Exempt from ' +
       'consent because the site cannot do what you came for without them.',
     locked: true,
@@ -43,7 +43,7 @@ const CATEGORIES: Category[] = [
     detail:
       'Google Analytics, which counts visits and shows us which pages people actually ' +
       'use, so we know what to improve. It sets two cookies on this site, and starts ' +
-      'switched on — turn it off here if you would rather we did not count your visit. ' +
+      'switched on. Turn it off here if you would rather we did not count your visit. ' +
       'Google\'s advertising features are off, so none of it feeds ad targeting.',
   },
 ]
@@ -268,7 +268,7 @@ export default function CookieConsent() {
                 We use cookies and similar storage that are strictly necessary to run this
                 site and its booking forms. We would also like to count visits with Google
                 Analytics, and to load the interactive Google map on our Contact page. Both
-                set cookies of their own, and neither happens unless you agree — you can
+                set cookies of their own, and neither happens unless you agree. You can
                 change your mind at any time.{' '}
                 <Link href="/cookies" className="text-[#EBBA6F] underline underline-offset-2 hover:text-[#DDA85E]">
                   Read our cookie policy

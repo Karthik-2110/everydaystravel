@@ -2,22 +2,6 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@font-face {
-  font-family: 'Formula Condensed';
-  src: url('/fonts/FormulaCondensed-Light.otf') format('opentype');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Formula Condensed';
-  src: url('/fonts/FormulaCondensed-Bold.otf') format('opentype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -161,9 +145,13 @@
   --color-text-grey-light: #ADB1B8;
   --color-text-dark: #0C0F1C;
 
-  /* next/font variables: --font-sans = Inter, --font-body-loaded = Source Sans 3 */
-  --font-display: 'Formula Condensed', sans-serif;
-  --font-body: var(--font-body-loaded, 'Source Sans 3', sans-serif);
+  /* One family, Inter, for everything. --font-sans is the next/font variable.
+     The three role variables are kept rather than collapsed into one, because
+     24 component files read them by name: changing a role's face later is one
+     line here, whereas collapsing them would mean editing every one of those
+     files and could not be undone as cheaply. */
+  --font-display: var(--font-sans, 'Inter', sans-serif);
+  --font-body: var(--font-sans, 'Inter', sans-serif);
   --font-ui: var(--font-sans, 'Inter', sans-serif);
 
   /* Override shadcn base to dark brand */

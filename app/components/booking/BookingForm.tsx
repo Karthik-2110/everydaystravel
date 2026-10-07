@@ -170,7 +170,7 @@ export default function BookingForm() {
         </p>
         <p className="text-white/45 text-[13.5px] max-w-[420px]" style={{ fontFamily: 'var(--font-body)' }}>
           Thank you, {fullName.split(' ')[0]}. Our team is preparing your personalised quotation and will be in
-          touch shortly — we aim to respond within 30 minutes during business hours.
+          touch shortly. We aim to respond within 30 minutes during business hours.
         </p>
         <a
           href={WHATSAPP_HREF}

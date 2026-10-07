@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a2e;">
       <div style="background: #0C0F1C; padding: 32px 24px; border-radius: 12px 12px 0 0;">
         <h1 style="color: #EBBA6F; font-size: 22px; margin: 0 0 4px;">New Enquiry</h1>
-        <p style="color: rgba(255,255,255,0.45); font-size: 13px; margin: 0;">Everydays Travel — contact page</p>
+        <p style="color: rgba(255,255,255,0.45); font-size: 13px; margin: 0;">Everydays Travel, contact page</p>
       </div>
 
       <div style="background: #f9f9f9; padding: 28px 24px; border-radius: 0 0 12px 12px; border: 1px solid #e5e5e5; border-top: none;">
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
     from: 'Everydays Travel <noreply@email.everydaystravel.co.uk>',
     to: TO_EMAILS,
     replyTo: email,
-    subject: `New Enquiry — ${name}`,
+    subject: `New Enquiry: ${name}`,
     html,
   })
 

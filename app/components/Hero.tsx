@@ -224,7 +224,7 @@ export default function Hero({
             /* Headline — staggered line-by-line entrance */
             <h1
               className="mb-7 leading-[0.91] tracking-[-0.015em]"
-              style={{ fontFamily: 'var(--font-display)', fontWeight: 300 }}
+              style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}
             >
               {lines.map((line, i) => (
                 <motion.span

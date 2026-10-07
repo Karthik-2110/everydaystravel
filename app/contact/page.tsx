@@ -10,7 +10,7 @@ import { createPageMetadata } from '../lib/seo'
 export const metadata = createPageMetadata({
   title: 'Contact Us',
   description:
-    'Share your travel requirements and receive a tailored quote — coach and minibus hire across London, Surrey, the UK and Europe. Call 020 8941 8354 or send us an enquiry.',
+    'Share your travel requirements and receive a tailored quote: coach and minibus hire across London, Surrey, the UK and Europe. Call 020 8941 8354 or send us an enquiry.',
   path: '/contact',
 })
 

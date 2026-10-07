@@ -32,7 +32,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
       {
         question: 'How do I get a quote?',
         answer:
-          'Fill in the quote form with your pickup, destination, date and passenger numbers, and we will come back to you with a price. If it is easier, call or message us on WhatsApp instead — some journeys are quicker to talk through than to type out. The more detail you can give us about timings and stops, the more accurate the quote.',
+          'Fill in the quote form with your pickup, destination, date and passenger numbers, and we will come back to you with a price. If it is easier, call or message us on WhatsApp instead, since some journeys are quicker to talk through than to type out. The more detail you can give us about timings and stops, the more accurate the quote.',
         link: { label: 'Get a quote', href: '/book' },
       },
       {
@@ -43,7 +43,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
       {
         question: 'Is the quote a booking?',
         answer:
-          'No. A quote is a price we are offering you. The booking exists once we have confirmed it in writing and any deposit has been paid — until that point the vehicle is not held for you. If your date is tight, confirm early.',
+          'No. A quote is a price we are offering you. The booking exists once we have confirmed it in writing and any deposit has been paid. Until that point the vehicle is not held for you. If your date is tight, confirm early.',
         link: { label: 'Conditions of hire', href: '/conditions-of-hire' },
       },
       {
@@ -60,13 +60,13 @@ export const FAQ_GROUPS: FaqGroup[] = [
       {
         question: 'What are your payment and cancellation terms?',
         answer:
-          'A deposit confirms a booking, with the balance due before departure. Cancellation charges depend on how much notice you give — the closer to departure, the less chance we have of re-letting the vehicle. The full detail is in our conditions of hire.',
+          'A deposit confirms a booking, with the balance due before departure. Cancellation charges depend on how much notice you give. The closer to departure, the less chance we have of re-letting the vehicle. The full detail is in our conditions of hire.',
         link: { label: 'Conditions of hire', href: '/conditions-of-hire' },
       },
       {
         question: 'Why do quotes differ so much between operators?',
         answer:
-          'Usually it comes down to the vehicle and the driver. A newer coach that meets current emissions standards costs more to run than an older one, and a properly rested driver paid a proper rate costs more than a stretched schedule. A quote that looks unusually cheap is worth asking questions about — the age of the vehicle, whether driver breaks are built in, and what is excluded.',
+          'Usually it comes down to the vehicle and the driver. A newer coach that meets current emissions standards costs more to run than an older one, and a properly rested driver paid a proper rate costs more than a stretched schedule. A quote that looks unusually cheap is worth asking questions about: the age of the vehicle, whether driver breaks are built in, and what is excluded.',
       },
     ],
   },
@@ -82,12 +82,12 @@ export const FAQ_GROUPS: FaqGroup[] = [
       {
         question: 'How many people can travel?',
         answer:
-          'Up to the vehicle’s licensed capacity, and no more. Standing is not permitted on a coach. Everybody travelling has to be counted — including children, whatever seat they take — because our insurance depends on the number being right.',
+          'Up to the vehicle’s licensed capacity, and no more. Standing is not permitted on a coach. Everybody travelling has to be counted, including children whatever seat they take, because our insurance depends on the number being right.',
       },
       {
         question: 'Can we get a wheelchair on board?',
         answer:
-          'Some of our vehicles are wheelchair accessible and some are not, so tell us at the time of booking rather than on the day and we will allocate one that works. The same goes for anyone in your party with mobility needs — we would far rather know early than have somebody turned away at the kerb.',
+          'Some of our vehicles are wheelchair accessible and some are not, so tell us at the time of booking rather than on the day and we will allocate one that works. The same goes for anyone in your party with mobility needs. We would far rather know early than have somebody turned away at the kerb.',
       },
       {
         question: 'How much luggage can we bring?',
@@ -103,7 +103,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
       {
         question: 'Will we get the exact vehicle shown on the website?',
         answer:
-          'The photographs show our own fleet, and we allocate the vehicle you booked wherever we can. Occasionally — a breakdown, a late-running job — we substitute another vehicle of the same standard or better. We will not quietly downgrade you.',
+          'The photographs show our own fleet, and we allocate the vehicle you booked wherever we can. Occasionally, after a breakdown or a late-running job, we substitute another vehicle of the same standard or better. We will not quietly downgrade you.',
       },
     ],
   },
@@ -113,12 +113,12 @@ export const FAQ_GROUPS: FaqGroup[] = [
       {
         question: 'Do you operate outside office hours?',
         answer:
-          'Yes. Our office is open Monday to Friday 7am to 7pm and weekends 8am to 4pm, but vehicles run well outside those hours — early airport runs and late returns from events are routine. Book the journey during office hours and the driver will be there whatever time you need.',
+          'Yes. Our office is open Monday to Friday 7am to 7pm and weekends 8am to 4pm, but vehicles run well outside those hours. Early airport runs and late returns from events are routine. Book the journey during office hours and the driver will be there whatever time you need.',
       },
       {
         question: 'How long can the driver stay with us?',
         answer:
-          'Drivers are limited by law on how long they may drive and when they must rest, and we will not breach those rules. Your quote is built around your itinerary with the required breaks included. If you want the option of running late, tell us when booking so we can schedule for it — it is far cheaper to plan for than to fix on the day.',
+          'Drivers are limited by law on how long they may drive and when they must rest, and we will not breach those rules. Your quote is built around your itinerary with the required breaks included. If you want the option of running late, tell us when booking so we can schedule for it. That is far cheaper than fixing it on the day.',
       },
       {
         question: 'Can we extend the hire on the day?',
@@ -133,7 +133,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
       {
         question: 'Can we eat and drink on board?',
         answer:
-          'Soft drinks and sensible snacks are fine. Alcohol needs our agreement in advance, and is not permitted at all on some journeys — most school trips and many sporting fixtures prohibit it by law or by venue rule. Ask when you book and we will tell you where you stand.',
+          'Soft drinks and sensible snacks are fine. Alcohol needs our agreement in advance, and is not permitted at all on some journeys. Most school trips and many sporting fixtures prohibit it by law or by venue rule. Ask when you book and we will tell you where you stand.',
       },
       {
         question: 'Who pays if the vehicle is damaged or needs cleaning?',
@@ -176,19 +176,19 @@ export const FAQ_GROUPS: FaqGroup[] = [
       {
         question: 'Can you decorate a wedding car?',
         answer:
-          'Yes — ribbons and decoration are arranged on request, and every vehicle turns up cleaned and presented properly. Weddings run to a tight schedule, so tell us the whole day’s movements and we will plan the timings around them rather than the other way round.',
+          'Yes. Ribbons and decoration are arranged on request, and every vehicle turns up cleaned and presented properly. Weddings run to a tight schedule, so tell us the whole day’s movements and we will plan the timings around them rather than the other way round.',
         link: { label: 'Weddings and events', href: '/services/weddings-events' },
       },
       {
         question: 'Do you travel outside London, and into Europe?',
         answer:
-          'We cover the whole of the UK, and we run tours into Europe. Multi-day and continental trips need more planning — driver hours, crossings, overnight accommodation — so give us as much notice as you can and we will build the itinerary with you.',
+          'We cover the whole of the UK, and we run tours into Europe. Multi-day and continental trips need more planning for driver hours, crossings and overnight accommodation, so give us as much notice as you can and we will build the itinerary with you.',
         link: { label: 'Group travel and tours', href: '/services/group-travel' },
       },
       {
         question: 'Do you work with schools, clubs and companies on an ongoing basis?',
         answer:
-          'Yes, and it is a lot of what we do — regular school runs, match-day travel for clubs, and corporate accounts with recurring transfers. Regular work can be set up on account rather than paid trip by trip. Get in touch and we will put something sensible together.',
+          'Yes, and it is a lot of what we do: regular school runs, match-day travel for clubs, and corporate accounts with recurring transfers. Regular work can be set up on account rather than paid trip by trip. Get in touch and we will put something sensible together.',
         link: { label: 'Contact us', href: '/contact' },
       },
     ],

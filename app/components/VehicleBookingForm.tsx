@@ -145,7 +145,7 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
           — the values match `VehicleDetail`'s own headings. */}
       <h2
         className="text-[#EBBA6F] mb-5 tracking-[-0.01em]"
-        style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.5rem, 2vw, 2rem)' }}
+        style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(1.5rem, 2vw, 2rem)' }}
       >
         Get a free quote
       </h2>

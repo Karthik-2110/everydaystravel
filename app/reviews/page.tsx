@@ -9,7 +9,7 @@ import { createPageMetadata } from '../lib/seo'
 export const metadata = createPageMetadata({
   title: 'Reviews',
   description:
-    'What our clients say — real reviews from weddings, school trips, airport transfers and corporate travel across London, Surrey, the UK and Europe.',
+    'What our clients say: real reviews from weddings, school trips, airport transfers and corporate travel across London, Surrey, the UK and Europe.',
   path: '/reviews',
 })
 
@@ -39,7 +39,7 @@ export default function ReviewsPage() {
 
           <h1
             className="text-white leading-[0.95] tracking-[-0.02em]"
-            style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(2.4rem, 5.2vw, 4.2rem)' }}
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(2.4rem, 5.2vw, 4.2rem)' }}
           >
             What our <span className="text-[#EBBA6F]">clients say</span>
           </h1>
@@ -65,7 +65,7 @@ export default function ReviewsPage() {
         <section className="site-container py-16 lg:py-20 text-center">
           <h2
             className="text-white leading-[1.05] tracking-[-0.02em] mb-5"
-            style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.9rem, 3.4vw, 2.8rem)' }}
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(1.9rem, 3.4vw, 2.8rem)' }}
           >
             Ready to write the next one?
           </h2>

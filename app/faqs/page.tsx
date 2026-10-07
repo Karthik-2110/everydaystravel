@@ -49,7 +49,7 @@ export default function FaqsPage() {
         <div className="max-w-[820px]">
           <h1
             className="text-white leading-[1.05] tracking-[-0.02em] mb-4"
-            style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(2.2rem, 4.5vw, 3.4rem)' }}
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(2.2rem, 4.5vw, 3.4rem)' }}
           >
             Frequently asked questions
           </h1>
@@ -58,7 +58,7 @@ export default function FaqsPage() {
             style={{ fontFamily: 'var(--font-body)' }}
           >
             The things people ask us most often, answered straight. If yours is not here,
-            call us — most questions about a journey are quicker to talk through than to
+            call us. Most questions about a journey are quicker to talk through than to
             read about.
           </p>
 

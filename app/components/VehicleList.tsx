@@ -59,7 +59,7 @@ function VehicleCard({ vehicle, category }: { vehicle: Vehicle; category?: strin
         <div>
           <h3
             className="text-white leading-[1] tracking-[-0.01em] mb-3"
-            style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.7rem, 2.4vw, 2.2rem)' }}
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(1.7rem, 2.4vw, 2.2rem)' }}
           >
             {vehicle.name}
           </h3>
@@ -166,7 +166,7 @@ export default function VehicleList({ vehicles, heading = 'Our vehicles', subtex
           <div className="mb-12 lg:mb-16 flex flex-col items-center text-center">
             <h2
               className="text-white leading-[0.93] tracking-[-0.02em] mb-4"
-              style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}
+              style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}
             >
               {heading}
             </h2>

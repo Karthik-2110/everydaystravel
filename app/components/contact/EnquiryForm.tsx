@@ -90,7 +90,7 @@ export default function EnquiryForm() {
             Enquiry sent
           </p>
           <p className="text-white/45 text-[13.5px] max-w-[420px]" style={{ fontFamily: 'var(--font-body)' }}>
-            Thank you, {firstName}. Our team will get back to you shortly — we aim to respond within 30 minutes
+            Thank you, {firstName}. Our team will get back to you shortly. We aim to respond within 30 minutes
             during business hours.
           </p>
         </div>

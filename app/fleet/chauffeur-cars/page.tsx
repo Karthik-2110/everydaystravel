@@ -9,7 +9,7 @@ import { createPageMetadata } from '../../lib/seo'
 export const metadata = createPageMetadata({
   title: 'Chauffeur Car Hire London',
   description:
-    'Chauffeur-driven Mercedes-Benz, BMW and luxury cars for hire in London and Surrey — airport transfers, corporate travel and special occasions.',
+    'Chauffeur-driven Mercedes-Benz, BMW and luxury cars for hire in London and Surrey: airport transfers, corporate travel and special occasions.',
   path: '/fleet/chauffeur-cars',
 })
 

@@ -56,7 +56,7 @@ export default function SplitSection({
 
           <h2
             className="text-white leading-[1.05] tracking-[-0.02em] mb-5"
-            style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(2rem, 3.6vw, 3rem)' }}
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(2rem, 3.6vw, 3rem)' }}
           >
             {heading}
           </h2>

@@ -9,7 +9,7 @@ import { createPageMetadata } from '../lib/seo'
 export const metadata = createPageMetadata({
   title: 'Book Your Journey',
   description:
-    'Tell us about your trip and we will prepare a personalised quotation — chauffeur cars, luxury minibuses and executive coaches across London, Surrey and the UK.',
+    'Tell us about your trip and we will prepare a personalised quotation: chauffeur cars, luxury minibuses and executive coaches across London, Surrey and the UK.',
   path: '/book',
 })
 
@@ -45,7 +45,7 @@ export default function BookPage() {
         <div className="relative site-container pt-32 pb-12 lg:pt-40 lg:pb-14">
           <h1
             className="text-white leading-[0.95] tracking-[-0.02em]"
-            style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(2.4rem, 5.2vw, 4.2rem)' }}
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(2.4rem, 5.2vw, 4.2rem)' }}
           >
             <span className="text-[#EBBA6F]">Book</span> Your Journey
           </h1>

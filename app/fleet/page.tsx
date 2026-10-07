@@ -7,7 +7,7 @@ import { createPageMetadata } from '../lib/seo'
 export const metadata = createPageMetadata({
   title: 'Coach & Minibus Fleet',
   description:
-    'Browse the Everydays Travel fleet — luxury minibuses, executive coaches and chauffeur-driven cars for hire across London, Surrey and the UK.',
+    'Browse the Everydays Travel fleet: luxury minibuses, executive coaches and chauffeur-driven cars for hire across London, Surrey and the UK.',
   path: '/fleet',
 })
 
@@ -22,13 +22,13 @@ const FLEET = [
   },
   {
     name:        'Luxury Minibuses',
-    description: 'Premium minibuses for small groups — comfort and style for up to 16 passengers.',
+    description: 'Premium minibuses for small groups, with comfort and style for up to 16 passengers.',
     image:       PLACEHOLDER,
     href:        '/fleet/luxury-minibuses',
   },
   {
     name:        'Executive Coaches',
-    description: '53 and 70 seater executive coaches — perfect for large groups and long-distance travel.',
+    description: '53 and 70 seater executive coaches, perfect for large groups and long-distance travel.',
     image:       PLACEHOLDER,
     href:        '/fleet/executive-coaches',
   },
@@ -45,7 +45,7 @@ export default function FleetPage() {
           { text: 'for Comfort &',   accent: false },
           { text: 'Every Occasion',  accent: true  },
         ]}
-        subtext="From executive chauffeur cars to luxury minibuses and premium coaches — every vehicle in our fleet is maintained to the highest standard."
+        subtext="From executive chauffeur cars to luxury minibuses and premium coaches. Every vehicle in our fleet is maintained to the highest standard."
         imageSrc="https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_2400,c_limit/v1783783988/DSC09031_yjmhzx.jpg"
       />
       <ServicesGrid

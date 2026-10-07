@@ -57,6 +57,22 @@ const SOCIAL_LINKS = [
 // type carries its own shadow rather than leaning on the overlay for contrast.
 const COPY_SHADOW = '0 2px 20px rgba(4,6,14,0.8), 0 1px 4px rgba(4,6,14,0.55)'
 
+/**
+ * Type for the phone, email and opening-hours lines.
+ *
+ * These were set at clamp(1.8rem, 2.8vw, 2.5rem) for a condensed display face.
+ * Inter sets far wider at the same size, so the email address ran past its
+ * 420px column. Retuned for Inter, and held in one object because four lines
+ * share it — separate copies drifted apart the moment one was adjusted.
+ */
+const CONTACT_TYPE = {
+  fontFamily: 'var(--font-display)',
+  fontWeight: 500,
+  fontSize:   'clamp(1.05rem, 1.5vw, 1.35rem)',
+  lineHeight: 1.25,
+  textShadow: COPY_SHADOW,
+} as const
+
 // ── Sub-components ────────────────────────────────────────────────────────────
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -114,7 +130,7 @@ export default function Footer() {
                   className="text-white leading-[0.92] tracking-[-0.025em]"
                   style={{
                     fontFamily: 'var(--font-display)',
-                    fontWeight: 300,
+                    fontWeight: 500,
                     fontSize: 'clamp(2.8rem, 5vw, 5rem)',
                     textShadow: COPY_SHADOW,
                   }}
@@ -164,7 +180,7 @@ export default function Footer() {
                 <Phone size={16} className="text-[#EBBA6F] shrink-0" strokeWidth={1.5} aria-hidden />
                 <span
                   className="text-white group-hover:text-[#EBBA6F] transition-colors duration-150 tracking-[-0.01em]"
-                  style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.8rem, 2.8vw, 2.5rem)', lineHeight: 1, textShadow: COPY_SHADOW }}
+                  style={CONTACT_TYPE}
                 >
                   020 8941 8354
                 </span>
@@ -179,7 +195,7 @@ export default function Footer() {
                 <Mail size={16} className="text-[#EBBA6F] shrink-0" strokeWidth={1.5} aria-hidden />
                 <span
                   className="text-white group-hover:text-[#EBBA6F] transition-colors duration-150 tracking-[-0.01em]"
-                  style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.8rem, 2.8vw, 2.5rem)', lineHeight: 1, textShadow: COPY_SHADOW }}
+                  style={CONTACT_TYPE}
                 >
                   info@everydaystravel.co.uk
                 </span>
@@ -191,13 +207,13 @@ export default function Footer() {
                 <div className="flex flex-col gap-2">
                   <span
                     className="text-white tracking-[-0.01em]"
-                    style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.8rem, 2.8vw, 2.5rem)', lineHeight: 1, textShadow: COPY_SHADOW }}
+                    style={CONTACT_TYPE}
                   >
                     Mon – Fri: 7:00 AM – 7:00 PM
                   </span>
                   <span
                     className="text-white/65 tracking-[-0.01em]"
-                    style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.8rem, 2.8vw, 2.5rem)', lineHeight: 1, textShadow: COPY_SHADOW }}
+                    style={CONTACT_TYPE}
                   >
                     Sat &amp; Sun: 8:00 AM – 4:00 PM
                   </span>
@@ -228,7 +244,7 @@ export default function Footer() {
                 style={{ fontFamily: 'var(--font-body)' }}
               >
                 Coach and minibus hire across London and the UK. Airport transfers,
-                weddings, corporate and group travel — every day.
+                weddings, corporate and group travel, every day.
               </p>
               <div className="flex items-center gap-2" data-testid="footer-socials">
                 {SOCIAL_LINKS.map(({ svg, href, label, brand }) => (

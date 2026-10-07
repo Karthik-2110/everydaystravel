@@ -14,7 +14,7 @@ import { createPageMetadata } from '../lib/seo'
 export const metadata = createPageMetadata({
   title: 'About Us',
   description:
-    'Our vision, mission and promise — coach and minibus hire across London and Surrey, built on personalised service, trusted partnerships and the belief that every journey matters.',
+    'Our vision, mission and promise: coach and minibus hire across London and Surrey, built on personalised service, trusted partnerships and the belief that every journey matters.',
   path: '/about',
 })
 
@@ -65,7 +65,7 @@ export default function AboutPage() {
 
           <h1
             className="text-white leading-[0.95] tracking-[-0.02em]"
-            style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(2.4rem, 5.2vw, 4.2rem)' }}
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(2.4rem, 5.2vw, 4.2rem)' }}
           >
             Every journey <span className="text-[#EBBA6F]">matters</span>
           </h1>
@@ -76,7 +76,7 @@ export default function AboutPage() {
             className="text-white/60 text-[15px] leading-relaxed max-w-[560px]"
             style={{ fontFamily: 'var(--font-body)' }}
           >
-            We have spent more than a decade moving people across the UK and Europe — weddings, school trips,
+            We have spent more than a decade moving people across the UK and Europe: weddings, school trips,
             airport runs, tours. The vehicles change. The care does not.
           </p>
         </div>
@@ -133,7 +133,7 @@ export default function AboutPage() {
             </p>
             <h2
               className="text-white leading-[1.05] tracking-[-0.02em]"
-              style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(2rem, 3.6vw, 3rem)' }}
+              style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(2rem, 3.6vw, 3rem)' }}
             >
               We are committed to
             </h2>
@@ -177,7 +177,7 @@ export default function AboutPage() {
 
             <blockquote
               className="text-white leading-[1.05] tracking-[-0.02em]"
-              style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(2.4rem, 5.4vw, 4.4rem)' }}
+              style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(2.4rem, 5.4vw, 4.4rem)' }}
             >
               Every journey matters.
             </blockquote>

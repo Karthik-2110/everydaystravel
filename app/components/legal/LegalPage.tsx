@@ -23,7 +23,7 @@ export default function LegalPage({
         <div className="max-w-[820px]">
           <h1
             className="text-white leading-[1.05] tracking-[-0.02em] mb-4"
-            style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(2.2rem, 4.5vw, 3.4rem)' }}
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(2.2rem, 4.5vw, 3.4rem)' }}
           >
             {title}
           </h1>

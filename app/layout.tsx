@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Source_Sans_3 } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import FloatingContactBar from "./components/FloatingContactBar";
@@ -7,18 +7,15 @@ import CookieConsent from "./components/CookieConsent";
 import Analytics from "./components/Analytics";
 import { businessSchema, siteUrl, webSiteSchema } from './lib/seo';
 
-// Inter → drives --font-sans (shadcn) and --font-ui (brand)
+// Inter is the whole typographic system: --font-sans feeds --font-ui,
+// --font-body and --font-display alike (see globals.css). One family, one
+// download, no second face to load or keep in step.
+//
+// No `weight` list: Inter ships as a variable font, so every weight the site
+// uses comes from a single file rather than one file per weight.
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
-  display: 'swap',
-});
-
-// Source Sans 3 → drives --font-body (brand)
-const sourceSans3 = Source_Sans_3({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
-  variable: '--font-body-loaded',
   display: 'swap',
 });
 
@@ -65,7 +62,6 @@ export default function RootLayout({
       className={cn(
         "h-full antialiased",
         inter.variable,
-        sourceSans3.variable,
       )}
     >
       <body className="min-h-full flex flex-col bg-[#0C0F1C] text-white">

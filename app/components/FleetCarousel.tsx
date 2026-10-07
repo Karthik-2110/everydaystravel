@@ -61,7 +61,7 @@ export default function FleetCarousel() {
           className="text-white leading-[0.93] tracking-[-0.02em] mb-4"
           style={{
             fontFamily: 'var(--font-display)',
-            fontWeight: 300,
+            fontWeight: 500,
             fontSize: 'clamp(2.4rem, 5vw, 4.5rem)',
           }}
         >
@@ -135,7 +135,7 @@ export default function FleetCarousel() {
                 className="text-white leading-tight mb-2"
                 style={{
                   fontFamily: 'var(--font-display)',
-                  fontWeight: 300,
+                  fontWeight: 500,
                   fontSize: 'clamp(1.5rem, 2.2vw, 2rem)',
                 }}
               >

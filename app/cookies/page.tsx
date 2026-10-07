@@ -35,8 +35,8 @@ const ROWS: string[][] = [
   [
     'Google Maps cookies (NID and similar)',
     'Google (third party)',
-    'Set by Google when our maps load — either the address suggestions you request by typing into a booking form, or the Contact page map, which waits for your consent.',
-    'Set by Google — see their policy',
+    'Set by Google when our maps load, for either the address suggestions you request by typing into a booking form, or the Contact page map, which waits for your consent.',
+    'Set by Google, see their policy',
   ],
 ]
 
@@ -54,7 +54,7 @@ export default function CookiePolicyPage() {
         <P>
           Nothing optional is stored until you answer. Refusing is one click, exactly like
           accepting, and you can change your answer whenever you like. Note that the
-          Analytics switch starts on &mdash; the rest start off.
+          Analytics switch starts on, and the rest start off.
         </P>
         <CookieSettingsButton className="mt-2 h-11 px-6 inline-flex items-center rounded-full bg-[#EBBA6F] text-[#0C0F1C] text-[14px] font-semibold hover:bg-[#DDA85E] transition-colors duration-150">
           Change your cookie settings
@@ -73,7 +73,7 @@ export default function CookiePolicyPage() {
         <P>
           One thing to know, because we would rather say it than bury it: the Analytics
           switch in our preferences panel starts in the on position. Nothing is stored
-          until you choose, and switching it off takes one tap &mdash; but it is
+          until you choose, and switching it off takes one tap, but it is
           pre-selected rather than blank, so please do look at it before you save.
         </P>
         <P>
@@ -84,7 +84,7 @@ export default function CookiePolicyPage() {
       </Section>
 
       <Section title="The categories we use">
-        <SubHeading>Strictly necessary — always on</SubHeading>
+        <SubHeading>Strictly necessary: always on</SubHeading>
         <P>
           One cookie, recording the choice you made. It is exempt from consent because
           without it we could not remember that you refused, and would have to ask you
@@ -93,12 +93,12 @@ export default function CookiePolicyPage() {
         <P>
           The address suggestions on our booking forms sit here too. They only run when you
           start typing an address, they exist to deliver the quote you came to ask for, and
-          the form cannot do its job without them &mdash; so we treat them as part of the
+          the form cannot do its job without them, so we treat them as part of the
           service you requested rather than as something optional. Google sets its own
           cookies at that point.
         </P>
 
-        <SubHeading>Functional — off unless you turn it on</SubHeading>
+        <SubHeading>Functional: off unless you turn it on</SubHeading>
         <P>
           The interactive Google map on our Contact page. Google sets its own cookies the
           moment that map loads, so it stays out of the page until you say yes. Leave this
@@ -106,11 +106,11 @@ export default function CookiePolicyPage() {
           Maps yourself if you want to.
         </P>
 
-        <SubHeading>Analytics — pre-selected, and yours to switch off</SubHeading>
+        <SubHeading>Analytics: pre-selected, and yours to switch off</SubHeading>
         <P>
           Google Analytics, which counts visits and shows us which pages people actually
           use, so we know what is worth improving. Nothing is loaded and nothing is sent to
-          Google until you make a choice &mdash; but this switch starts on, so accepting or
+          Google until you make a choice, but this switch starts on, so accepting or
           saving without changing it means we count your visit. Switch it off, or press
           Reject all, and we count nothing.
         </P>

@@ -34,7 +34,7 @@ const CARDS: { slug: string; description: string; image: string }[] = [
   },
   {
     slug:        'corporate',
-    description: 'Executive transport for business — punctual, professional, and properly presented.',
+    description: 'Executive transport for business: punctual, professional, and properly presented.',
     image:       PLACEHOLDER,
   },
   {
@@ -94,7 +94,7 @@ function ServiceCard({ service }: { service: ServiceItem }) {
           className="text-white leading-[0.95] tracking-[-0.01em]"
           style={{
             fontFamily: 'var(--font-display)',
-            fontWeight: 300,
+            fontWeight: 500,
             fontSize:   '24px',
           }}
         >
@@ -143,7 +143,7 @@ export default function ServicesGrid({
             className="text-white leading-[0.93] tracking-[-0.02em] mb-5"
             style={{
               fontFamily: 'var(--font-display)',
-              fontWeight: 300,
+              fontWeight: 500,
               fontSize:   'clamp(2.4rem, 4.5vw, 4rem)',
             }}
           >

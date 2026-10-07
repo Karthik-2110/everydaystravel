@@ -67,8 +67,10 @@ describe('ServiceSections', () => {
       expect(container.querySelector('section')).toBeNull()
 
       // Same size and weight as "Features & Amenities" and "Preferred for".
+      // These values are copied from VehicleDetail's own headings; if that file
+      // restyles them, this fails and the two are meant to move together.
       const heading = screen.getByRole('heading', { level: 2 })
-      expect(heading).toHaveStyle({ fontSize: 'clamp(1.5rem, 2vw, 2rem)', fontWeight: '300' })
+      expect(heading).toHaveStyle({ fontSize: 'clamp(1.5rem, 2vw, 2rem)', fontWeight: '500' })
     })
 
     it('carries the opening argument as points', () => {

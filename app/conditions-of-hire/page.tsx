@@ -66,7 +66,7 @@ export default function ConditionsOfHirePage() {
       <Section title="1. Quotations and booking">
         <List
           items={[
-            'A quotation is based on the details you give us — route, timings, passenger numbers and any stops. If those change, the price may change.',
+            'A quotation is based on the details you give us: route, timings, passenger numbers and any stops. If those change, the price may change.',
             'A quotation is valid for the period stated on it, and is not a booking.',
             'A booking exists only once we have confirmed it to you in writing and any deposit has been paid. Until then the vehicle is not held for you.',
             'We reserve the right to decline a booking.',
@@ -111,8 +111,8 @@ export default function ConditionsOfHirePage() {
           rows={CANCELLATION_SCALE.map(({ notice, charge }) => [notice, charge])}
         />
         <P>
-          Anything we have already bought for you that cannot be refunded — ferry crossings,
-          accommodation, tickets — is charged in full on top, whatever the notice period.
+          Anything we have already bought for you that cannot be refunded, such as ferry crossings,
+          accommodation and tickets, is charged in full on top, whatever the notice period.
           Where we have committed more than one vehicle, higher charges may apply and will
           be set out in your quotation.
         </P>
@@ -127,7 +127,7 @@ export default function ConditionsOfHirePage() {
           items={[
             'We may substitute a vehicle of equivalent or higher specification, or subcontract the hire to another licensed operator of equivalent standard. We remain responsible for the hire.',
             'If we have to cancel for a reason within our control, you get a full refund of everything you have paid us.',
-            'If we cannot perform the hire because of something outside our reasonable control — severe weather, road closure, industrial action, accident, an act of government — we will refund what you have paid less any costs already properly incurred, but we are not liable for consequential loss.',
+            'If we cannot perform the hire because of something outside our reasonable control, such as severe weather, road closure, industrial action, accident or an act of government, we will refund what you have paid less any costs already properly incurred, but we are not liable for consequential loss.',
             'On a hire of more than one day, a mechanical failure that delays you by more than an hour and cannot be remedied earns a refund of one day’s hire charge.',
           ]}
         />
@@ -152,7 +152,7 @@ export default function ConditionsOfHirePage() {
       <Section title="7. Passengers and luggage">
         <List
           items={[
-            'The number of passengers may not exceed the vehicle’s licensed capacity. Standing is not permitted, and every passenger must be counted — including children, whatever seat they occupy — because insurance depends on it.',
+            'The number of passengers may not exceed the vehicle’s licensed capacity. Standing is not permitted, and every passenger must be counted, including children whatever seat they occupy, because insurance depends on it.',
             'Seatbelts are fitted and passengers must wear them where the law requires.',
             `Luggage allowance is ${LUGGAGE_ALLOWANCE}, unless agreed in advance. Tell us if you are carrying more, or carrying skis, instruments or sports equipment, so we can send the right vehicle.`,
             'We do not carry child car seats. You are welcome to bring your own and fit it to a three-point belt.',
@@ -165,7 +165,7 @@ export default function ConditionsOfHirePage() {
         <List
           items={[
             'Smoking and vaping are not permitted on any vehicle.',
-            'Alcohol may only be consumed on board with our prior written agreement, and is prohibited outright on some journeys — including most school and sports fixtures — by law or by the venue.',
+            'Alcohol may only be consumed on board with our prior written agreement, and is prohibited outright on some journeys, including most school and sports fixtures, by law or by the venue.',
             'The driver may refuse to carry, or may remove, any passenger whose behaviour puts the safety of others at risk or who is abusive to the driver.',
             'You are responsible for the behaviour of your party.',
           ]}
@@ -175,7 +175,7 @@ export default function ConditionsOfHirePage() {
       <Section title="9. Damage and cleaning">
         <P>
           Normal use is expected and is not charged for. Where a vehicle is returned damaged
-          or needing more than ordinary cleaning — including after sickness — the cost of
+          or needing more than ordinary cleaning, including after sickness, the cost of
           putting it right is yours, from £{SOILING_CHARGE} depending on what is needed.
           We will tell you what we are charging and why, with evidence.
         </P>
@@ -227,7 +227,7 @@ export default function ConditionsOfHirePage() {
         <List
           items={[
             `Our liability for a passenger’s property is limited to £${LUGGAGE_LIABILITY_CAP} per passenger.`,
-            `Where an on-board facility — fridge, WC, PA, screens, wifi — is not working, our liability is limited to £${FACILITY_FAILURE_CAP} per facility.`,
+            `Where an on-board facility such as a fridge, WC, PA, screens or wifi is not working, our liability is limited to £${FACILITY_FAILURE_CAP} per facility.`,
             'Our total liability arising from a hire is limited to the total charge for that hire.',
             'We are not liable for indirect or consequential loss, including loss of profit or of an opportunity.',
           ]}
@@ -236,7 +236,7 @@ export default function ConditionsOfHirePage() {
 
       <Section title="15. Complaints">
         <P>
-          Tell the driver at the time if something is wrong — most things can be fixed on the
+          Tell the driver at the time if something is wrong. Most things can be fixed on the
           spot. Otherwise contact us at <A href={`mailto:${EMAIL}`}>{EMAIL}</A> or{' '}
           <A href={PHONE_HREF}>{PHONE}</A> within 28 days of the journey, and we will
           investigate and reply.

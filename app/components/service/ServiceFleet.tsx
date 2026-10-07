@@ -47,7 +47,7 @@ export default function ServiceFleet({ block }: { block: FleetBlock }) {
               <div key={heading}>
                 <h3
                   className="text-[#EBBA6F] mb-5"
-                  style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.15rem, 1.6vw, 1.35rem)' }}
+                  style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(1.15rem, 1.6vw, 1.35rem)' }}
                 >
                   {heading}
                 </h3>

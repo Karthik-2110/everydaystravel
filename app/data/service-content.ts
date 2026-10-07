@@ -191,7 +191,7 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
         { text: 'we run transfers in' },
       ],
       intro:
-        'From a chauffeur-driven car for one passenger to a 55-seat coach for a full group — every transfer goes out with one of our professional drivers.',
+        'From a chauffeur-driven car for one passenger to a 55-seat coach for a full group. Every transfer goes out with one of our professional drivers.',
       includedHeading: 'Every transfer includes:',
       included: [
         { icon: Plane,      text: 'Live flight tracking' },

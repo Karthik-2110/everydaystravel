@@ -9,7 +9,7 @@ import { createPageMetadata } from '../../lib/seo'
 export const metadata = createPageMetadata({
   title: 'Executive Coach Hire London',
   description:
-    'Executive coach hire from 35 to 55 seats for group travel across London, Surrey and the UK — Mercedes-Benz Turismo, Neoplan Tourliner and more.',
+    'Executive coach hire from 35 to 55 seats for group travel across London, Surrey and the UK: Mercedes-Benz Turismo, Neoplan Tourliner and more.',
   path: '/fleet/executive-coaches',
 })
 

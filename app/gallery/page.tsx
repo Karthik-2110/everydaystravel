@@ -9,7 +9,7 @@ import { createPageMetadata } from '../lib/seo'
 export const metadata = createPageMetadata({
   title: 'Fleet Gallery',
   description:
-    'Photographs of the Everydays Travel fleet — luxury minibuses, executive coaches and chauffeur cars serving London, Surrey and the UK.',
+    'Photographs of the Everydays Travel fleet: luxury minibuses, executive coaches and chauffeur cars serving London, Surrey and the UK.',
   path: '/gallery',
 })
 
@@ -85,7 +85,7 @@ export default function GalleryPage() {
           </p>
           <h1
             className="text-white leading-[0.93] tracking-[-0.02em] mb-4"
-            style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(2.4rem, 5vw, 4rem)' }}
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(2.4rem, 5vw, 4rem)' }}
           >
             Our vehicles &amp; journeys
           </h1>

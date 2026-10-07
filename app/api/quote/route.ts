@@ -81,7 +81,7 @@ export async function POST(request: Request) {
     ...EXTRA_FIELDS.filter(([key]) => body[key]).map(([key, label]) => row(label, body[key])),
   ].join('')
 
-  const subject = `New Quote Request — ${pickup} → ${destination}`.replace(/[\r\n]+/g, ' ')
+  const subject = `New Quote Request: ${pickup} → ${destination}`.replace(/[\r\n]+/g, ' ')
 
   const html = `
     <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a2e;">

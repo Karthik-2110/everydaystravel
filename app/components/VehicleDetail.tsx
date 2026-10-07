@@ -108,7 +108,7 @@ function ExploreCard({ vehicle, href, cta }: { vehicle: Vehicle; href: string; c
       <div className="absolute inset-x-0 bottom-0 p-4 flex flex-col gap-1.5">
         <h3
           className="text-white leading-[0.95] tracking-[-0.01em]"
-          style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.1rem, 1.8vw, 1.4rem)' }}
+          style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(1.1rem, 1.8vw, 1.4rem)' }}
         >
           {vehicle.name}
         </h3>
@@ -200,7 +200,7 @@ export default function VehicleDetail({
             <div className="mt-7 mb-3">
               <h1
                 className="text-white leading-[0.92] tracking-[-0.02em] mb-4"
-                style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(2rem, 4vw, 3.2rem)' }}
+                style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(2rem, 4vw, 3.2rem)' }}
               >
                 {vehicle.name}
               </h1>
@@ -238,7 +238,7 @@ export default function VehicleDetail({
             <div className="mb-7">
               <h2
                 className="text-white mb-5 tracking-[-0.01em]"
-                style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.5rem, 2vw, 2rem)' }}
+                style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(1.5rem, 2vw, 2rem)' }}
               >
                 Features &amp; Amenities
               </h2>
@@ -269,7 +269,7 @@ export default function VehicleDetail({
             <div className="mb-10">
               <h2
                 className="text-white mb-5 tracking-[-0.01em]"
-                style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.5rem, 2vw, 2rem)' }}
+                style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(1.5rem, 2vw, 2rem)' }}
               >
                 Preferred for
               </h2>
@@ -319,7 +319,7 @@ export default function VehicleDetail({
             <div className="flex flex-col items-center text-center mb-12">
               <h2
                 className="text-white leading-[0.93] tracking-[-0.02em] mb-3"
-                style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}
+                style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}
               >
                 {exploreHeading}
               </h2>

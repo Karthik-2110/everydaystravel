@@ -169,12 +169,12 @@ export default function Navbar({
             <span className="hidden xl:block w-px h-3.5 bg-white/15" aria-hidden />
             <a
               href={PHONE_HREF}
-              aria-label={`Call ${PHONE} — we are one call away at weekends for emergencies and unplanned bookings`}
+              aria-label={`Call ${PHONE}. We are one call away at weekends for emergencies and unplanned bookings`}
               className="hidden xl:inline-flex items-center gap-2 hover:text-white transition-colors duration-150"
             >
               <PhoneCall size={13} className="shrink-0" aria-hidden />
               <span>
-                <span className="text-[#EBBA6F]">Weekends</span>{' — '}
+                <span className="text-[#EBBA6F]">Weekends</span>{': '}
                 one call away for emergencies &amp; unplanned bookings
               </span>
             </a>

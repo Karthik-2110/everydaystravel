@@ -35,7 +35,7 @@ export default function SectionHeading({
         : 'text-white leading-[1.04] tracking-[-0.02em]'}
       style={{
         fontFamily: 'var(--font-display)',
-        fontWeight: 300,
+        fontWeight: 500,
         fontSize: spec ? 'clamp(1.5rem, 2vw, 2rem)' : 'clamp(2rem, 3.8vw, 3.1rem)',
       }}
     >
