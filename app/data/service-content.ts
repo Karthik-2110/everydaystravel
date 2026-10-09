@@ -2,9 +2,11 @@ import {
   PlaneLanding, TimerReset, Handshake, Hourglass, Car, BadgePoundSterling,
   Plane, UserCheck, Briefcase, BadgeCheck, Baby, Clock,
   MapPin, Timer, Repeat, Bus, MapPinned,
+  CalendarClock, ReceiptPoundSterling, Wifi,
+  Armchair, Usb, Snowflake, Volume2, Table, Toilet,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
-import { AIRPORT_TRANSFER_IMAGES } from '../components/ServiceList'
+import { AIRPORT_TRANSFER_IMAGES, CORPORATE_IMAGES } from '../components/ServiceList'
 
 /**
  * The persuasion copy that sits between a service page's spec and its
@@ -112,6 +114,12 @@ const S_CLASS_PHOTO = cdn('v1783787266/837f9f74-eb75-4beb-9553-2424ced64ace_rhx7
 const AIRPORT_FLEET_PHOTO =
   'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_1400,c_limit/v1783784630/20260211_134438550_iOS_okfp39.jpg'
 
+/** The midi coach, for the away day that does not fill a full-size coach. */
+const TURAS_35_PHOTO = cdn('v1783787232/0712a7cf-b45c-45e5-86cf-71de3a21ab55_zrwpei.jpg')
+
+/** A different frame from the carousel's, so the band is not a repeat. */
+const CORPORATE_FLEET_PHOTO = cdn('v1783783909/IMG_8109_hqk5fk.jpg')
+
 export const SERVICE_CONTENT: Record<string, ServiceContent> = {
 
   'airport-transfers': {
@@ -211,6 +219,109 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       ],
       image:    AIRPORT_FLEET_PHOTO,
       imageAlt: 'An Everydays Travel vehicle on an airport transfer',
+      ctas: [
+        { label: 'Get a quote',    href: '/book',  primary: true },
+        { label: 'View our fleet', href: '/fleet' },
+      ],
+    },
+  },
+
+  'corporate': {
+
+    whyChoose: {
+      heading: [
+        { text: 'Why choose' },
+        { text: 'Everydays Travel', accent: true },
+      ],
+      points: [
+        { icon: CalendarClock,        text: 'Timed to the meeting, with the traffic already allowed for' },
+        { icon: BadgeCheck,           text: 'Uniformed chauffeurs, briefed on the day before they arrive' },
+        { icon: Wifi,                 text: 'Onboard WiFi, so the journey is working time' },
+        { icon: ReceiptPoundSterling, text: 'Regular work set up on account, not paid trip by trip' },
+        { icon: Briefcase,            text: 'One point of contact from the quote to the invoice' },
+        { icon: BadgePoundSterling,   text: 'A price agreed before anyone travels' },
+      ],
+    },
+
+    solutions: {
+      heading: [
+        { text: 'Corporate coach hire', accent: true },
+        { text: 'for every kind of business journey' },
+      ],
+      intro:
+        'We run corporate work across London and the Home Counties, into the exhibition halls at ExCeL, Olympia and the QEII Centre, out to the London airports, and anywhere in the UK the working day reaches.',
+      accordion: [
+        {
+          title: 'Conferences and exhibitions',
+          text:  'Delegates moved to ExCeL, Olympia or the QEII Centre on a schedule built around the doors opening rather than the diary. The return leg is booked at the same time, so nobody is left on the pavement at six.',
+        },
+        {
+          title: 'Staff shuttles',
+          text:  'A standing run between the office, the station and the site, on the same vehicle and the same driver each day. Set up on account and invoiced monthly rather than booked trip by trip.',
+        },
+        {
+          title: 'Away days and team building',
+          text:  'The whole team in one vehicle, which is usually the point of the day. A 35-seat midi coach when a full-size one is more than you need.',
+        },
+        {
+          title: 'Client hospitality and VIP guests',
+          text:  'An S-Class or V-Class with a chauffeur for the visitor you would rather not put in a taxi, and a driver who waits between appointments instead of being re-booked each time.',
+        },
+        {
+          title: 'Business airport groups',
+          text:  'A team flying out together and met on the way back. Give us the flight number and we will track it, so a delayed landing moves your driver rather than losing them.',
+        },
+        {
+          title: 'Roadshows and multi-city programmes',
+          text:  'Several cities over several days on one vehicle and one driver, with the luggage and the kit staying aboard between stops.',
+        },
+        {
+          title: 'Meetings and site visits',
+          text:  'Two or three addresses in a morning. Tell us the stops when you enquire and we will build them into the route and the price, rather than charging for the detour afterwards.',
+        },
+        {
+          title: 'Staff parties and end-of-year events',
+          text:  'Guests collected from the office and dropped home afterwards, however late that is. We run 24/7, so the last leg is an ordinary booking rather than a favour.',
+        },
+        {
+          title: 'Corporate accounts',
+          text:  'Recurring work can be set up on account, so a booking is a phone call and the paperwork arrives once a month. It is a lot of what we already do for clubs and schools.',
+        },
+      ],
+      carousel: [
+        { src: CORPORATE_IMAGES[0], alt: 'An Everydays Travel coach on corporate work' },
+        { src: S_CLASS_PHOTO,       alt: 'Mercedes-Benz S-Class, used for client and executive transfers' },
+        { src: CORPORATE_IMAGES[1], alt: 'A 49-seater Mercedes Turismo, used for conference groups' },
+        { src: TURAS_35_PHOTO,      alt: 'The 35-seater Turas Midi, used for away days and smaller teams' },
+      ],
+    },
+
+    fleet: {
+      heading: [
+        { text: 'The vehicles', accent: true },
+        { text: 'we run corporate work in' },
+      ],
+      intro:
+        'From a chauffeur-driven car for one director to a 55-seat coach for a full conference group. Every journey goes out with one of our professional drivers.',
+      includedHeading: 'Every corporate journey includes:',
+      included: [
+        { icon: Armchair,   text: 'Individual reclining seats' },
+        { icon: Wifi,       text: 'Onboard WiFi' },
+        { icon: Usb,        text: 'USB & 240v charging' },
+        { icon: Snowflake,  text: 'Climate control throughout' },
+        { icon: Volume2,    text: 'PA & entertainment system' },
+        { icon: BadgeCheck, text: 'Professional uniformed drivers' },
+      ],
+      extrasHeading: 'You can also ask for:',
+      extras: [
+        { icon: Toilet, text: 'Onboard WC and refreshment area on the larger coaches' },
+        { icon: Table,  text: 'Seat-back tables for working en route' },
+        { icon: MapPin, text: 'Additional pickups on the way' },
+        { icon: Timer,  text: 'Extended waiting between appointments' },
+        { icon: Bus,    text: 'A second vehicle when one will not hold the group' },
+      ],
+      image:    CORPORATE_FLEET_PHOTO,
+      imageAlt: 'An Everydays Travel vehicle on a corporate booking',
       ctas: [
         { label: 'Get a quote',    href: '/book',  primary: true },
         { label: 'View our fleet', href: '/fleet' },

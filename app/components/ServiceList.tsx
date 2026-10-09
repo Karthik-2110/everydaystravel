@@ -11,6 +11,18 @@ export const AIRPORT_TRANSFER_IMAGES = [
   'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_1200,c_limit/v1783784630/20260211_134438550_iOS_okfp39.jpg',
 ]
 
+/**
+ * Corporate work photographed as it actually goes out: the 53-seater that
+ * carries a conference group, the 49-seater, and the S-Class that carries one
+ * director. Same reason the airport service has its own photos rather than the
+ * stand-in — a placeholder argues we have nothing to show.
+ */
+export const CORPORATE_IMAGES = [
+  'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_1600,c_limit/v1783787451/IMG_0419_kkqxkq.jpg',
+  'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_1600,c_limit/v1783783910/IMG_8052_aixyc2.jpg',
+  'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_1600,c_limit/v1783787266/837f9f74-eb75-4beb-9553-2424ced64ace_rhx7vy.jpg',
+]
+
 export const SERVICES: Vehicle[] = [
   {
     slug:        'airport-transfers',
@@ -28,12 +40,13 @@ export const SERVICES: Vehicle[] = [
     slug:        'corporate',
     name:        'Corporate Travel',
     badge:       'Corporate',
-    image:       PH,
+    image:       CORPORATE_IMAGES[0],
+    images:      CORPORATE_IMAGES,
     seats:       'Executive business transport',
     luggage:     'Luggage assistance included',
     description: 'Executive transport for business: punctual, professional and properly presented, from single-passenger chauffeur cars to full-team coaches.',
     features:    ['Punctual, professional service', 'Uniformed chauffeurs', 'Onboard WiFi', 'Privacy glass', 'Account management available', 'Flexible scheduling'],
-    idealFor:    ['Corporate Events', 'Business Roadshows', 'Airport Transfers'],
+    idealFor:    ['Corporate Events', 'Conferences & Exhibitions', 'Staff Shuttles', 'Away Days', 'Business Roadshows', 'Airport Transfers'],
   },
   {
     slug:        'private-hire',

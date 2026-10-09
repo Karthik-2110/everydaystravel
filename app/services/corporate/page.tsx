@@ -2,8 +2,8 @@ import ServiceDetail from '../../components/ServiceDetail'
 import { createPageMetadata } from '../../lib/seo'
 
 export const metadata = createPageMetadata({
-  title: 'Corporate Events Transport London',
-  description: 'Professional corporate events transport and chauffeur-driven business travel across London, Surrey and the UK.',
+  title: 'Executive & Corporate Coach Hire London',
+  description: 'Executive and corporate coach hire across London and the UK: conference transport, staff shuttles, roadshows and client transfers, from chauffeur cars to 55-seat coaches.',
   path: '/services/corporate',
 })
 

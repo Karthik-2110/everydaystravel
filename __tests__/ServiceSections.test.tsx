@@ -35,9 +35,21 @@ vi.mock('motion/react', () => ({
  * the page it rendered before, not an empty heading.
  */
 
+/**
+ * A real service whose copy nobody has written yet, which is what the
+ * renders-nothing tests need. When this one lands, point them at another
+ * unwritten slug; the assertion below says so rather than failing obscurely.
+ */
+const UNWRITTEN = 'private-hire'
+
 describe('ServiceSections', () => {
   it('renders nothing for a service with no content written yet', () => {
-    const { container } = render(<ServiceSections slug="corporate" />)
+    expect(
+      SERVICE_CONTENT[UNWRITTEN],
+      `"${UNWRITTEN}" has copy now — point this test at a service that has none`,
+    ).toBeUndefined()
+
+    const { container } = render(<ServiceSections slug={UNWRITTEN} />)
     expect(container).toBeEmptyDOMElement()
   })
 
@@ -57,7 +69,7 @@ describe('ServiceSections', () => {
 
   describe('ServiceSpecBlocks', () => {
     it('renders nothing for a service with no content written yet', () => {
-      const { container } = render(<ServiceSpecBlocks slug="corporate" />)
+      const { container } = render(<ServiceSpecBlocks slug={UNWRITTEN} />)
       expect(container).toBeEmptyDOMElement()
     })
 
@@ -181,6 +193,100 @@ describe('ServiceSections', () => {
     it('gives the photo real alt text rather than leaving it decorative', () => {
       render(<ServiceSections slug="airport-transfers" />)
       expect(screen.getByAltText(/everydays travel vehicle on an airport transfer/i)).toBeInTheDocument()
+    })
+  })
+
+  /**
+   * Corporate renders through the same components as the transfers page, so
+   * these assert the shape rather than the prose: the same bands, the same
+   * counts, the same one-primary-action rule. A band that went missing or a
+   * list that lost its pair would be a page that stops reading like the other.
+   */
+  describe('corporate', () => {
+    it('leaves the opening argument to the spec column', () => {
+      render(<ServiceSections slug="corporate" />)
+      expect(
+        screen.queryByRole('heading', { name: /^why choose everydays travel$/i }),
+      ).not.toBeInTheDocument()
+    })
+
+    it('opens the spec column with the same six-point argument', () => {
+      render(<ServiceSpecBlocks slug="corporate" />)
+      expect(
+        screen.getByRole('heading', { level: 2, name: /^Why choose Everydays Travel$/ }),
+      ).toBeInTheDocument()
+      expect(screen.getAllByRole('listitem')).toHaveLength(6)
+    })
+
+    it('puts the kinds of business journey in an accordion, first row open', () => {
+      const { container } = render(<ServiceSections slug="corporate" />)
+      const rows = container.querySelectorAll('details[name="transfer-kinds"]')
+      expect(rows.length).toBe(9)
+
+      expect(rows[0]).toHaveAttribute('open')
+      expect([...rows].filter((r) => r.hasAttribute('open'))).toHaveLength(1)
+
+      expect(screen.getByText('Conferences and exhibitions')).toBeInTheDocument()
+      expect(screen.getByText('Staff shuttles')).toBeInTheDocument()
+    })
+
+    it('keeps every row readable without JavaScript', () => {
+      const { container } = render(<ServiceSections slug="corporate" />)
+      expect(screen.getByText(/a standing run between the office, the station and the site/i)).toBeInTheDocument()
+      expect(container.querySelectorAll('details > summary').length).toBe(9)
+    })
+
+    it('names the venues it serves, which the spec above never does', () => {
+      render(<ServiceSections slug="corporate" />)
+      expect(screen.getByText(/ExCeL, Olympia and the QEII Centre/)).toBeInTheDocument()
+    })
+
+    it('shows a photo carousel with working controls', () => {
+      render(<ServiceSections slug="corporate" />)
+      expect(screen.getByRole('button', { name: /next photo/i })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /previous photo/i })).toBeInTheDocument()
+
+      const dots = screen.getAllByRole('button', { name: /^show photo/i })
+      expect(dots).toHaveLength(4)
+      expect(dots[0]).toHaveAttribute('aria-current', 'true')
+    })
+
+    it('advances the carousel when asked', async () => {
+      const user = userEvent.setup()
+      render(<ServiceSections slug="corporate" />)
+
+      expect(screen.getByAltText(/^an everydays travel coach on corporate work$/i)).toBeInTheDocument()
+      await user.click(screen.getByRole('button', { name: /next photo/i }))
+      expect(screen.getByAltText(/mercedes-benz s-class/i)).toBeInTheDocument()
+    })
+
+    it('gives every vehicle-list item an icon', () => {
+      const { included, extras } = SERVICE_CONTENT['corporate'].fleet!
+      for (const { icon, text } of [...included, ...extras]) {
+        expect(icon, `"${text}" has no icon`).toBeTruthy()
+      }
+    })
+
+    it('separates what is included from what you ask for', () => {
+      render(<ServiceSections slug="corporate" />)
+      expect(screen.getByRole('heading', { name: /every corporate journey includes/i })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: /you can also ask for/i })).toBeInTheDocument()
+    })
+
+    it('offers a quote and the fleet, with exactly one primary action', () => {
+      render(<ServiceSections slug="corporate" />)
+      expect(screen.getByRole('link', { name: /get a quote/i })).toHaveAttribute('href', '/book')
+      expect(screen.getByRole('link', { name: /view our fleet/i })).toHaveAttribute('href', '/fleet')
+
+      const { ctas } = SERVICE_CONTENT['corporate'].fleet!
+      expect(ctas.filter((c) => c.primary)).toHaveLength(1)
+    })
+
+    it('gives the photo real alt text rather than leaving it decorative', () => {
+      // Distinct from the carousel's opening slide: two images announcing the
+      // same words is what a screen reader hears as one picture twice.
+      render(<ServiceSections slug="corporate" />)
+      expect(screen.getByAltText(/everydays travel vehicle on a corporate booking/i)).toBeInTheDocument()
     })
   })
 })
