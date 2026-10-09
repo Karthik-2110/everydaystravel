@@ -20,6 +20,9 @@ import { serviceSchema } from '../lib/seo'
 
 const STARS_IMG = 'https://res.cloudinary.com/dckyndryf/image/upload/v1780237231/stars-5_w1ckxp.svg'
 
+/** The score and its source are one fact, so they are set the same. */
+const RATING_TEXT = 'text-white text-[17px] font-semibold leading-none'
+
 // ── Feature icon mapping ──────────────────────────────────────────────────────
 
 function featureIcon(text: string): LucideIcon {
@@ -137,7 +140,6 @@ interface VehicleDetailProps {
   category:      string
   categoryLabel: string
   otherVehicles: Vehicle[]
-  popular?:      boolean
   hrefBase?:         string   // base path for breadcrumb & explore links
   exploreHeading?:   string
   cardCta?:          string
@@ -157,7 +159,7 @@ interface VehicleDetailProps {
 }
 
 export default function VehicleDetail({
-  vehicle, category, categoryLabel, otherVehicles, popular = true,
+  vehicle, category, categoryLabel, otherVehicles,
   hrefBase, exploreHeading = 'Explore other vehicles', cardCta = 'View vehicle',
   preselectVehicle = true, extraSections, specSections,
 }: VehicleDetailProps) {
@@ -196,32 +198,41 @@ export default function VehicleDetail({
             {/* 1. Interactive gallery */}
             <VehicleImageGallery images={galleryImages} vehicleName={vehicle.name} />
 
-            {/* 2. Title + stars + badge */}
-            <div className="mt-7 mb-3">
+            {/* 2. Title, with the rating closing the row.
+                   The rating used to sit under the title in a row of chips,
+                   set smaller and dimmer than the body copy beneath it: the
+                   one piece of third-party proof on the page, styled as the
+                   least important thing on it. The chips went because neither
+                   earned its place — "Most Popular" was on every vehicle, and
+                   the badge repeated the heading beside it.
+
+                   Below `sm` the row wraps and the rating drops under the
+                   title, because at clamp 2rem the heading has the width. */}
+            <div
+              data-title-row
+              className="mt-7 mb-3 flex flex-wrap items-end justify-between gap-x-6 gap-y-3"
+            >
               <h1
-                className="text-white leading-[0.92] tracking-[-0.02em] mb-4"
+                className="text-white leading-[0.92] tracking-[-0.02em]"
                 style={{ fontFamily: 'var(--font-display)', fontWeight: 500, fontSize: 'clamp(2rem, 4vw, 3.2rem)' }}
               >
                 {vehicle.name}
               </h1>
-              <div className="flex items-center gap-3 flex-wrap">
-                <img src={STARS_IMG} alt="5 stars" className="h-[18px] w-auto" />
-                <span className="text-white/40 text-[12.5px]" style={{ fontFamily: 'var(--font-ui)' }}>
-                  4.4 · Trustpilot
+
+              {/* One label for the group: the stars, the score and the source
+                  are a single fact, and read as three to a screen reader
+                  otherwise. The image carried alt="5 stars" beside a 4.4. */}
+              <div
+                role="img"
+                aria-label="Rated 4.4 out of 5 on Trustpilot"
+                className="flex items-center gap-2.5 shrink-0"
+              >
+                <img src={STARS_IMG} alt="" aria-hidden className="h-[18px] w-auto" />
+                <span className={RATING_TEXT} style={{ fontFamily: 'var(--font-ui)' }}>
+                  4.4
                 </span>
-                {popular && (
-                  <span
-                    className="px-2.5 py-0.5 bg-[#EBBA6F]/15 text-[#EBBA6F] text-[11px] font-semibold rounded-full border border-[#EBBA6F]/25"
-                    style={{ fontFamily: 'var(--font-ui)' }}
-                  >
-                    Most Popular
-                  </span>
-                )}
-                <span
-                  className="px-2.5 py-0.5 bg-white/[0.06] text-white/50 text-[11px] rounded-full border border-white/10"
-                  style={{ fontFamily: 'var(--font-ui)' }}
-                >
-                  {vehicle.badge}
+                <span className={RATING_TEXT} style={{ fontFamily: 'var(--font-ui)' }}>
+                  Trustpilot
                 </span>
               </div>
             </div>
