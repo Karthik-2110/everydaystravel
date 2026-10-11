@@ -66,10 +66,10 @@ export default function VehicleImageGallery({ images, videos, vehicleName }: Pro
 
       {/* Main hero — no text, clean.
 
-          3:2 rather than 16:9: the cabin stills are 4:3 off the camera, and a
-          16:9 frame cut a quarter of their height away. The thumbnails stay
-          16:9, because a strip of eight is reading as a row of tiles rather
-          than as eight photographs. */}
+          3:2 rather than 16:9 throughout: the cabin stills are 4:3 off the
+          camera, and a 16:9 frame cut a quarter of their height away. The
+          thumbnails take the same ratio, so the strip is the hero in
+          miniature rather than a differently-cropped set of the same shots. */}
       <div
         className="relative w-full rounded-2xl overflow-hidden"
         style={{ aspectRatio: '3/2', backgroundColor: FADE_GROUND }}
@@ -132,7 +132,7 @@ export default function VehicleImageGallery({ images, videos, vehicleName }: Pro
                 ? 'border-[#EBBA6F] shadow-[0_0_0_1px_rgba(235,186,111,0.3)]'
                 : 'border-transparent hover:border-white/25 opacity-60 hover:opacity-100',
             ].join(' ')}
-            style={{ aspectRatio: '16/9' }}
+            style={{ aspectRatio: '3/2' }}
           >
             <Image
               src={slide.kind === 'video' ? slide.poster : slide.src}

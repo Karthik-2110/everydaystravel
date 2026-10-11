@@ -32,7 +32,7 @@ function VehicleCard({ vehicle, category }: { vehicle: Vehicle; category?: strin
     <article className="group flex flex-col lg:flex-row bg-[#0D1221] rounded-2xl border border-white/[0.07] overflow-hidden transition-all duration-300 hover:border-[#EBBA6F]/40 hover:shadow-[0_0_0_1px_rgba(235,186,111,0.12),0_8px_40px_rgba(235,186,111,0.07)]">
 
       {/* Image */}
-      <div className="relative w-full lg:w-[400px] lg:shrink-0 aspect-video lg:aspect-auto overflow-hidden">
+      <div className="relative w-full lg:w-[400px] lg:shrink-0 aspect-[3/2] lg:aspect-auto overflow-hidden">
         <Image
           src={vehicle.image}
           alt={vehicle.name}
