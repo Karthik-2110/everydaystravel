@@ -1,6 +1,8 @@
 import { redirect } from 'next/navigation'
 import { createPageMetadata } from '../../../lib/seo'
 import VehicleDetail from '../../../components/VehicleDetail'
+import VehicleSections from '../../../components/vehicle/VehicleSections'
+import VehicleSpecBlocks from '../../../components/vehicle/VehicleSpecBlocks'
 import { EXECUTIVE_COACHES } from '../../../components/VehicleList'
 
 export function generateStaticParams() {
@@ -33,6 +35,8 @@ export default async function CoachDetailPage({ params }: { params: Promise<{ sl
       category="executive-coaches"
       categoryLabel="Executive Coaches"
       otherVehicles={others}
+      specSections={<VehicleSpecBlocks slug={slug} />}
+      extraSections={<VehicleSections slug={slug} />}
     />
   )
 }

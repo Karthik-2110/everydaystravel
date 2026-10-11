@@ -35,6 +35,7 @@ export default function ExecutiveCoachesPage() {
       <StatBand stats={STATS} />
       <VehicleList
         vehicles={EXECUTIVE_COACHES}
+        category="executive-coaches"
         heading="Our executive coaches"
         subtext="Full-size coaches with all the amenities your group needs for a comfortable journey, wherever you're headed."
       />

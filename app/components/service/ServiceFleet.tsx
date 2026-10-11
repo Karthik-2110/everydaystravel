@@ -20,7 +20,7 @@ import type { FleetBlock } from '../../data/service-content'
  */
 export default function ServiceFleet({ block }: { block: FleetBlock }) {
   return (
-    <section aria-label="The vehicles we use" className="bg-[#0F1322] border-t border-white/[0.05]">
+    <section aria-label={block.ariaLabel ?? 'The vehicles we use'} className="bg-[#0F1322] border-t border-white/[0.05]">
       <div className="grid grid-cols-1 lg:grid-cols-2 items-stretch">
 
         {/* Copy.
@@ -92,16 +92,35 @@ export default function ServiceFleet({ block }: { block: FleetBlock }) {
         </div>
 
         {/* Photo — stacked above the copy on a narrow screen, full-bleed beside it on
-            a wide one, meeting the band on a hard edge rather than a fade. */}
+            a wide one, meeting the band on a hard edge rather than a fade.
+
+            A clip takes the same cell when the block has one. It loops with no
+            controls, because it is the photograph moving rather than something
+            to watch: muted is what lets it autoplay unprompted, and `image` is
+            the poster underneath it either way. */}
         <div className="relative min-h-[260px] sm:min-h-[360px] lg:min-h-full order-first lg:order-last">
-          <Image
-            src={block.image}
-            alt={block.imageAlt}
-            fill
-            unoptimized
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-cover object-center"
-          />
+          {block.video ? (
+            <video
+              src={block.video.src}
+              poster={block.image}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-label={block.imageAlt}
+              className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
+            />
+          ) : (
+            <Image
+              src={block.image}
+              alt={block.imageAlt}
+              fill
+              unoptimized
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover object-center"
+            />
+          )}
         </div>
 
       </div>

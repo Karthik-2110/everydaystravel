@@ -7,12 +7,19 @@
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
+/** A gallery clip. Cloudinary holds the master; `src` is the web-safe encode. */
+export interface VehicleVideo {
+  src:    string  // transcoded mp4 — the stored .mov masters are HEVC, which Chrome will not play
+  poster: string  // first frame, shown before playback and as the thumbnail
+}
+
 export interface Vehicle {
   slug:        string
   name:        string
   badge:       string
   image:       string
-  images?:     string[]  // gallery photos — falls back to `image` when absent
+  images?:     string[]        // gallery photos — falls back to `image` when absent
+  videos?:     VehicleVideo[]  // gallery clips, shown after the photos
   seats:       string
   luggage:     string
   description: string
@@ -30,6 +37,13 @@ export const PH = 'https://res.cloudinary.com/dckyndryf/image/upload/f_auto,q_au
 const cdn = (path: string) =>
   `https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_1600,c_limit/${path}`
 
+// `path` here omits the extension: Cloudinary transcodes the uploaded master to
+// whatever we ask for, and the poster is just frame zero of the same asset.
+const clip = (path: string): VehicleVideo => ({
+  src:    `https://res.cloudinary.com/dp4cbs8c2/video/upload/f_auto:video,q_auto,w_1600/${path}.mp4`,
+  poster: `https://res.cloudinary.com/dp4cbs8c2/video/upload/so_0,f_auto,q_auto,w_1600,c_limit/${path}.jpg`,
+})
+
 const S_CLASS_IMAGES = [
   cdn('v1783787266/837f9f74-eb75-4beb-9553-2424ced64ace_rhx7vy.jpg'),
   cdn('v1783787261/6d2f6a06-f8a1-4dfd-a346-d2bdf3b6b048_ouhnoc.jpg'),
@@ -38,10 +52,25 @@ const S_CLASS_IMAGES = [
   cdn('v1783787240/19ed3b38-0619-41ed-8fe7-d098ba14b037_rbhzvy.jpg'),
 ]
 
-const V_CLASS_IMAGES = [
-  cdn('v1783787244/2d6095da-5ce2-48b0-a84f-5453ad8d3db0_pmmmbz.jpg'),
-  cdn('v1783787235/18a2fa3f-a225-4225-b2ac-85490b7e2751_qly7qs.jpg'),
+// The exterior three-quarter leads, then the 2026 cabin shoot. Exported
+// because `vehicle-content.ts` draws its band photos from the same strip.
+export const V_CLASS_IMAGES = [
   cdn('v1783785281/0fd86aa5-d02a-4357-aa60-b4b79cb2c2ba_oitvek.jpg'),
+  cdn('v1791729156/IMG_8760_yudvs3.jpg'),
+  cdn('v1791729153/IMG_8759_zdvdhq.jpg'),
+  cdn('v1791729147/IMG_8783_bidfph.jpg'),
+  cdn('v1791729149/IMG_8782_mk7qco.jpg'),
+]
+
+/**
+ * The walkaround, in the order it plays: around the outside, up to the front,
+ * then inside. The gallery runs these three as a sequence before anybody
+ * touches a thumbnail, so the order is the edit.
+ */
+export const V_CLASS_VIDEOS = [
+  clip('v1791730474/IMG_8750_pobgt3'),
+  clip('v1791729132/IMG_8749_bcpa4n'),
+  clip('v1791729138/IMG_8763_ku4yvi'),
 ]
 
 const TURAS_35_IMAGE = cdn('v1783787232/0712a7cf-b45c-45e5-86cf-71de3a21ab55_zrwpei.jpg')
@@ -119,11 +148,12 @@ export const CHAUFFEUR_CARS: Vehicle[] = [
     badge:       'Executive MPV',
     image:       V_CLASS_IMAGES[0],
     images:      V_CLASS_IMAGES,
+    videos:      V_CLASS_VIDEOS,
     seats:       '1–6 Passengers',
     luggage:     '6 large + 4 small cases',
     description: 'A spacious MPV ideal for small groups or families, with luxurious flexible seating and ample room for luggage and refined travel.',
-    features:    ['Luxury black leather reclining seats', 'Privacy audio & rear entertainment', 'Bluetooth audio & rear climate control', 'Dark privacy glass', 'Extended legroom', 'USB charging for all seats'],
-    idealFor:    ['Airport Transfers', 'Events', 'Family Travel'],
+    features:    ['Individual reclining leather seats', 'Fold-away tables between the seats', 'Rear climate control', 'Bluetooth audio & rear entertainment', 'Dark privacy glass', 'Extended legroom', 'USB charging for all seats', 'Sliding side doors with a low step in'],
+    idealFor:    ['Airport Transfers', 'Corporate Travel', 'Events', 'Family Travel'],
   },
 ]
 
@@ -135,11 +165,12 @@ export const LUXURY_MINIBUSES: Vehicle[] = [
     badge:       'MPV',
     image:       V_CLASS_IMAGES[0],
     images:      V_CLASS_IMAGES,
+    videos:      V_CLASS_VIDEOS,
     seats:       'Up to 7 Passengers',
     luggage:     '5 large + 4 small cases',
     description: 'The V-Class MPV carries a small group in chauffeur-car comfort: flexible leather seating, room for luggage and an easy step-in for every passenger.',
-    features:    ['Luxury black leather reclining seats', 'Rear climate control', 'Bluetooth audio & rear entertainment', 'Dark privacy glass', 'Extended legroom', 'USB charging for all seats'],
-    idealFor:    ['Airport Transfers', 'Family Travel', 'Corporate Groups'],
+    features:    ['Seven individual reclining seats', 'Fold-away tables between the seats', 'Rear climate control', 'Bluetooth audio & rear entertainment', 'Dark privacy glass', 'Extended legroom', 'USB charging for all seats', 'Rear row lifts out for extra luggage'],
+    idealFor:    ['Airport Transfers', 'Family Travel', 'Corporate Groups', 'Weddings'],
   },
   {
     slug:        '16-seater-minibus',

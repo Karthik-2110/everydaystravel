@@ -27,7 +27,7 @@ import type { SolutionsBlock } from '../../data/service-content'
  */
 export default function ServiceSolutions({ block }: { block: SolutionsBlock }) {
   return (
-    <section aria-label="Kinds of transfer" className="bg-[#0F1322] border-t border-white/[0.05]">
+    <section aria-label={block.ariaLabel ?? 'Kinds of transfer'} className="bg-[#0F1322] border-t border-white/[0.05]">
       <div className="site-container py-16 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-16 items-start">
 

@@ -36,6 +36,7 @@ export default function LuxuryMinibusesPage() {
       <StatBand stats={STATS} />
       <VehicleList
         vehicles={LUXURY_MINIBUSES}
+        category="luxury-minibuses"
         heading="Our luxury minibuses"
         subtext="Spacious, well-equipped vehicles for groups who expect the same premium standard as our chauffeur fleet."
       />

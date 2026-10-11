@@ -18,7 +18,7 @@ const longitude = -0.4137
  * The date the page content last changed, not the date of the last deploy.
  * A lastmod that moves on every build is a freshness signal crawlers discount.
  */
-export const contentUpdated = '2026-09-22'
+export const contentUpdated = '2026-10-11'
 
 type PageMetadataInput = {
   title: string
@@ -248,7 +248,7 @@ export const sitemapEntries = [
   { path: '/terms', priority: 0.3 },
   // Kept out of the sitemap while the commercial figures are unconfirmed.
   ...(HIRE_TERMS_DRAFT ? [] : [{ path: '/conditions-of-hire', priority: 0.5 }]),
-  { path: '/fleet/luxury-minibuses/7-seater-mpv-v-class', priority: 0.7 },
+  { path: '/fleet/luxury-minibuses/7-seater-mpv-v-class', priority: 0.8 },
   { path: '/fleet/luxury-minibuses/16-seater-minibus', priority: 0.8 },
   { path: '/fleet/luxury-minibuses/16-seater-vip-sprinter', priority: 0.8 },
   { path: '/fleet/luxury-minibuses/19-seater-minibus', priority: 0.7 },

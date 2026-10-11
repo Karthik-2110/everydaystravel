@@ -20,6 +20,8 @@ vi.mock('motion/react', () => ({
     ),
   },
   AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  // The vehicle picker's gallery asks whether to animate before it crossfades.
+  useReducedMotion: () => false,
 }))
 
 // Places autocomplete talks to Google — swap for a plain text input

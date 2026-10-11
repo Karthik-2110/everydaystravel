@@ -1,6 +1,8 @@
 import { redirect } from 'next/navigation'
 import { createPageMetadata } from '../../../lib/seo'
 import VehicleDetail from '../../../components/VehicleDetail'
+import VehicleSections from '../../../components/vehicle/VehicleSections'
+import VehicleSpecBlocks from '../../../components/vehicle/VehicleSpecBlocks'
 import { LUXURY_MINIBUSES } from '../../../components/VehicleList'
 
 export function generateStaticParams() {
@@ -33,6 +35,8 @@ export default async function MinibusDetailPage({ params }: { params: Promise<{ 
       category="luxury-minibuses"
       categoryLabel="Luxury Minibuses"
       otherVehicles={others}
+      specSections={<VehicleSpecBlocks slug={slug} />}
+      extraSections={<VehicleSections slug={slug} />}
     />
   )
 }

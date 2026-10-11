@@ -3,10 +3,10 @@ import Link from 'next/link'
 import type { ReactNode } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import {
-  ArrowUpRight,
+  ArrowUpRight, ArrowRight,
   Armchair, EyeOff, Wind, Flame, Zap, Droplets,
   Wifi, Volume2, Lightbulb, DoorOpen, Maximize2,
-  Briefcase, GlassWater, MonitorPlay, Speaker,
+  Briefcase, GlassWater, MonitorPlay, Speaker, Table,
   Accessibility, ShieldCheck, UserCheck, Star,
   Plane, Heart, Car, CalendarDays, Users, GraduationCap,
   Trophy, Globe, Compass, Building2, Clock, Ship,
@@ -35,11 +35,15 @@ function featureIcon(text: string): LucideIcon {
   if (f.includes('ribbon') || f.includes('decorat') || f.includes('red carpet') || f.includes('bridal')) return Heart
   if (f.includes('itinerar') || f.includes('route') || f.includes('door-to-door') || f.includes('europe')) return Compass
   if (f.includes('kit') || f.includes('equipment'))                                    return Briefcase
+  // Charging before seating: "USB charging for all seats" is about the socket,
+  // and matching `seat` first put a second sofa icon beside the first.
+  if (f.includes('usb') || f.includes('charg') || f.includes('12v') || f.includes('240v')) return Zap
+  // Word boundary, or "comfortable" and "unforgettable" claim the table icon.
+  if (/\btables?\b/.test(f))                                                  return Table
   if (f.includes('leather') || f.includes('seat') || f.includes('reclining')) return Armchair
   if (f.includes('privacy glass') || f.includes('tinted'))                     return EyeOff
   if (f.includes('climate') || f.includes('air con') || f.includes('temperature')) return Wind
   if (f.includes('heat'))                                                       return Flame
-  if (f.includes('usb') || f.includes('charg') || f.includes('12v') || f.includes('240v')) return Zap
   if (f.includes('water') || f.includes('bottle'))                             return Droplets
   if (f.includes('champagne') || f.includes('drink') || f.includes('refreshment')) return GlassWater
   if (f.includes('wifi') || f.includes('wi-fi') || f.includes('internet'))    return Wifi
@@ -196,7 +200,7 @@ export default function VehicleDetail({
           <div className="flex flex-col">
 
             {/* 1. Interactive gallery */}
-            <VehicleImageGallery images={galleryImages} vehicleName={vehicle.name} />
+            <VehicleImageGallery images={galleryImages} videos={vehicle.videos} vehicleName={vehicle.name} />
 
             {/* 2. Title, with the rating closing the row.
                    The rating used to sit under the title in a row of chips,
@@ -334,12 +338,21 @@ export default function VehicleDetail({
               >
                 {exploreHeading}
               </h2>
+              {/* The one way out of this page other than the cards below it,
+                  so it is set as the filled pill the rest of the site uses for
+                  a primary action rather than as dimmed small print. */}
               <Link
                 href={base}
-                className="text-[#EBBA6F]/60 text-[13px] hover:text-[#EBBA6F] transition-colors duration-150 mt-2"
+                className="group/all mt-5 inline-flex items-center gap-2 rounded-full bg-[#EBBA6F] px-7 py-3 text-[14px] font-semibold text-[#1A1205] transition-colors duration-150 hover:bg-[#DDA85E] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EBBA6F]"
                 style={{ fontFamily: 'var(--font-ui)' }}
               >
-                View all {categoryLabel.toLowerCase()} →
+                View all {categoryLabel.toLowerCase()}
+                <ArrowRight
+                  size={14}
+                  strokeWidth={2.5}
+                  aria-hidden
+                  className="transition-transform duration-200 group-hover/all:translate-x-0.5"
+                />
               </Link>
             </div>
 

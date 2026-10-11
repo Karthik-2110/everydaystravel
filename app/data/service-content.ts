@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { AIRPORT_TRANSFER_IMAGES, CORPORATE_IMAGES } from '../components/ServiceList'
+import type { VehicleVideo } from './fleet'
 
 /**
  * The persuasion copy that sits between a service page's spec and its
@@ -69,6 +70,8 @@ export interface CarouselSlide {
 }
 
 export interface SolutionsBlock {
+  /** Names the band for a screen reader. Defaults to the transfers wording. */
+  ariaLabel?: string
   heading:   HeadingPart[]
   /** A standfirst under the heading. Carries the detail worth reading first. */
   intro:     string
@@ -85,6 +88,8 @@ export interface CallToAction {
 }
 
 export interface FleetBlock {
+  /** Names the band for a screen reader. Defaults to the transfers wording. */
+  ariaLabel?:      string
   heading:         HeadingPart[]
   intro:           string
   includedHeading: string
@@ -93,6 +98,12 @@ export interface FleetBlock {
   extras:          IconPoint[]
   image:           string
   imageAlt:        string
+  /**
+   * A clip in the photo's place. `image` stays required and becomes its poster
+   * frame, so the band still has a still for the moment before it decodes and
+   * for anyone whose browser will not play it.
+   */
+  video?:          VehicleVideo
   ctas:            CallToAction[]
 }
 
