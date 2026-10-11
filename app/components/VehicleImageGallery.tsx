@@ -64,10 +64,15 @@ export default function VehicleImageGallery({ images, videos, vehicleName }: Pro
   return (
     <div className="flex flex-col gap-3">
 
-      {/* Main hero — no text, clean */}
+      {/* Main hero — no text, clean.
+
+          3:2 rather than 16:9: the cabin stills are 4:3 off the camera, and a
+          16:9 frame cut a quarter of their height away. The thumbnails stay
+          16:9, because a strip of eight is reading as a row of tiles rather
+          than as eight photographs. */}
       <div
         className="relative w-full rounded-2xl overflow-hidden"
-        style={{ aspectRatio: '16/9', backgroundColor: FADE_GROUND }}
+        style={{ aspectRatio: '3/2', backgroundColor: FADE_GROUND }}
       >
         <AnimatePresence mode="wait">
           <motion.div
