@@ -152,7 +152,7 @@ export const CHAUFFEUR_CARS: Vehicle[] = [
     seats:       '1–6 Passengers',
     luggage:     '6 large + 4 small cases',
     description: 'A spacious MPV ideal for small groups or families, with luxurious flexible seating and ample room for luggage and refined travel.',
-    features:    ['Individual reclining leather seats', 'Fold-away tables between the seats', 'Rear climate control', 'Bluetooth audio & rear entertainment', 'Dark privacy glass', 'Extended legroom', 'USB charging for all seats', 'Sliding side doors with a low step in'],
+    features:    ['Individual reclining leather seats', 'Fold-away tables between the seats', 'Rear climate control', 'Bluetooth audio throughout', 'Dark privacy glass', 'Extended legroom', 'USB charging for all seats', 'Sliding side doors with a low step in'],
     idealFor:    ['Airport Transfers', 'Corporate Travel', 'Events', 'Family Travel'],
   },
 ]
@@ -169,7 +169,7 @@ export const LUXURY_MINIBUSES: Vehicle[] = [
     seats:       'Up to 7 Passengers',
     luggage:     '5 large + 4 small cases',
     description: 'The V-Class MPV carries a small group in chauffeur-car comfort: flexible leather seating, room for luggage and an easy step-in for every passenger.',
-    features:    ['Seven individual reclining seats', 'Fold-away tables between the seats', 'Rear climate control', 'Bluetooth audio & rear entertainment', 'Dark privacy glass', 'Extended legroom', 'USB charging for all seats', 'Rear row lifts out for extra luggage'],
+    features:    ['Seven individual reclining seats', 'Fold-away tables between the seats', 'Rear climate control', 'Bluetooth audio throughout', 'Dark privacy glass', 'Extended legroom', 'USB charging for all seats', 'Rear row lifts out for extra luggage'],
     idealFor:    ['Airport Transfers', 'Family Travel', 'Corporate Groups', 'Weddings'],
   },
   {

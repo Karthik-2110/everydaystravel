@@ -1,7 +1,7 @@
 import {
   Users, Armchair, Table, DoorOpen, EyeOff, BadgePoundSterling,
   Luggage, Baby, Clock, UserCheck, BadgeCheck, MapPin, Timer, Repeat,
-  Bus, Snowflake, Usb, Volume2, MonitorPlay, Maximize2, Car,
+  Bus, Snowflake, Usb, Volume2, Maximize2, Car,
 } from 'lucide-react'
 import type { ServiceContent } from './service-content'
 import { V_CLASS_IMAGES, V_CLASS_VIDEOS } from './fleet'
@@ -248,7 +248,7 @@ export const VEHICLE_CONTENT: Record<string, VehicleContent> = {
       extras: [
         { icon: Baby,       text: 'Child seats and boosters' },
         { icon: Luggage,    text: 'A rear row removed for sports kit or golf clubs' },
-        { icon: MonitorPlay, text: 'Rear entertainment on the longer trips' },
+        { icon: Repeat,     text: 'The return leg booked at the same time' },
         { icon: MapPin,     text: 'Several pickups on the way out or home' },
         { icon: Bus,        text: 'The 16-seater instead, when seven will not hold the party' },
       ],
