@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import FloatingContactBar from "./components/FloatingContactBar";
-import CookieConsent from "./components/CookieConsent";
-import Analytics from "./components/Analytics";
+import MarketingChrome from "./components/MarketingChrome";
 import { businessSchema, siteUrl, webSiteSchema } from './lib/seo';
 
 // Inter is the whole typographic system: --font-sans feeds --font-ui,
@@ -72,9 +70,7 @@ export default function RootLayout({
           }}
         />
         {children}
-        <FloatingContactBar />
-        <CookieConsent />
-        <Analytics />
+        <MarketingChrome />
       </body>
     </html>
   );

@@ -40,6 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Local-only CRM records and encrypted Google tokens
+/.crm-local/
+
 # large media — host via CDN (use Cloudinary instead)
 public/videos/
 public/images/*.JPG
