@@ -15,6 +15,7 @@ import {
   type Mail,
 } from "./model";
 
+import { assertNoExternalUpdate, type ExternalOperation } from "./operations";
 export type SendAttempt = {
   fingerprint: string;
   status: "pending" | "sent" | "unknown";
@@ -29,6 +30,17 @@ export type Workspace = {
   vehicles: VehicleUnit[];
   calendarMonths?: Record<string, CalendarItem[]>;
   sendAttempts?: Record<string, SendAttempt>;
+  operations?: Record<string, ExternalOperation>;
+  importFingerprint?: string;
+  connectionGeneration?: string;
+  cacheGeneration?: string;
+};
+import { hostedStorage } from "./firebase-admin";
+import { firestoreBackend } from "./firestore-store";
+
+export type WorkspaceBackend = {
+  read: () => Promise<Workspace>;
+  mutate: <T>(fn: (state: Workspace) => T | Promise<T>) => Promise<T>;
 };
 const queues = new Map<string, Promise<unknown>>();
 export function createRepository(directory: string) {
@@ -70,6 +82,9 @@ export function createRepository(directory: string) {
     queues.set(file, operation);
     return operation;
   }
+  return domainRepository({ read, mutate });
+}
+export function domainRepository({ read, mutate }: WorkspaceBackend) {
   return {
     read,
     mutate,
@@ -89,6 +104,7 @@ export function createRepository(directory: string) {
       }),
     saveBooking: (input: Record<string, unknown>) =>
       mutate((state) => {
+        if (input.id) assertNoExternalUpdate(state, `booking:${input.id}`);
         const previous = input.id
           ? state.bookings.find((b) => b.id === input.id)
           : undefined;
@@ -106,6 +122,7 @@ export function createRepository(directory: string) {
         for (const leadId of new Set(
           [booking.leadId, previous?.leadId].filter(Boolean),
         )) {
+          assertNoExternalUpdate(state, `lead:${leadId}`);
           const index = state.leads.findIndex((l) => l.id === leadId);
           if (index < 0) continue;
           const lead = state.leads[index];
@@ -140,6 +157,13 @@ export function createRepository(directory: string) {
       }),
     importMail: (input: Record<string, unknown>) =>
       mutate((state) => {
+        if (
+          state.connectionGeneration !== undefined &&
+          state.cacheGeneration !== state.connectionGeneration
+        )
+          throw new Error(
+            "Google connection changed. Sync the inbox before importing.",
+          );
         const mail = state.messages.find((m) => m.id === input.sourceMailId);
         if (!mail)
           throw new Error("Source email not found. Sync Gmail and try again.");
@@ -152,6 +176,7 @@ export function createRepository(directory: string) {
           : undefined;
         if (input.targetLeadId && !target)
           throw new Error("Target enquiry not found");
+        if (target) assertNoExternalUpdate(state, `lead:${target.id}`);
         const lead = target
           ? updateLead(target, {
               note: `Email linked: ${mail.subject}\n${mail.body.slice(0, 5000)}`,
@@ -177,6 +202,7 @@ export function createRepository(directory: string) {
       }),
     edit: (id: string, input: Record<string, unknown>) =>
       mutate((state) => {
+        assertNoExternalUpdate(state, `lead:${id}`);
         const index = state.leads.findIndex((l) => l.id === id);
         if (index < 0) throw new Error("Enquiry not found");
         if (input.revision !== state.leads[index].revision)
@@ -188,4 +214,13 @@ export function createRepository(directory: string) {
   };
 }
 export const localDirectory = join(process.cwd(), ".crm-local");
-export const repository = createRepository(localDirectory);
+const localRepository = createRepository(localDirectory);
+const sharedRepository = domainRepository(firestoreBackend());
+export const repository = new Proxy(localRepository, {
+  get(_target, key) {
+    return Reflect.get(
+      hostedStorage() ? sharedRepository : localRepository,
+      key,
+    );
+  },
+});

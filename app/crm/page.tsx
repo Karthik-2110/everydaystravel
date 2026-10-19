@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import StaffLogin from "./StaffLogin";
+import { currentStaff } from "@/app/lib/crm/auth";
+import {
+  hostedStorage,
+  firebaseConfigured,
+} from "@/app/lib/crm/firebase-admin";
 import CrmWorkspace from "./CrmWorkspace";
 import "./crm.css";
 
@@ -14,20 +20,13 @@ export default async function CrmPage({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const host = (await headers()).get("host") || "";
-  if (
-    process.env.NODE_ENV === "production" ||
-    !/^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/.test(host)
-  ) {
-    return (
-      <main className="crm-unavailable min-h-screen space-y-4 p-12">
-        <h1>CRM workspace</h1>
-        <p>
-          This first version runs locally. Open the development server on your
-          Mac to use it.
-        </p>
-      </main>
-    );
+  if (hostedStorage()) {
+    const staff = await currentStaff();
+    if (!staff) return <StaffLogin configured={firebaseConfigured()} />;
+  } else {
+    const host = (await headers()).get("host") || "";
+    if (!/^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/.test(host))
+      return <StaffLogin configured={false} />;
   }
   const params = await searchParams;
   const initialView = [
@@ -42,6 +41,7 @@ export default async function CrmPage({
     : "pipeline";
   return (
     <CrmWorkspace
+      hosted={hostedStorage()}
       initialView={initialView}
       initialError={typeof params.error === "string" ? params.error : ""}
       initialConnected={params.connected === "1"}

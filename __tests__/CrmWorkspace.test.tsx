@@ -243,3 +243,23 @@ it("refreshes a stale revision while keeping the user’s draft for an explicit 
     title: "My updated trip",
   });
 });
+it("hides an open customer draft when the hosted session expires", async () => {
+  const fetchMock = vi
+    .fn()
+    .mockResolvedValueOnce({ ok: true, status: 200, json: async () => empty })
+    .mockResolvedValue({
+      ok: false,
+      status: 401,
+      json: async () => ({ error: "Session expired" }),
+    });
+  vi.stubGlobal("fetch", fetchMock);
+  render(<CrmWorkspace hosted />);
+  await screen.findByText("Your next booking starts here.");
+  fireEvent.click(screen.getByRole("button", { name: /new enquiry/i }));
+  fireEvent.change(screen.getByLabelText("Customer name"), {
+    target: { value: "Private draft" },
+  });
+  fireEvent(window, new Event("focus"));
+  await screen.findByRole("heading", { name: "Sign in to the CRM" });
+  expect(screen.queryByDisplayValue("Private draft")).not.toBeInTheDocument();
+});

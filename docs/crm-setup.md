@@ -1,4 +1,8 @@
-# Everydays Travel CRM, local milestone
+# CRM setup
+
+For hosted sign-in and shared storage, follow [Production CRM setup](crm-production.md). The instructions below describe localhost development.
+
+## Everydays Travel CRM, local milestone
 
 The interface uses the official shadcn/ui `dashboard-01` structure. Sidebar, header, cards, tables, tabs, buttons, inputs, native selects, field groups, sheets, scroll areas, badges, alerts, empty states and loading skeletons use shadcn components. `app/crm/crm.css` contains only scoped light-theme tokens; the public site's theme is unchanged. `/dashboard` redirects to `/crm`.
 
@@ -43,7 +47,7 @@ Permissions: OpenID/email identity, `gmail.readonly`, `gmail.send`, `calendar.ev
 - The follow-ups screen shows upcoming primary-calendar events. On an enquiry, **Add follow-up to Calendar** creates a 30-minute event at its next-action time, with no attendees and no invitations. Repeating the same action reuses the event ID. Rescheduling an enquiry does not change an existing Google event automatically; manage that event in Calendar.
 - Disconnect revokes the Google grant and clears locally cached messages/events. Manually created CRM enquiries remain.
 
-Before deployment, replace local storage with the agreed Firestore repository and enforce verified staff sessions on all CRM routes. Provision London data residency, retention and access controls from the core-engine design before collecting shared production data.
+Hosted staff sessions and the shared Firestore repository are implemented. Activate them using [Production CRM setup](crm-production.md), including London database provisioning and the documented retention/access settings before collecting shared production data.
 
 ## Calendar and vehicle reservations
 

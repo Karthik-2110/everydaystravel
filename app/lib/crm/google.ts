@@ -1,3 +1,4 @@
+import { AsyncLocalStorage } from "node:async_hooks";
 import {
   createCipheriv,
   createDecipheriv,
@@ -10,6 +11,18 @@ import { localDirectory } from "./store";
 import type { CalendarItem, Mail } from "./model";
 import { londonToUtc, monthDays, shiftDay } from "./calendar";
 
+import { hostedStorage } from "./firebase-admin";
+import {
+  connectionEnvelope,
+  readHostedConnection,
+  writeHostedConnection,
+  clearHostedConnection,
+} from "./connection-store";
+
+export const googleContext = new AsyncLocalStorage<string>();
+class GoogleRequestError extends Error {
+  noExternalWrite = true;
+}
 const SCOPES = [
   "openid",
   "email",
@@ -18,6 +31,7 @@ const SCOPES = [
   "https://www.googleapis.com/auth/calendar.events",
 ];
 type GoogleConnection = {
+  generation?: string;
   accessToken: string;
   refreshToken: string;
   expiresAt: number;
@@ -75,6 +89,7 @@ async function encryptionKey() {
   return readFile(file);
 }
 async function readConnection(): Promise<GoogleConnection | null> {
+  if (hostedStorage()) return readHostedConnection<GoogleConnection>();
   let bytes: Buffer;
   try {
     bytes = await readFile(tokenPath);
@@ -95,7 +110,15 @@ async function readConnection(): Promise<GoogleConnection | null> {
     ]).toString("utf8"),
   );
 }
-async function saveConnection(connection: GoogleConnection) {
+async function saveConnection(
+  connection: GoogleConnection,
+  expected = connection.generation || "",
+  reconnect = false,
+) {
+  if (hostedStorage()) {
+    await writeHostedConnection(connection, expected, reconnect);
+    return;
+  }
   const iv = randomBytes(12);
   const cipher = createCipheriv("aes-256-gcm", await encryptionKey(), iv);
   const encrypted = Buffer.concat([
@@ -120,10 +143,14 @@ async function googleFetch(url: string, init: RequestInit = {}) {
       (detail: { reason?: string }) => detail.reason === "SERVICE_DISABLED",
     );
     if (disabled)
-      throw new Error(
+      throw new GoogleRequestError(
         `${disabled.metadata?.service === "gmail.googleapis.com" ? "Gmail API" : "Google Calendar API"} is disabled in your Google Cloud project. Enable it, wait a few minutes, then sync again.`,
       );
-    throw new Error(
+    const Failure =
+      response.status >= 400 && response.status < 500 && response.status !== 408
+        ? GoogleRequestError
+        : Error;
+    throw new Failure(
       response.status === 401 || response.status === 403
         ? "Google access was denied. Check API permissions or reconnect your account."
         : `Google request failed (${response.status}). Please try again.`,
@@ -135,6 +162,7 @@ export async function finishGoogleConnection(
   code: string,
   verifier: string,
   redirect: string,
+  generation = "",
 ) {
   if (!googleConfigured())
     throw new Error("Google OAuth credentials have not been configured");
@@ -175,13 +203,17 @@ export async function finishGoogleConnection(
     throw new Error(
       "Google did not provide offline access. Reconnect and grant consent.",
     );
-  await saveConnection({
-    accessToken: token.access_token,
-    refreshToken: token.refresh_token,
-    expiresAt: Date.now() + token.expires_in * 1000,
-    email: user.email,
-    scopes,
-  });
+  await saveConnection(
+    {
+      accessToken: token.access_token,
+      refreshToken: token.refresh_token,
+      expiresAt: Date.now() + token.expires_in * 1000,
+      email: user.email,
+      scopes,
+    },
+    generation,
+    true,
+  );
 }
 async function accessToken(): Promise<string> {
   const operation = tokenQueue
@@ -189,7 +221,14 @@ async function accessToken(): Promise<string> {
     .then(async () => {
       const connection = await readConnection();
       if (!connection)
-        throw new Error("Connect your Google account in Integrations first");
+        throw new GoogleRequestError(
+          "Connect your Google account in Integrations first",
+        );
+      const expected = googleContext.getStore();
+      if (expected !== undefined && (connection.generation || "") !== expected)
+        throw new GoogleRequestError(
+          "Google connection changed. Please retry.",
+        );
       if (connection.expiresAt > Date.now() + 60000)
         return connection.accessToken;
       const token = await googleFetch("https://oauth2.googleapis.com/token", {
@@ -219,7 +258,14 @@ export async function connectionStatus() {
   };
 }
 export async function disconnectGoogle() {
-  const connection = await readConnection();
+  const envelope = hostedStorage() ? await connectionEnvelope() : null;
+  const connection = envelope?.secret
+    ? await readHostedConnection<GoogleConnection>()
+    : hostedStorage()
+      ? null
+      : await readConnection();
+  if (envelope && connection && envelope.generation !== connection.generation)
+    throw new Error("Google connection changed. Refresh before disconnecting.");
   // Revoke first; if Google is unavailable retain the connection and show an error.
   if (connection) {
     const result = await fetch("https://oauth2.googleapis.com/revoke", {
@@ -231,9 +277,13 @@ export async function disconnectGoogle() {
     if (!result.ok && result.status !== 400)
       throw new Error("Google could not revoke access. Please try again.");
   }
+  if (hostedStorage()) {
+    return clearHostedConnection(envelope!.generation);
+  }
   await unlink(tokenPath).catch((error) => {
     if (error.code !== "ENOENT") throw error;
   });
+  return "";
 }
 export async function googleApi(path: string, init: RequestInit = {}) {
   if (
@@ -349,4 +399,8 @@ export async function fetchGoogleMonth(month: string): Promise<CalendarItem[]> {
   throw new Error(
     "This calendar month has too many events to load completely. Narrow the connected calendar before retrying.",
   );
+}
+
+export async function googleConnectionGeneration() {
+  return hostedStorage() ? (await connectionEnvelope()).generation : "";
 }

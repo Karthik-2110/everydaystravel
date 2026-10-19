@@ -1,20 +1,25 @@
 import { NextResponse } from "next/server";
 import { randomBytes } from "node:crypto";
-import { assertLocalRequest } from "@/app/lib/crm/security";
+import { authorize } from "@/app/lib/crm/auth";
+import { AccessError } from "@/app/lib/crm/auth-policy";
 import {
   googleAuthorizationUrl,
   googleConfigured,
   pkce,
+  googleConnectionGeneration,
 } from "@/app/lib/crm/google";
 
 export async function POST(request: Request) {
   let url: URL;
+  let uid: string;
   try {
-    url = assertLocalRequest(request);
-  } catch {
+    const access = await authorize(request, true);
+    url = access.url;
+    uid = access.staff.uid;
+  } catch (error) {
     return NextResponse.json(
-      { error: "Local access required" },
-      { status: 403 },
+      { error: error instanceof Error ? error.message : "Sign-in required" },
+      { status: error instanceof AccessError ? error.status : 403 },
     );
   }
   if (!googleConfigured())
@@ -41,7 +46,14 @@ export async function POST(request: Request) {
   );
   response.cookies.set(
     "crm-google-oauth",
-    JSON.stringify({ state, verifier, created: Date.now(), redirect }),
+    JSON.stringify({
+      state,
+      verifier,
+      created: Date.now(),
+      redirect,
+      uid,
+      generation: await googleConnectionGeneration(),
+    }),
     {
       httpOnly: true,
       sameSite: "lax",

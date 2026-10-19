@@ -1,16 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { timingSafeEqual } from "node:crypto";
-import { assertLocalRequest } from "@/app/lib/crm/security";
+import { authorize } from "@/app/lib/crm/auth";
+import { AccessError } from "@/app/lib/crm/auth-policy";
 import { finishGoogleConnection } from "@/app/lib/crm/google";
 
 export async function GET(request: NextRequest) {
   let url: URL;
+  let uid: string;
   try {
-    url = assertLocalRequest(request, true);
-  } catch {
+    const access = await authorize(request, true, true);
+    url = access.url;
+    uid = access.staff.uid;
+  } catch (error) {
     return NextResponse.json(
-      { error: "Local access required" },
-      { status: 403 },
+      { error: error instanceof Error ? error.message : "Sign-in required" },
+      { status: error instanceof AccessError ? error.status : 403 },
     );
   }
   const target = new URL("/crm?view=integrations", url.origin);
@@ -21,6 +25,7 @@ export async function GET(request: NextRequest) {
     const saved = JSON.parse(cookie);
     const state = url.searchParams.get("state") || "";
     if (
+      saved.uid !== uid ||
       typeof saved.state !== "string" ||
       state.length !== saved.state.length ||
       !timingSafeEqual(Buffer.from(state), Buffer.from(saved.state)) ||
@@ -36,7 +41,12 @@ export async function GET(request: NextRequest) {
       );
     const code = url.searchParams.get("code");
     if (!code) throw new Error("Google did not return an authorisation code.");
-    await finishGoogleConnection(code, saved.verifier, saved.redirect);
+    await finishGoogleConnection(
+      code,
+      saved.verifier,
+      saved.redirect,
+      saved.generation,
+    );
     target.searchParams.set("connected", "1");
   } catch (error) {
     target.searchParams.set(

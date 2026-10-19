@@ -26,6 +26,8 @@ export type Snapshot = {
   messages: import("@/app/lib/crm/model").Mail[];
   events: import("@/app/lib/crm/model").CalendarItem[];
   syncedAt: string | null;
+  operations?: { key: string; token: string; status: string; at: string }[];
+  staff?: { email: string; admin: boolean } | null;
   google: { configured: boolean; connected: boolean; email: string | null };
   notice?: string;
 };
