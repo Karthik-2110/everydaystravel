@@ -27,6 +27,7 @@ export type Lead = {
   firstRespondedAt: string | null;
   notes: Note[];
   calendarEventId?: string;
+  sourceWhatsAppIds?: string[];
   sourceMailIds?: string[];
   sourceThreadIds?: string[];
 };

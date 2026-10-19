@@ -213,6 +213,43 @@ export default function Integrations({
           </CardFooter>
         </Card>
       )}
+      <Card className="shadow-none">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <MessageCircle className="size-5" />
+            WhatsApp Business
+          </CardTitle>
+          <CardDescription>
+            Incoming messages become reviewed enquiries in the shared inbox.
+          </CardDescription>
+          <CardAction>
+            <Badge variant="outline">
+              {data.whatsapp?.configured
+                ? "Webhook configured"
+                : "Setup tomorrow"}
+            </Badge>
+          </CardAction>
+        </CardHeader>
+        <CardContent className="space-y-3 text-sm">
+          <p>
+            Messages → Gemini request analysis → review → enquiry → quote →
+            vehicle reservation.
+          </p>
+          <p className="text-muted-foreground">
+            Gemini:{" "}
+            {data.whatsapp?.geminiConfigured
+              ? "configured"
+              : "not configured yet"}
+            . Number onboarding, public message delivery and Firebase activation
+            must be completed before live use.
+          </p>
+          <p className="text-muted-foreground">
+            New incoming texts and captions are supported. Older chat history
+            and attachment contents are not imported or read automatically. No
+            replies or booking changes are sent automatically.
+          </p>
+        </CardContent>
+      </Card>
       {data.staff?.admin && Boolean(data.operations?.length) && (
         <section className="space-y-4 border-t pt-6">
           <h2 className="font-semibold">Review unfinished Calendar updates</h2>
@@ -290,11 +327,6 @@ export default function Integrations({
         <CardContent>
           <ItemGroup>
             {[
-              {
-                icon: MessageCircle,
-                title: "WhatsApp Business",
-                text: "Conversations, quote follow-ups and booking updates.",
-              },
               {
                 icon: MessageCircle,
                 title: "Instagram",

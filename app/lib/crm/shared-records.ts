@@ -13,6 +13,9 @@ export function emptyWorkspace(): Workspace {
     calendarMonths: {},
     sendAttempts: {},
     operations: {},
+    whatsAppMessages: [],
+    whatsAppAnalyses: {},
+    whatsAppArchiveBefore: {},
   };
 }
 const families = {
@@ -21,6 +24,7 @@ const families = {
   events: "event",
   bookings: "booking",
   vehicles: "vehicle",
+  whatsAppMessages: "whatsapp",
 } as const;
 export function encodeWorkspace(state: Workspace): Records {
   const records: Records = {};
@@ -37,7 +41,7 @@ export function encodeWorkspace(state: Workspace): Records {
     };
   };
   for (const [field, kind] of Object.entries(families))
-    for (const value of state[field as keyof typeof families])
+    for (const value of state[field as keyof typeof families] || [])
       add(kind, value.id, value);
   for (const [key, value] of Object.entries(state.calendarMonths || {}))
     add("month", key, value);
@@ -45,6 +49,10 @@ export function encodeWorkspace(state: Workspace): Records {
     add("attempt", key, value);
   for (const [key, value] of Object.entries(state.operations || {}))
     add("operation", key, value);
+  for (const [key, value] of Object.entries(state.whatsAppArchiveBefore || {}))
+    add("waArchive", key, value);
+  for (const [key, value] of Object.entries(state.whatsAppAnalyses || {}))
+    add("waAnalysis", key, value);
   if (state.cacheGeneration !== undefined)
     add("meta", "cacheGeneration", state.cacheGeneration);
   if (state.importFingerprint)
@@ -64,6 +72,12 @@ export function decodeWorkspace(records: Records): Workspace {
     )?.[0];
     if (field)
       (state[field as keyof typeof families] as unknown[]).push(record.value);
+    else if (record.kind === "waArchive")
+      state.whatsAppArchiveBefore![record.key] = String(record.value);
+    else if (record.kind === "waAnalysis")
+      state.whatsAppAnalyses![record.key] = record.value as NonNullable<
+        Workspace["whatsAppAnalyses"]
+      >[string];
     else if (record.kind === "month")
       state.calendarMonths![record.key] = record.value as Workspace["events"];
     else if (record.kind === "attempt")

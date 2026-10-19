@@ -26,7 +26,8 @@ import VehicleManager from "./VehicleManager";
 import { londonDate } from "@/app/lib/crm/calendar";
 import type { LeadDraft } from "./ui";
 import Pipeline from "./Pipeline";
-import Mailbox from "./Mailbox";
+import SharedInbox from "./SharedInbox";
+
 import Followups from "./Followups";
 import Integrations from "./Integrations";
 import LeadDetails from "./LeadDetails";
@@ -358,7 +359,7 @@ export default function CrmWorkspace({
               />
             )}
             {data && view === "inbox" && (
-              <Mailbox
+              <SharedInbox
                 data={data}
                 pending={pending}
                 act={act}
@@ -452,14 +453,19 @@ export default function CrmWorkspace({
               const existing = editing !== "new" && Boolean(editing.id);
               await act({
                 ...input,
+                ...(editing !== "new" && editing.sourceWhatsAppId
+                  ? { sourceWhatsAppId: editing.sourceWhatsAppId }
+                  : {}),
                 ...(editing !== "new" && editing.sourceMailId
                   ? { sourceMailId: editing.sourceMailId }
                   : {}),
                 action: existing
                   ? "update"
-                  : editing !== "new" && editing.sourceMailId
-                    ? "mail-import"
-                    : "create",
+                  : editing !== "new" && editing.sourceWhatsAppId
+                    ? "whatsapp-import"
+                    : editing !== "new" && editing.sourceMailId
+                      ? "mail-import"
+                      : "create",
               });
               setNotice(existing ? "Enquiry updated." : "Enquiry created.");
             }}

@@ -21,7 +21,15 @@ export type SendAttempt = {
   status: "pending" | "sent" | "unknown";
   gmailId?: string;
 };
+import { conversationFingerprint } from "./gemini";
+import {
+  compareWhatsAppMessages,
+  type WhatsAppMessage,
+} from "./whatsapp-model";
 export type Workspace = {
+  whatsAppMessages?: WhatsAppMessage[];
+  whatsAppArchiveBefore?: Record<string, string>;
+  whatsAppAnalyses?: Record<string, import("./gemini").ConversationAnalysis>;
   leads: Lead[];
   messages: Mail[];
   events: CalendarItem[];
@@ -53,6 +61,7 @@ export function createRepository(directory: string) {
         bookings: saved.bookings || [],
         vehicles: saved.vehicles || [],
         calendarMonths: saved.calendarMonths || {},
+        whatsAppMessages: saved.whatsAppMessages || [],
       };
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
@@ -88,6 +97,112 @@ export function domainRepository({ read, mutate }: WorkspaceBackend) {
   return {
     read,
     mutate,
+    receiveWhatsApp: (messages: WhatsAppMessage[]) =>
+      mutate((state) => {
+        state.whatsAppMessages ||= [];
+        const known = new Map(state.whatsAppMessages.map((m) => [m.id, m]));
+        const changed = new Set<string>();
+        for (const message of messages)
+          if (
+            `${message.sentAt}|${message.id}` >
+              (state.whatsAppArchiveBefore?.[message.conversationId] || "") &&
+            !known.has(message.id)
+          ) {
+            known.set(message.id, message);
+            changed.add(message.conversationId);
+          }
+        if (known.size > 2000)
+          throw new Error(
+            "WhatsApp message capacity reached. Archive conversations before continuing.",
+          );
+        state.whatsAppMessages = [...known.values()].sort((a, b) =>
+          compareWhatsAppMessages(b, a),
+        );
+        state.whatsAppAnalyses ||= {};
+        for (const id of changed)
+          state.whatsAppAnalyses[id] = {
+            id,
+            token: crypto.randomUUID(),
+            fingerprint: conversationFingerprint(
+              state.whatsAppMessages.filter((m) => m.conversationId === id),
+            ),
+            status: "queued",
+            updatedAt: new Date().toISOString(),
+            attempts: 0,
+          };
+      }),
+    archiveWhatsApp: (id: string, through: string) =>
+      mutate((state) => {
+        const candidates = (state.whatsAppMessages || [])
+          .filter(
+            (m) => m.conversationId === id && `${m.sentAt}|${m.id}` <= through,
+          )
+          .sort((a, b) => compareWhatsAppMessages(a, b))
+          .slice(0, 200);
+        if (!candidates.length) throw new Error("No messages to archive");
+        const remove = new Set(candidates.map((m) => m.id));
+        state.whatsAppMessages = (state.whatsAppMessages || []).filter(
+          (m) => !remove.has(m.id),
+        );
+        const last = candidates[candidates.length - 1];
+        state.whatsAppArchiveBefore ||= {};
+        state.whatsAppArchiveBefore[id] = `${last.sentAt}|${last.id}`;
+        const remaining = state.whatsAppMessages.filter(
+          (m) => m.conversationId === id,
+        );
+        state.whatsAppAnalyses ||= {};
+        if (!remaining.length) delete state.whatsAppAnalyses[id];
+        else
+          state.whatsAppAnalyses[id] = {
+            id,
+            token: crypto.randomUUID(),
+            fingerprint: conversationFingerprint(remaining),
+            status: "queued",
+            updatedAt: new Date().toISOString(),
+            attempts: 0,
+          };
+        return candidates.length;
+      }),
+    importWhatsApp: (input: Record<string, unknown>) =>
+      mutate((state) => {
+        const message = state.whatsAppMessages?.find(
+          (m) => m.id === input.sourceWhatsAppId,
+        );
+        if (!message) throw new Error("WhatsApp source message not found");
+        if (
+          (process.env.WHATSAPP_PHONE_NUMBER_ID &&
+            message.phoneId !== process.env.WHATSAPP_PHONE_NUMBER_ID) ||
+          (process.env.WHATSAPP_BUSINESS_ACCOUNT_ID &&
+            message.businessId !== process.env.WHATSAPP_BUSINESS_ACCOUNT_ID)
+        )
+          throw new Error("WhatsApp source account changed");
+        const existing = state.leads.find((l) =>
+          l.sourceWhatsAppIds?.includes(message.id),
+        );
+        if (existing) return existing;
+        const target = input.targetLeadId
+          ? state.leads.find((l) => l.id === input.targetLeadId)
+          : undefined;
+        if (input.targetLeadId && !target)
+          throw new Error("Target enquiry not found");
+        if (target) assertNoExternalUpdate(state, `lead:${target.id}`);
+        const note = `WhatsApp request from ${message.name} (${message.phone}):\n${message.body.slice(0, 5000) || "[" + message.type + " message; review in WhatsApp]"}`;
+        const lead = target
+          ? updateLead(target, { note })
+          : createLead({
+              ...input,
+              phone: message.phone,
+              channel: "whatsapp",
+              stage: "new",
+              note,
+            });
+        lead.sourceWhatsAppIds = [
+          ...(lead.sourceWhatsAppIds || []),
+          message.id,
+        ];
+        state.leads = [lead, ...state.leads.filter((l) => l.id !== lead.id)];
+        return lead;
+      }),
     addVehicle: (input: Record<string, unknown>) =>
       mutate((state) => {
         const vehicle = createVehicle(input);

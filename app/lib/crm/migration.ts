@@ -42,6 +42,7 @@ const leadSchema = z
       .array(z.object({ id, body: text, createdAt: date }).strict())
       .max(500),
     calendarEventId: short.optional(),
+    sourceWhatsAppIds: z.array(short).max(500).optional(),
     sourceMailIds: z.array(id).max(500).optional(),
     sourceThreadIds: z.array(id).max(500).optional(),
   })
@@ -118,6 +119,7 @@ export function importRecords(
     state.vehicles.length ||
     state.bookings.length ||
     state.messages.length ||
+    state.whatsAppMessages?.length ||
     state.events.length ||
     Object.keys(state.sendAttempts || {}).length ||
     Object.keys(state.operations || {}).length

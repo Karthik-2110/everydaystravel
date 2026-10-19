@@ -1,3 +1,5 @@
+import { analyseConversation } from "@/app/lib/crm/whatsapp-analysis";
+import { whatsAppConfigured } from "@/app/lib/crm/whatsapp";
 import { repository } from "@/app/lib/crm/store";
 import {
   connectionStatus,
@@ -43,7 +45,31 @@ async function snapshot() {
   const staff = hostedStorage() ? await currentStaff() : null;
   const cacheCurrent =
     !hostedStorage() || state.cacheGeneration === state.connectionGeneration;
+  const visibleWhatsApp = (state.whatsAppMessages || []).filter(
+    (m) =>
+      m.phoneId === process.env.WHATSAPP_PHONE_NUMBER_ID &&
+      m.businessId === process.env.WHATSAPP_BUSINESS_ACCOUNT_ID,
+  );
+  const visibleIds = new Set(visibleWhatsApp.map((m) => m.conversationId));
   return {
+    whatsAppMessages: visibleWhatsApp,
+    whatsapp: {
+      configured: whatsAppConfigured(),
+      geminiConfigured: Boolean(process.env.GEMINI_API_KEY),
+    },
+    whatsAppAnalyses: Object.fromEntries(
+      Object.entries(state.whatsAppAnalyses || {})
+        .filter(([id]) => visibleIds.has(id))
+        .map(([id, job]) => [
+          id,
+          {
+            status: job.status,
+            result: job.result,
+            error: job.error,
+            updatedAt: job.updatedAt,
+          },
+        ]),
+    ),
     leads,
     messages: cacheCurrent ? messages : [],
     events: cacheCurrent ? events : [],
@@ -126,6 +152,27 @@ async function performPost(request: Request) {
         break;
       case "booking-save":
         await repository.saveBooking(input);
+        break;
+      case "whatsapp-archive":
+        await authorize(request, true);
+        if (input.confirm !== true)
+          throw new Error("Confirm archiving after reviewing the conversation");
+        await repository.archiveWhatsApp(
+          String(input.conversationId),
+          String(input.through),
+        );
+        break;
+      case "whatsapp-analyse":
+        if (!process.env.GEMINI_API_KEY)
+          throw new Error("Gemini analysis is not configured yet");
+        await analyseConversation(
+          String(input.conversationId),
+          repository,
+          true,
+        );
+        break;
+      case "whatsapp-import":
+        await repository.importWhatsApp(input);
         break;
       case "mail-import":
         await repository.importMail(input);

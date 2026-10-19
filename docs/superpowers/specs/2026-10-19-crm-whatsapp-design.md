@@ -1,0 +1,21 @@
+# WhatsApp incoming enquiry pipeline
+
+User requested WhatsApp Business integration, then directed “lets build the pipeline” when asked setup questions. Proceed with builder-selected inbound-only scope; live phone-number onboarding remains undecided. No real messages sent or accounts registered. Firebase activation is explicitly deferred until tomorrow and remains a separate prerequisite for live webhook persistence.
+
+## Deliverable
+Receive signed Meta Cloud API message notifications for one configured business account and phone number. Persist text and supported attachment metadata as WhatsApp conversations in the existing shared database/local development adapter. Show a WhatsApp tab in Shared inbox, review request details, and explicitly create or attach an enquiry. Link source message identity so retries/imports are idempotent. From the enquiry reuse the existing quote/stage/reservation/follow-up journey.
+
+## Limits
+Initial scope is new incoming notifications only. Do not claim arbitrary phone chat access or import historical chats. Existing phone-app number migration/coexistence and history eligibility must be confirmed from Meta onboarding before connecting it. No outgoing messages, marketing templates, bots, automatic bookings, attachment downloads or transcription in this milestone. Show honest setup/empty states without fabricated chats.
+
+## Security and storage
+Verify raw-body HMAC-SHA256 with WHATSAPP_APP_SECRET before parsing, and verification challenges with WHATSAPP_VERIFY_TOKEN. Bind webhook payloads to WHATSAPP_BUSINESS_ACCOUNT_ID and WHATSAPP_PHONE_NUMBER_ID. Reject unexpected source accounts; cap body and batch sizes; deduplicate message IDs and ignore unsupported events without inventing content. Public webhook is an authenticated provider endpoint, not a staff session endpoint. Use exact configured production CRM origin; all inbox reads/imports still require existing CRM auth. Production persists only in Firestore, never disk, and failures return retryable errors. Secrets stay server-only environment values. Metadata URLs/media IDs are not fetched/rendered remotely. Any-Google-account shared access policy remains as explicitly approved previously.
+
+## Data and UI
+WhatsApp message: provider ID, conversation ID derived from sender phone, contact/profile name, phone, sent time, received time, type, text/caption, optional media ID/filename/MIME, source account and number IDs. No phonebook scanning. Conversation list grouped by sender, latest message preview, individual transcript with date labels and a review action. Read-only intake field suggestions are local patterns, not AI provider transmission. Full-width inbox uses existing monochrome shadcn tabs/cards/scroll area/buttons. Keep sidebar unchanged. Import attaches source IDs and a bounded text note, not raw external HTML.
+
+## Verification
+Signature/challenge rejection, cross-account payloads, unsupported/media events, duplicate and out-of-order notifications, atomic persistence and idempotent lead import, phone matching, empty states and reviewed UI import. Full suite/type/scoped lint/build and independent review. No browser use per user instruction. Live connection cannot be declared ready until public webhook subscription and real provider delivery verified with user-authorized setup.
+
+## Accepted steering: Gemini conversation understanding
+User explicitly requested understanding all upcoming business messages and selected their existing Gemini API. Add server-only Gemini structured analysis of the bounded recent conversation, persisted as reviewable intent/summary/journey fields/missing details/next action. Only texts/captions are sent; no attachments downloaded. No automatic outbound replies or bookings. Webhook durably saves incoming messages first; automatic analysis is dispatched after response through Next after(), with a pending receipt and authenticated retry in the inbox if the process stops or Gemini fails. Source transcript fingerprint prevents stale or duplicate analyses. GEMINI_API_KEY and configurable GEMINI_MODEL stay server-only. No live key has been supplied and no real chats are sent while testing. Gemini responses are untrusted, schema-validated suggestions. All customer text is untrusted data, never tool/system instructions; no tools/actions are given to the model.

@@ -19,6 +19,15 @@ import { STAGES, type Lead, type Channel } from "@/app/lib/crm/model";
 export type View =
   "pipeline" | "inbox" | "followups" | "integrations" | "calendar";
 export type Snapshot = {
+  whatsAppMessages?: import("@/app/lib/crm/whatsapp-model").WhatsAppMessage[];
+  whatsAppAnalyses?: Record<
+    string,
+    Pick<
+      import("@/app/lib/crm/gemini").ConversationAnalysis,
+      "status" | "result" | "error" | "updatedAt"
+    >
+  >;
+  whatsapp?: { configured: boolean; geminiConfigured: boolean };
   leads: Lead[];
   bookings?: import("@/app/lib/crm/bookings").Booking[];
   vehicles?: import("@/app/lib/crm/bookings").VehicleUnit[];
@@ -31,7 +40,10 @@ export type Snapshot = {
   google: { configured: boolean; connected: boolean; email: string | null };
   notice?: string;
 };
-export type LeadDraft = Partial<Lead> & { sourceMailId?: string };
+export type LeadDraft = Partial<Lead> & {
+  sourceMailId?: string;
+  sourceWhatsAppId?: string;
+};
 export type Action = (input: Record<string, unknown>) => Promise<void>;
 export const money = (pence: number) =>
   new Intl.NumberFormat("en-GB", {
