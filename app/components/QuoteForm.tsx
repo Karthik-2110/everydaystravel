@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import {
   Users,
-  ArrowRight, ArrowRightLeft, ChevronDown,
+  ArrowRight, ArrowRightLeft, ChevronDown, Minus,
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import DatePickerField from './DatePickerField'
@@ -103,14 +103,16 @@ export interface QuoteFormProps {
    * up two per row instead of spreading across five columns.
    */
   variant?: 'panel' | 'compact'
+  docked?: boolean
+  onMinimize?: () => void
 }
 
-export default function QuoteForm({ variant = 'panel' }: QuoteFormProps = {}) {
+export default function QuoteForm({ variant = 'panel', docked = false, onMinimize }: QuoteFormProps = {}) {
   const compact = variant === 'compact'
 
   // Tailwind breakpoints track the viewport, not the container, so a narrow
   // card on a wide screen needs its column counts set explicitly.
-  const sectionCls = compact ? 'relative z-20 w-full' : 'relative z-20 site-container mt-[42px]'
+  const sectionCls = docked ? 'w-full' : compact ? 'relative z-20 w-full' : 'relative z-20 site-container mt-[42px]'
   const cardPadCls = compact ? 'p-5 sm:p-6' : 'p-6 sm:p-7 lg:p-8'
   const journeyRowCls = compact
     ? 'grid grid-cols-1 sm:grid-cols-2 gap-4'
@@ -228,9 +230,9 @@ export default function QuoteForm({ variant = 'panel' }: QuoteFormProps = {}) {
       <div ref={cardRef} onMouseEnter={focusFirstField} className={`bg-[#0D1221] rounded-2xl border border-[#EBBA6F]/35 shadow-[0_0_0_1px_rgba(235,186,111,0.10),0_0_34px_rgba(235,186,111,0.14),0_20px_60px_rgba(0,0,0,0.45)] ${cardPadCls} transition-[border-color,box-shadow] duration-300 hover:border-[#EBBA6F]/70 hover:shadow-[0_0_0_1px_rgba(235,186,111,0.28),0_0_70px_rgba(235,186,111,0.30),0_24px_70px_rgba(0,0,0,0.5)]`}>
 
         {/* ── Header ── */}
-        <div className="flex flex-wrap items-center gap-3 mb-6">
+        <div className="flex flex-wrap items-center gap-2 mb-6">
           <span
-            className="text-[#EBBA6F] font-medium text-[15px]"
+            className={`text-[#EBBA6F] font-medium text-[15px] ${onMinimize ? "w-full sm:w-auto" : ""}`}
             style={{ fontFamily: 'var(--font-body)' }}
           >
             Plan your journey
@@ -242,7 +244,7 @@ export default function QuoteForm({ variant = 'panel' }: QuoteFormProps = {}) {
               aria-pressed={!isReturn}
               onClick={() => setJourneyType('oneway')}
               className={[
-                'flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[13px] font-medium transition-all duration-200',
+                'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-all duration-200',
                 !isReturn
                   ? 'bg-[#1e2338] text-white border border-white/20'
                   : 'text-white/45 hover:text-white/70',
@@ -258,7 +260,7 @@ export default function QuoteForm({ variant = 'panel' }: QuoteFormProps = {}) {
               aria-pressed={isReturn}
               onClick={() => setJourneyType('return')}
               className={[
-                'flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[13px] font-medium transition-all duration-200',
+                'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-all duration-200',
                 isReturn
                   ? 'bg-[#1e2338] text-white border border-white/20'
                   : 'text-white/45 hover:text-white/70',
@@ -269,6 +271,10 @@ export default function QuoteForm({ variant = 'panel' }: QuoteFormProps = {}) {
               Return
             </button>
           </div>
+          {onMinimize && <button type="button" onClick={onMinimize} aria-label="Minimize quote form" title="Minimize quote form"
+            className="ml-auto flex size-9 shrink-0 items-center justify-center rounded-full border border-white/15 text-[#EBBA6F] transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EBBA6F]">
+            <Minus size={18} aria-hidden />
+          </button>}
         </div>
 
         {submitted ? (

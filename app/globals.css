@@ -226,3 +226,68 @@
     transition: none;
   }
 }
+
+/* The quote card travels above the page while its original space stays reserved. */
+.quote-dock-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgb(8 12 24 / 35%);
+  backdrop-filter: blur(5px);
+}
+.quote-dock-modal {
+  position: fixed;
+  z-index: 65;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(480px, calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: 1rem;
+  scrollbar-width: thin;
+}
+.quote-dock-button {
+  position: fixed;
+  right: max(24px, env(safe-area-inset-right));
+  bottom: max(24px, env(safe-area-inset-bottom));
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid oklch(88% .09 80);
+  border-radius: 999px;
+  padding: 17px 24px;
+  background: linear-gradient(110deg, oklch(72% .12 75), oklch(85% .11 82) 48%, oklch(76% .12 75));
+  color: oklch(18% .025 270);
+  box-shadow: 0 8px 32px rgb(9 13 25 / 35%), inset 0 1px 0 rgb(255 245 215 / 55%);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 200ms ease-out, box-shadow 200ms ease-out;
+}
+.quote-dock-button::after {
+  content: '';
+  position: absolute;
+  inset: -60% -30%;
+  background: linear-gradient(110deg, transparent 35%, rgb(255 248 218 / 65%) 50%, transparent 65%);
+  transform: translateX(-120%);
+  animation: quote-gold-shimmer 4.8s ease-in-out infinite;
+  pointer-events: none;
+}
+.quote-dock-button:hover { transform: translateY(-3px); box-shadow: 0 12px 38px rgb(235 186 111 / 25%); }
+.quote-dock-button:focus-visible { outline: 2px solid #EBBA6F; outline-offset: 5px; }
+@keyframes quote-gold-shimmer {
+  0%, 55% { transform: translateX(-120%); }
+  85%, 100% { transform: translateX(120%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .quote-dock-button { transition: none; }
+  .quote-dock-button::after { animation: none; }
+}
+
+body:has(.quote-dock-modal) [data-slot="popover-content"] { z-index: 70; }

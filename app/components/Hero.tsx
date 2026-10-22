@@ -4,7 +4,7 @@ import { useRef, useEffect, useState, useMemo } from 'react'
 import { motion } from 'motion/react'
 import Image from 'next/image'
 import { Phone } from 'lucide-react'
-import QuoteForm from './QuoteForm'
+import HeroQuoteForm from './HeroQuoteForm'
 import TrustBar from './TrustBar'
 import { WhatsAppIcon, WHATSAPP_HREF, SOCIAL_BRAND } from './icons/social'
 import { PHONE, PHONE_HREF } from './contact/contact-details'
@@ -183,9 +183,9 @@ export default function Hero({
                   </motion.span>
                 ))}
               </h1>
-              <motion.div {...fadeUp(0.45)} className="max-w-[480px]">
-                <QuoteForm variant="compact" />
-              </motion.div>
+              <div className="max-w-[480px]">
+                <HeroQuoteForm compact />
+              </div>
             </>
           ) : story ? (
             /* Story block — replaces the large headline */
@@ -290,7 +290,7 @@ export default function Hero({
       {/* Quote form — only when it has not been moved into the hero above */}
       {!inlineForm && (
         <div className="relative z-10 w-full pb-10">
-          <QuoteForm />
+          <HeroQuoteForm />
         </div>
       )}
 
