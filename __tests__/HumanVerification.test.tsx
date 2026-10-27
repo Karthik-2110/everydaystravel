@@ -24,6 +24,8 @@ describe('HumanVerification', () => {
   it('does not load a widget without configuration and offers a contact option', () => {
     vi.stubEnv('NEXT_PUBLIC_TURNSTILE_SITE_KEY', '')
     render(<HumanVerification action="quote" onVerify={vi.fn()} resetKey={0} />)
+    expect(screen.getByRole('status')).toHaveTextContent('If urgent, call 020 8941 8354.')
+    expect(screen.queryByText(/verification is currently unavailable/i)).not.toBeInTheDocument()
     expect(renderWidget).not.toHaveBeenCalled()
     expect(screen.getByRole('link', { name: /call 020/i })).toHaveAttribute('href', 'tel:02089418354')
   })

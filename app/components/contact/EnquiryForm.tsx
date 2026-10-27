@@ -3,7 +3,7 @@
 import HumanVerification, { useHumanVerification } from '../HumanVerification'
 
 import { useState } from 'react'
-import Link from 'next/link'
+import BookingForm from '../booking/BookingForm'
 import { MessageSquareHeart, FileText, Mail, Phone, ArrowRight, Check } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { FieldLabel, FieldError, inputCls, textareaCls, errorRing } from '../form-fields'
@@ -13,6 +13,7 @@ type Errors = Partial<Record<'firstName' | 'lastName' | 'email' | 'phone' | 'mes
 const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())
 
 export default function EnquiryForm() {
+  const [activeTab, setActiveTab] = useState<'enquiry' | 'quote'>('enquiry')
   const verification = useHumanVerification()
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName]   = useState('')
@@ -71,27 +72,50 @@ export default function EnquiryForm() {
   return (
     <div className="max-w-[1000px] mx-auto">
 
-      {/* Enquiry / quote switch */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 mb-10">
-        <span
-          aria-current="page"
-          className="h-12 px-6 flex items-center justify-center gap-2.5 rounded-full border border-[#EBBA6F] bg-[#EBBA6F]/[0.06] text-white text-[14px] font-medium"
-          style={{ fontFamily: 'var(--font-ui)' }}
-        >
-          <MessageSquareHeart size={16} strokeWidth={1.5} className="text-[#EBBA6F]" aria-hidden />
-          Send us an Enquiry message
-        </span>
-
-        <Link
-          href="/book"
-          className="h-12 px-6 flex items-center justify-center gap-2.5 rounded-full border border-white/20 text-white/80 text-[14px] font-medium hover:border-[#EBBA6F]/60 hover:text-[#EBBA6F] transition-colors duration-150"
-          style={{ fontFamily: 'var(--font-ui)' }}
-        >
-          <FileText size={16} strokeWidth={1.5} aria-hidden />
-          Get Quote
-        </Link>
+      <div role="tablist" aria-label="Enquiry type" className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 mb-10">
+        {([
+          { id: 'enquiry', label: 'Send us an Enquiry message', icon: MessageSquareHeart },
+          { id: 'quote', label: 'Get Quote', icon: FileText },
+        ] as const).map(({ id, label, icon: Icon }) => (
+          <button
+            key={id}
+            type="button"
+            role="tab"
+            id={`contact-tab-${id}`}
+            aria-selected={activeTab === id}
+            aria-controls={`contact-panel-${id}`}
+            tabIndex={activeTab === id ? 0 : -1}
+            onClick={() => setActiveTab(id)}
+            onKeyDown={(event) => {
+              if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) {
+                event.preventDefault()
+                const next = event.key === 'Home' ? 'enquiry' : event.key === 'End' ? 'quote' : activeTab === 'enquiry' ? 'quote' : 'enquiry'
+                setActiveTab(next)
+                document.getElementById(`contact-tab-${next}`)?.focus()
+              }
+            }}
+            className={`h-12 px-6 flex items-center justify-center gap-2.5 rounded-full border text-[14px] font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-[#EBBA6F] focus-visible:outline-offset-4 ${activeTab === id ? 'border-[#EBBA6F] bg-[#EBBA6F]/[0.06] text-white' : 'border-white/20 text-white/80 hover:border-[#EBBA6F]/60 hover:text-[#EBBA6F]'}`}
+            style={{ fontFamily: 'var(--font-ui)' }}
+          >
+            <Icon size={16} strokeWidth={1.5} className={activeTab === id ? 'text-[#EBBA6F]' : ''} aria-hidden />
+            {label}
+          </button>
+        ))}
       </div>
 
+      {activeTab === 'quote' ? (
+        <div role="tabpanel" id="contact-panel-quote" aria-labelledby="contact-tab-quote">
+          <ol aria-label="Quote form sections" className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6 text-sm text-white/75">
+            {['Journey details', 'Your details', 'Additional information', 'Choose your vehicle'].map((section, index) => (
+              <li key={section} className="flex items-center gap-2">
+                <span className="text-[#EBBA6F]">{index + 1}.</span> {section}
+              </li>
+            ))}
+          </ol>
+          <BookingForm />
+        </div>
+      ) : (
+      <div role="tabpanel" id="contact-panel-enquiry" aria-labelledby="contact-tab-enquiry">
       {submitted ? (
         <div className="bg-[#0D1221] rounded-2xl border border-white/[0.08] px-6 py-16 flex flex-col items-center text-center gap-3">
           <div className="w-12 h-12 rounded-full bg-[#EBBA6F]/15 flex items-center justify-center">
@@ -190,6 +214,8 @@ export default function EnquiryForm() {
           </button>
 
         </form>
+      )}
+      </div>
       )}
     </div>
   )

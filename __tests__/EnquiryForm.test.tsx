@@ -7,6 +7,7 @@ vi.mock('motion/react', () => ({
   motion: {
     div: ({ children, initial, animate, exit, transition, ...props }: any) => <div {...props}>{children}</div>,
   },
+  useReducedMotion: () => true,
   AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }))
 
@@ -27,9 +28,18 @@ beforeEach(() => {
 })
 
 describe('EnquiryForm', () => {
-  it('links Get Quote through to the booking page', () => {
+  it('switches to the full quote form with all sections visible and back to enquiry', () => {
     render(<EnquiryForm />)
-    expect(screen.getByRole('link', { name: /get quote/i })).toHaveAttribute('href', '/book')
+    fireEvent.click(screen.getByRole('tab', { name: /get quote/i }))
+    expect(screen.getByRole('tab', { name: /get quote/i })).toHaveAttribute('aria-selected', 'true')
+    for (const title of ['Journey Details', 'Your Details', 'Additional Information']) {
+      expect(screen.getByRole('heading', { name: title })).toBeVisible()
+    }
+    expect(screen.getByRole('list', { name: /quote form sections/i })).toBeVisible()
+    expect(screen.getByRole('button', { name: /request my quote/i })).toBeVisible()
+    expect(screen.queryByLabelText('First name')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('tab', { name: /send us an enquiry/i }))
+    expect(screen.getByLabelText('First name')).toBeVisible()
   })
 
   it('blocks submit and shows errors when required fields are empty', async () => {

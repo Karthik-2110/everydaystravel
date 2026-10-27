@@ -39,7 +39,7 @@ export default function HumanVerification({ action, onVerify, resetKey }: {
     return () => { api.remove(id); onVerify('') }
   }, [action, onVerify, ready, resetKey, sitekey])
 
-  if (!sitekey) return <p role="status" className="text-sm leading-relaxed text-white/75">Verification is currently unavailable. Please <a className="text-[#EBBA6F] underline" href="tel:02089418354">call 020 8941 8354</a> to enquire.</p>
+  if (!sitekey) return <p role="status" className="text-sm leading-relaxed text-white/75">If urgent, <a className="text-[#EBBA6F] underline" href="tel:02089418354">call 020 8941 8354</a>.</p>
 
   return (
     <div className="min-w-0 my-4">
