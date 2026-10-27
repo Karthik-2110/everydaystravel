@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!vehicle) return {}
 
   return createPageMetadata({
-    title: `${vehicle.name} Hire`,
+    title: `${vehicle.name} Hire London with Driver`,
     description: vehicle.description,
     path: `/fleet/executive-coaches/${vehicle.slug}`,
   })

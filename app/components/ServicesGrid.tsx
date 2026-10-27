@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
-import { SERVICES, AIRPORT_TRANSFER_IMAGES } from './ServiceList'
+import { SERVICES, AIRPORT_TRANSFER_IMAGES, CORPORATE_IMAGES } from './ServiceList'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -27,6 +27,8 @@ const PLACEHOLDER = 'https://res.cloudinary.com/dckyndryf/image/upload/f_auto,q_
 // it used to carry a 'Race Days & Events' card pointing at /services/race-days,
 // which was never built.
 const CARDS: { slug: string; description: string; image: string }[] = [
+  { slug: 'staff-shuttles', description: 'Premium staff journeys between stations, workplaces and sites, planned around your team.', image: CORPORATE_IMAGES[0] },
+  { slug: 'event-coach-hire', description: 'Professional guest transport for conferences, exhibitions, hospitality and private events.', image: CORPORATE_IMAGES[1] },
   {
     slug:        'private-hire',
     description: 'Flexible transport for any occasion, from day trips to bespoke journeys across the UK.',

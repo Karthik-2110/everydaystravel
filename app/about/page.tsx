@@ -76,7 +76,7 @@ export default function AboutPage() {
             className="text-white/60 text-[15px] leading-relaxed max-w-[560px]"
             style={{ fontFamily: 'var(--font-body)' }}
           >
-            We have spent more than a decade moving people across the UK and Europe: weddings, school trips,
+            We bring 17+ years of industry experience to journeys across the UK and Europe: weddings, school trips,
             airport runs, tours. The vehicles change. The care does not.
           </p>
         </div>

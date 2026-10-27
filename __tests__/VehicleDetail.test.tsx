@@ -121,3 +121,10 @@ describe('VehicleDetail title row', () => {
     expect(screen.queryByText(/most popular/i)).toBeNull()
   })
 })
+
+// These tests cover the form's own fields. Cloudflare lifecycle and server
+// enforcement are exercised separately in the verification tests.
+vi.mock('@/app/components/HumanVerification', () => ({
+  default: () => null,
+  useHumanVerification: () => ({ token: 'verified-test-token', setToken: () => {}, resetKey: 0, reset: () => {} }),
+}))

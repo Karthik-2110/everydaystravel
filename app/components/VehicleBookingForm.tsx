@@ -1,5 +1,7 @@
 'use client'
 
+import HumanVerification, { useHumanVerification } from './HumanVerification'
+
 import { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import {
@@ -76,6 +78,7 @@ function SimpleSelect({
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehicleSlug?: string }) {
+  const verification = useHumanVerification()
   const [journeyType, setJourneyType] = useState<'oneway' | 'return'>('oneway')
   const [vehicle, setVehicle]         = useState(defaultVehicleSlug ?? '')
   const [pickup, setPickup]           = useState('')
@@ -115,14 +118,21 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
     setEmailError(emailProblem)
     setPhoneError(phoneProblem)
     if (emailProblem || phoneProblem) return
+    if (!verification.token) {
+      alert('Please complete the human verification before submitting.')
+      return
+    }
     setSubmitting(true)
     try {
       const res = await fetch('/api/quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ vehicle, journeyType, pickup, destination, passengers, travelDate, pickupTime, returnDate, returnTime, email, phone }),
+        body: JSON.stringify({ turnstileToken: verification.token, vehicle, journeyType, pickup, destination, passengers, travelDate, pickupTime, returnDate, returnTime, email, phone }),
       })
-      if (!res.ok) throw new Error('Failed')
+      if (!res.ok) {
+        const problem = await res.json().catch(() => ({}))
+        throw new Error(problem.error || 'Please try again or call us on 020 8941 8354.')
+      }
       setSubmitted(true)
       setTimeout(() => {
         setSubmitted(false)
@@ -130,9 +140,10 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
         setTravelDate(''); setPickupTime(''); setReturnDate(''); setReturnTime('')
         setEmail(''); setPhone(''); setEmailTouched(false); setEmailError('')
       }, 3000)
-    } catch {
-      alert('Something went wrong. Please try again.')
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Something went wrong. Please try again.')
     } finally {
+      verification.reset()
       setSubmitting(false)
     }
   }
@@ -306,6 +317,7 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
           </div>
 
           {/* Submit */}
+          <HumanVerification action="quote" onVerify={verification.setToken} resetKey={verification.resetKey} />
           <button
             type="submit"
             disabled={submitting}

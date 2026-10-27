@@ -211,19 +211,19 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       ],
       intro:
         'From a chauffeur-driven car for one passenger to a 55-seat coach for a full group. Every transfer goes out with one of our professional drivers.',
-      includedHeading: 'Every transfer includes:',
+      includedHeading: 'Transfer arrangements:',
       included: [
         { icon: Plane,      text: 'Live flight tracking' },
         { icon: UserCheck,  text: 'Meet & greet service' },
         { icon: Briefcase,  text: 'Luggage assistance' },
         { icon: BadgeCheck, text: 'Professional uniformed drivers' },
-        { icon: Baby,       text: 'Child seats on request' },
+        { icon: Baby,       text: 'Bring your own child seat; tell us when booking' },
         { icon: Clock,      text: '24/7 availability' },
       ],
       extrasHeading: 'You can also ask for:',
       extras: [
         { icon: MapPin,    text: 'Additional stops en route' },
-        { icon: Timer,     text: 'Extended waiting beyond the included period' },
+        { icon: Timer,     text: 'Waiting time and any additional charges agreed in your quote' },
         { icon: Repeat,    text: 'The return leg booked at the same time' },
         { icon: Bus,       text: 'A second vehicle when one will not hold the group' },
         { icon: MapPinned, text: 'Drop-offs at several addresses on the way home' },
@@ -314,7 +314,7 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       ],
       intro:
         'From a chauffeur-driven car for one director to a 55-seat coach for a full conference group. Every journey goes out with one of our professional drivers.',
-      includedHeading: 'Every corporate journey includes:',
+      includedHeading: 'Facilities to confirm for your vehicle:',
       included: [
         { icon: Armchair,   text: 'Individual reclining seats' },
         { icon: Wifi,       text: 'Onboard WiFi' },

@@ -2,8 +2,8 @@ import ServiceDetail from '../../components/ServiceDetail'
 import { createPageMetadata } from '../../lib/seo'
 
 export const metadata = createPageMetadata({
-  title: 'School Trip Coach Hire',
-  description: 'Safe, reliable coach and minibus transport for school trips, educational tours and fixtures across the UK.',
+  title: 'School Coach Hire London',
+  description: 'School coach hire in London and Surrey for educational trips, sports fixtures and regular transport. DBS-checked drivers and vehicle documentation on request.',
   path: '/services/school-trips',
 })
 

@@ -92,7 +92,7 @@ export const FAQ_GROUPS: FaqGroup[] = [
       {
         question: 'How much luggage can we bring?',
         answer:
-          'Roughly a suitcase and a small bag each on a coach with a luggage hold; less on a minibus, where cases share the passenger space. Tell us in advance if you are carrying skis, instruments, sports kit or a full set of holiday luggage, so we send a vehicle that can actually take it.',
+          'Luggage capacity varies by vehicle and seating configuration. Check the vehicle listing and confirm your cases with us before booking. Tell us in advance if you are carrying skis, instruments, sports kit or a full set of holiday luggage, so we send a vehicle that can actually take it.',
       },
       {
         question: 'What is on board?',

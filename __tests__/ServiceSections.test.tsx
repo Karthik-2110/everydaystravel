@@ -170,7 +170,7 @@ describe('ServiceSections', () => {
 
     it('separates what is included from what you ask for', () => {
       render(<ServiceSections slug="airport-transfers" />)
-      expect(screen.getByRole('heading', { name: /every transfer includes/i })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: /transfer arrangements/i })).toBeInTheDocument()
       expect(screen.getByRole('heading', { name: /you can also ask for/i })).toBeInTheDocument()
 
       // Compare the text, not the objects — `includes` on the objects would
@@ -269,7 +269,7 @@ describe('ServiceSections', () => {
 
     it('separates what is included from what you ask for', () => {
       render(<ServiceSections slug="corporate" />)
-      expect(screen.getByRole('heading', { name: /every corporate journey includes/i })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: /facilities to confirm for your vehicle/i })).toBeInTheDocument()
       expect(screen.getByRole('heading', { name: /you can also ask for/i })).toBeInTheDocument()
     })
 

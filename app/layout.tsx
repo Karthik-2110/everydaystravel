@@ -19,8 +19,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Everydays Travel | Luxury Coach & Minibus Hire Across the UK",
-  description: "Luxury coach, minibus and chauffeur-driven travel across London, Surrey, the UK and Europe. Airport transfers, corporate events, weddings and private tours.",
+  title: "Coach Hire London & Minibus Hire with Driver | Everydays Travel",
+  description: "Coach and minibus hire with a driver in London and Surrey. Explore 7 to 55-seat group vehicles for schools, corporate events, weddings and airport transfers. Request a quote.",
   keywords: [
     'Everydays Travel',
     'Everydays Luxury Travel',
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     locale: 'en_GB',
     url: '/',
     siteName: 'Everydays Travel',
-    title: 'Everydays Travel | Luxury Coach & Minibus Hire Across the UK',
+    title: 'Coach Hire London & Minibus Hire with Driver | Everydays Travel',
     description: 'Luxury coach, minibus and chauffeur-driven travel across London, Surrey, the UK and Europe.',
   },
 };

@@ -92,7 +92,7 @@ export const VEHICLE_CONTENT: Record<string, VehicleContent> = {
         },
         {
           title: 'Family travel',
-          text:  'The pushchair, the cases and everybody in one vehicle, with a sliding door and a low step that a child or a grandparent can manage without help. Child seats on request.',
+          text:  'The pushchair, the cases and everybody in one vehicle, with a sliding door and a low step that a child or a grandparent can manage without help. Bring your own child seat; tell us when booking.',
         },
         {
           title: 'Events, racing and hospitality',
@@ -142,7 +142,7 @@ export const VEHICLE_CONTENT: Record<string, VehicleContent> = {
       ],
       extrasHeading: 'You can also ask for:',
       extras: [
-        { icon: Baby,    text: 'Child seats and boosters' },
+        { icon: Baby,    text: 'Your own child seats, with fitting discussed before booking' },
         { icon: Luggage, text: 'A rear row removed for a full boot' },
         { icon: MapPin,  text: 'Additional pickups on the way' },
         { icon: Timer,   text: 'A driver who waits between appointments' },
@@ -188,7 +188,7 @@ export const VEHICLE_CONTENT: Record<string, VehicleContent> = {
       accordion: [
         {
           title: 'Airport runs for a family or a team',
-          text:  'Seven people, seven cases and the early flight, without the six-in-the-morning conversation about whose car takes the luggage. We track the flight number, so a delay moves the pickup rather than costing you the booking.',
+          text:  'Your group and its luggage on the early flight, with the seating and luggage allocation confirmed before booking, without the six-in-the-morning conversation about whose car takes the luggage. We track the flight number, so a delay moves the pickup rather than costing you the booking.',
         },
         {
           title: 'Family travel and days out',
@@ -216,7 +216,7 @@ export const VEHICLE_CONTENT: Record<string, VehicleContent> = {
         },
         {
           title: 'When seven is not quite the number',
-          text:  'Eight or nine and we move you to the 16-seater, which costs less than two vehicles and keeps everybody together. Tell us the headcount and we will say which one actually fits.',
+          text:  'Eight or nine and we move you to the 16-seater, which keeps everybody together; we will quote for the available options. Tell us the headcount and we will say which one actually fits.',
         },
       ],
       carousel: [
@@ -246,7 +246,7 @@ export const VEHICLE_CONTENT: Record<string, VehicleContent> = {
       ],
       extrasHeading: 'You can also ask for:',
       extras: [
-        { icon: Baby,       text: 'Child seats and boosters' },
+        { icon: Baby,       text: 'Your own child seats, with fitting discussed before booking' },
         { icon: Luggage,    text: 'A rear row removed for sports kit or golf clubs' },
         { icon: Repeat,     text: 'The return leg booked at the same time' },
         { icon: MapPin,     text: 'Several pickups on the way out or home' },

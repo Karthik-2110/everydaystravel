@@ -1,3 +1,4 @@
+import LandingContent from './components/LandingContent'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import HomeServices from './components/HomeServices'
@@ -21,12 +22,13 @@ export default function Home() {
           { text: 'Choose Everydays Travel', accent: false },
           { text: 'for coach hire in London', accent: true },
         ]}
-        subtext=""
+        subtext="Private coach and minibus hire with professional drivers across London and Surrey. From airport transfers and school trips to corporate events and days out, choose a vehicle for your group and itinerary."
         inlineForm
       />
       <HomeServices />
       <FleetCarousel />
       <Testimonials />
+      <LandingContent page="home" />
       <Footer />
     </>
   )

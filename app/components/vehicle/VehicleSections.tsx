@@ -1,3 +1,4 @@
+import LandingContent from '../LandingContent'
 import { vehicleContent } from '../../data/vehicle-content'
 import ServiceSolutions from '../service/ServiceSolutions'
 import ServiceFleet from '../service/ServiceFleet'
@@ -17,7 +18,7 @@ import ServiceFleet from '../service/ServiceFleet'
  */
 export default function VehicleSections({ slug }: { slug: string }) {
   const content = vehicleContent(slug)
-  if (!content) return null
+  if (!content) return <LandingContent page={slug} />
 
   return (
     <>

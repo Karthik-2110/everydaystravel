@@ -40,3 +40,10 @@ describe('Hero quote dock', () => {
     expect(document.body.style.overflow).not.toBe('hidden')
   })
 })
+
+// These tests cover the form's own fields. Cloudflare lifecycle and server
+// enforcement are exercised separately in the verification tests.
+vi.mock('@/app/components/HumanVerification', () => ({
+  default: () => null,
+  useHumanVerification: () => ({ token: 'verified-test-token', setToken: () => {}, resetKey: 0, reset: () => {} }),
+}))

@@ -223,13 +223,18 @@ export const webSiteSchema = {
 
 export const sitemapEntries = [
   { path: '/', priority: 1 },
+  { path: '/areas/west-london', priority: 0.8 },
   { path: '/fleet', priority: 0.9 },
   { path: '/fleet/luxury-minibuses', priority: 0.9 },
   { path: '/fleet/executive-coaches', priority: 0.9 },
   { path: '/fleet/chauffeur-cars', priority: 0.8 },
   { path: '/services', priority: 0.9 },
   { path: '/services/airport-transfers', priority: 0.9 },
+  { path: '/services/airport-transfers/heathrow', priority: 0.8 },
+  { path: '/guides/coach-hire-prices-london', priority: 0.7 },
   { path: '/services/corporate', priority: 0.9 },
+  { path: '/services/staff-shuttles', priority: 0.8 },
+  { path: '/services/event-coach-hire', priority: 0.8 },
   { path: '/services/weddings-events', priority: 0.9 },
   { path: '/services/group-travel', priority: 0.9 },
   { path: '/services/cruise-port-transfers', priority: 0.8 },

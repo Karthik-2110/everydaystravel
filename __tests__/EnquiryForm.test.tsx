@@ -66,6 +66,7 @@ describe('EnquiryForm', () => {
     const [url, init] = (globalThis.fetch as any).mock.calls[0]
     expect(url).toBe('/api/contact')
     expect(JSON.parse(init.body)).toEqual({
+      turnstileToken: 'verified-test-token',
       firstName: 'Jane',
       lastName: 'Smith',
       email: 'jane@example.com',
@@ -78,3 +79,10 @@ describe('EnquiryForm', () => {
     })
   })
 })
+
+// These tests cover the form's own fields. Cloudflare lifecycle and server
+// enforcement are exercised separately in the verification tests.
+vi.mock('@/app/components/HumanVerification', () => ({
+  default: () => null,
+  useHumanVerification: () => ({ token: 'verified-test-token', setToken: () => {}, resetKey: 0, reset: () => {} }),
+}))

@@ -85,3 +85,7 @@ describe('POST /api/quote', () => {
     expect(html).not.toContain('<b>Lovelace</b>')
   })
 })
+
+// Email formatting/field validation tests isolate the verification boundary.
+// publicFormSecurity.test.ts exercises the real boundary on both endpoints.
+vi.mock('@/app/lib/turnstile', () => ({ verifyHuman: async () => null }))

@@ -1,3 +1,4 @@
+import { verifyHuman } from '../../lib/turnstile'
 import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
@@ -14,7 +15,12 @@ function escapeHtml(value: string): string {
 }
 
 export async function POST(request: Request) {
-  const body = await request.json()
+  const body = await request.json().catch(() => null)
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return NextResponse.json({ error: 'Invalid submission' }, { status: 400 })
+  }
+  const verification = await verifyHuman(body.turnstileToken, 'contact')
+  if (verification) return NextResponse.json({ error: verification.error }, { status: verification.status })
   const { firstName, lastName, email, phone, message } = body
 
   const name = [firstName, lastName].filter(Boolean).join(' ').trim() || 'Website visitor'

@@ -33,7 +33,7 @@ export const SERVICES: Vehicle[] = [
     seats:       'All major UK airports',
     luggage:     'Luggage assistance included',
     description: 'Reliable airport transfers to and from all major UK airports: on-time pickups, luggage assistance and stress-free journeys for individuals and groups.',
-    features:    ['Live flight tracking', 'Meet & greet service', '24/7 availability', 'Luggage assistance', 'Professional uniformed drivers', 'Child seats on request'],
+    features:    ['Live flight tracking', 'Meet & greet service', '24/7 availability', 'Luggage assistance', 'Professional uniformed drivers', 'Bring your own child seat; tell us when booking'],
     idealFor:    ['Business Travellers', 'Family Holidays', 'Group Travel', 'Wedding Parties', 'Sports Teams', 'Tour Groups'],
   },
   {
@@ -52,12 +52,12 @@ export const SERVICES: Vehicle[] = [
     slug:        'private-hire',
     name:        'Private Hire',
     badge:       'Private Hire',
-    image:       PH,
+    image:       CORPORATE_IMAGES[1],
     seats:       'Your schedule, your route',
     luggage:     'Luggage assistance included',
     description: 'Premium vehicles on your schedule. Flexible private hire for day trips, nights out and bespoke journeys anywhere in the UK.',
     features:    ['Fully flexible itineraries', 'Door-to-door service', 'Premium vehicles', 'Professional uniformed drivers', 'Extended waiting available', 'Refreshments on request'],
-    idealFor:    ['Day Trips', 'Special Occasions', 'Family Travel'],
+    idealFor:    ['Day Trips', 'Special Occasions', 'Family Travel', 'Private Groups'],
   },
   {
     slug:        'weddings-events',
@@ -74,7 +74,7 @@ export const SERVICES: Vehicle[] = [
     slug:        'school-trips',
     name:        'School Transport',
     badge:       'Education',
-    image:       PH,
+    image:       CORPORATE_IMAGES[0],
     seats:       'Safe, reliable school travel',
     luggage:     'Luggage assistance included',
     description: 'Safe, reliable transport for schools and colleges, with DBS-checked drivers and well-maintained vehicles for trips, tours and daily runs.',
@@ -125,4 +125,19 @@ export const SERVICES: Vehicle[] = [
     features:    ['Luxury chauffeur-driven vehicles', 'Privacy glass', 'Bottled water provided', 'Concierge-level service', 'Discreet professional drivers', 'Flexible scheduling'],
     idealFor:    ['VIP Clients', 'Corporate Travel', 'Airport Transfers'],
   },
+  {
+    slug: 'staff-shuttles', name: 'Staff Shuttle Services', badge: 'Employee transport',
+    image: CORPORATE_IMAGES[0], seats: 'Recurring workplace journeys', luggage: 'Confirm your requirements',
+    description: 'Premium employee transport with professional drivers, backed by 17+ years of industry experience.',
+    features: ['Professional uniformed drivers', 'Agreed pickup points', 'Workplace connections', 'Inter-site journeys', 'Recurring service planning', 'Account arrangements on request'],
+    idealFor: ['Station Connections', 'Office Travel', 'Shift Patterns', 'Inter-site Travel'],
+  },
+  {
+    slug: 'event-coach-hire', name: 'Event Coach Hire', badge: 'Events',
+    image: CORPORATE_IMAGES[1], seats: 'Guest and delegate transport', luggage: 'Confirm your requirements',
+    description: 'Premium London event transport with professional drivers and a schedule planned around your guests.',
+    features: ['Professional uniformed drivers', 'Agreed itineraries', 'Multiple pickup planning', 'Vehicle selection support', 'Airport connections', 'Return journey planning'],
+    idealFor: ['Conferences', 'Exhibitions', 'Hospitality', 'Private Events'],
+  },
+
 ]

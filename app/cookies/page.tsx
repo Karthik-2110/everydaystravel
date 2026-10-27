@@ -43,11 +43,15 @@ const ROWS: string[][] = [
 export default function CookiePolicyPage() {
   return (
     <LegalPage title="Cookie Policy" updated={LEGAL_UPDATED}>
+      <Section title="Human verification on forms">
+        <P>We use Cloudflare Turnstile to protect enquiry, quote and booking submissions from automated abuse. This security check is separate from optional analytics and map consent. The website does not request a Cloudflare clearance cookie through the widget.</P>
+        <P>Read <A href="https://www.cloudflare.com/privacypolicy/">Cloudflare’s privacy notice</A> for information about how its verification service processes browser and device signals.</P>
+      </Section>
       <Section title="The short version">
         <P>
-          We store as little as we can. Three things can end up on your device: a cookie
+          We store as little as we can. Our site uses a cookie
           that remembers the choice you make here, two Google Analytics cookies that count
-          visits if you allow them, and the cookies Google sets when one of its maps loads.
+          visits if you allow them, and the cookies Google sets when one of its maps loads. Cloudflare Turnstile also processes browser and device signals to verify form submissions and prevent automated abuse.
           We run no advertising cookies, nothing that follows you to other websites, and we
           do not sell or share what we hold.
         </P>

@@ -1,5 +1,7 @@
 'use client'
 
+import HumanVerification, { useHumanVerification } from './HumanVerification'
+
 import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import {
@@ -108,6 +110,7 @@ export interface QuoteFormProps {
 }
 
 export default function QuoteForm({ variant = 'panel', docked = false, onMinimize }: QuoteFormProps = {}) {
+  const verification = useHumanVerification()
   const compact = variant === 'compact'
 
   // Tailwind breakpoints track the viewport, not the container, so a narrow
@@ -197,18 +200,26 @@ export default function QuoteForm({ variant = 'panel', docked = false, onMinimiz
     setEmailError(emailProblem)
     setPhoneError(phoneProblem)
     if (nameProblem || emailProblem || phoneProblem) return
+    if (!verification.token) {
+      alert('Please complete the human verification before submitting.')
+      return
+    }
     setSubmitting(true)
     try {
       const res = await fetch('/api/quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ journeyType, pickup, destination, passengers, travelDate, pickupTime, returnDate, returnTime, fullName, email, phone }),
+        body: JSON.stringify({ turnstileToken: verification.token, journeyType, pickup, destination, passengers, travelDate, pickupTime, returnDate, returnTime, fullName, email, phone }),
       })
-      if (!res.ok) throw new Error('Failed')
+      if (!res.ok) {
+        const problem = await res.json().catch(() => ({}))
+        throw new Error(problem.error || 'Please try again or call us on 020 8941 8354.')
+      }
       setSubmitted(true)
-    } catch {
-      alert('Something went wrong. Please try again.')
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Something went wrong. Please try again.')
     } finally {
+      verification.reset()
       setSubmitting(false)
     }
   }
@@ -505,11 +516,9 @@ export default function QuoteForm({ variant = 'panel', docked = false, onMinimiz
                     )}
                   </div>
 
-                  {/* Four fields fill the row evenly, so the button no longer
-                      spans it. The blank label keeps it aligned with the inputs. */}
-                  <div>
-                    <span className="block text-[11px] mb-1.5" aria-hidden>&#8203;</span>
-                  <button
+                </div>
+              <HumanVerification action="quote" onVerify={verification.setToken} resetKey={verification.resetKey} />
+              <button
                     type="submit"
                     disabled={submitting}
                     className="h-10 flex items-center justify-center gap-2 px-6 bg-[#EBBA6F] text-[#0C0F1C] text-[13.5px] font-semibold rounded-lg hover:bg-[#E2B36A] active:bg-[#AC864C] transition-colors duration-150 w-full disabled:opacity-60 disabled:cursor-not-allowed"
@@ -518,8 +527,6 @@ export default function QuoteForm({ variant = 'panel', docked = false, onMinimiz
                     {submitting ? 'Sending…' : 'Get a Free Quote'}
                     {!submitting && <ArrowRight size={15} aria-hidden />}
                   </button>
-                  </div>
-                </div>
               </motion.div>
             )}
           </AnimatePresence>

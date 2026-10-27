@@ -22,7 +22,7 @@ const FLEET = [
   },
   {
     name:        'Luxury Minibuses',
-    description: 'Premium minibuses for small groups, with comfort and style for up to 16 passengers.',
+    description: 'Premium minibuses for small groups, with comfort and style for up to 19 passengers.',
     image:       PLACEHOLDER,
     href:        '/fleet/luxury-minibuses',
   },

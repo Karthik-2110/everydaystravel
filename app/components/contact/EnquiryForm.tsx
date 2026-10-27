@@ -1,5 +1,7 @@
 'use client'
 
+import HumanVerification, { useHumanVerification } from '../HumanVerification'
+
 import { useState } from 'react'
 import Link from 'next/link'
 import { MessageSquareHeart, FileText, Mail, Phone, ArrowRight, Check } from 'lucide-react'
@@ -11,6 +13,7 @@ type Errors = Partial<Record<'firstName' | 'lastName' | 'email' | 'phone' | 'mes
 const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())
 
 export default function EnquiryForm() {
+  const verification = useHumanVerification()
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName]   = useState('')
   const [email, setEmail]         = useState('')
@@ -41,18 +44,26 @@ export default function EnquiryForm() {
     setErrors(found)
     if (Object.keys(found).length > 0) return
 
+    if (!verification.token) {
+      alert('Please complete the human verification before submitting.')
+      return
+    }
     setSubmitting(true)
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ firstName, lastName, email, phone, message }),
+        body: JSON.stringify({ turnstileToken: verification.token, firstName, lastName, email, phone, message }),
       })
-      if (!res.ok) throw new Error('Failed')
+      if (!res.ok) {
+        const problem = await res.json().catch(() => ({}))
+        throw new Error(problem.error || 'Please try again or call us on 020 8941 8354.')
+      }
       setSubmitted(true)
-    } catch {
-      alert('Something went wrong. Please try again, or call us on 020 8941 8354.')
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Something went wrong. Please try again, or call us on 020 8941 8354.')
     } finally {
+      verification.reset()
       setSubmitting(false)
     }
   }
@@ -167,6 +178,7 @@ export default function EnquiryForm() {
             <FieldError message={errors.message} />
           </div>
 
+          <HumanVerification action="contact" onVerify={verification.setToken} resetKey={verification.resetKey} />
           <button
             type="submit"
             disabled={submitting}

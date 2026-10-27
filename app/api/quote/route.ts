@@ -1,3 +1,4 @@
+import { verifyHuman } from '../../lib/turnstile'
 import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { CHAUFFEUR_CARS, LUXURY_MINIBUSES, EXECUTIVE_COACHES } from '@/app/components/VehicleList'
@@ -47,7 +48,12 @@ function row(label: string, value: string): string {
 }
 
 export async function POST(request: Request) {
-  const body = await request.json()
+  const body = await request.json().catch(() => null)
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return NextResponse.json({ error: 'Invalid submission' }, { status: 400 })
+  }
+  const verification = await verifyHuman(body.turnstileToken, 'quote')
+  if (verification) return NextResponse.json({ error: verification.error }, { status: verification.status })
   const { vehicle, journeyType, pickup, destination, passengers, travelDate, pickupTime, returnDate, returnTime, email, phone, fullName, extraStops } = body
   const vehicleName = vehicle ? vehicleNameFromSlug(vehicle) : null
 

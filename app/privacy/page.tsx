@@ -42,6 +42,7 @@ const LAWFUL_BASES: string[][] = [
 ]
 
 const PROCESSORS: string[][] = [
+  ['Cloudflare', 'Turnstile human verification protects enquiry and quote forms from automated abuse; it processes browser and device signals and verification tokens', 'Global network; see Cloudflare’s privacy notice'],
   ['Resend', 'Delivers the enquiry email to our inbox', 'United States'],
   ['Vercel', 'Hosts the website and runs the form endpoints', 'United States / EU'],
   ['Google', 'Address suggestions on the forms; visit measurement and the Contact page map, if you allow them', 'United States'],

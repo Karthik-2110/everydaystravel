@@ -1,3 +1,4 @@
+import LandingContent from '../../components/LandingContent'
 import Navbar from '../../components/Navbar'
 import Hero from '../../components/Hero'
 import StatBand from '../../components/StatBand'
@@ -14,8 +15,8 @@ export const metadata = createPageMetadata({
 })
 
 const STATS = [
-  { icon: Users,       label: 'Up to 53 Passengers' },
-  { icon: Wifi,        label: 'Onboard WiFi & WC' },
+  { icon: Users,       label: 'Up to 55 Passengers' },
+  { icon: Wifi,        label: 'Facilities vary by vehicle' },
   { icon: ShieldCheck, label: 'Fully Licensed & Insured' },
 ]
 
@@ -28,7 +29,7 @@ export default function ExecutiveCoachesPage() {
         lines={[
           { text: 'Executive',  accent: false },
           { text: 'Coach',      accent: false },
-          { text: 'Hire',       accent: true  },
+          { text: 'Hire in London', accent: true },
         ]}
         subtext="Premium coaches for large groups, events, and long-distance travel. Trusted by schools, sports clubs, and corporate clients across the UK."
       />
@@ -39,6 +40,7 @@ export default function ExecutiveCoachesPage() {
         heading="Our executive coaches"
         subtext="Full-size coaches with all the amenities your group needs for a comfortable journey, wherever you're headed."
       />
+      <LandingContent page="coaches" />
       <Footer />
     </>
   )

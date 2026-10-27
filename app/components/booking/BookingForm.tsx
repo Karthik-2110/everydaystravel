@@ -1,5 +1,7 @@
 'use client'
 
+import HumanVerification, { useHumanVerification } from '../HumanVerification'
+
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import {
@@ -56,6 +58,7 @@ type Errors = Partial<Record<
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function BookingForm() {
+  const verification = useHumanVerification()
   // 1 — Journey
   const [pickup, setPickup]           = useState('')
   const [destination, setDestination] = useState('')
@@ -130,12 +133,16 @@ export default function BookingForm() {
       return
     }
 
+    if (!verification.token) {
+      alert('Please complete the human verification before submitting.')
+      return
+    }
     setSubmitting(true)
     try {
       const res = await fetch('/api/quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: JSON.stringify({ turnstileToken: verification.token,
           vehicle,
           journeyType: isReturn ? 'return' : 'oneway',
           serviceType,
@@ -148,11 +155,15 @@ export default function BookingForm() {
           extraStops, specialRequests, notes,
         }),
       })
-      if (!res.ok) throw new Error('Failed')
+      if (!res.ok) {
+        const problem = await res.json().catch(() => ({}))
+        throw new Error(problem.error || 'Please try again or call us on 020 8941 8354.')
+      }
       setSubmitted(true)
-    } catch {
-      alert('Something went wrong. Please try again, or call us on 020 8941 8354.')
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Something went wrong. Please try again, or call us on 020 8941 8354.')
     } finally {
+      verification.reset()
       setSubmitting(false)
     }
   }
@@ -479,7 +490,7 @@ export default function BookingForm() {
               <Input
                 id="bk-requests" aria-label="Special Requests" value={specialRequests}
                 onChange={(e) => setSpecialRequests(e.target.value)}
-                placeholder="Child seats, refreshments, meet & greet, etc."
+                placeholder="Luggage, mobility needs, extra stops, your own child seats, etc."
                 className={inputCls}
               />
             </div>
@@ -515,6 +526,7 @@ export default function BookingForm() {
       {/* ── Submit bar ──────────────────────────────────────────────────────── */}
       <div className="mt-6 lg:mt-8">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3">
+          <HumanVerification action="quote" onVerify={verification.setToken} resetKey={verification.resetKey} />
           <button
             type="submit"
             disabled={submitting}
