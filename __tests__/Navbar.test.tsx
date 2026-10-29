@@ -142,7 +142,7 @@ describe('Navbar — Our Fleet menu', () => {
 })
 
 describe('Navbar — links to pages that do not exist yet', () => {
-  const UNBUILT = ['Our Team', 'Vacancies', 'Travel Inspirations']
+  const UNBUILT = ['Our Team', 'Vacancies']
 
   it('renders unbuilt "More" entries as inert, not as links', () => {
     render(<Navbar />)
@@ -151,6 +151,11 @@ describe('Navbar — links to pages that do not exist yet', () => {
       expect(entry).not.toBeNull()
       expect(entry).not.toHaveAttribute('href')
     }
+  })
+
+  it('links Travel Inspirations to the published blog', () => {
+    render(<Navbar />)
+    expect(screen.getByText('Travel Inspirations').closest('a')).toHaveAttribute('href', '/blog')
   })
 
   it('still links Gallery, which does exist', () => {

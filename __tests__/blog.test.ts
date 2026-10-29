@@ -1,8 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { BLOG_POSTS } from '@/app/data/blog'
 import sitemap from '@/app/sitemap'
+import { isUnavailable } from '@/app/lib/routes'
 
 describe('Blog discovery', () => {
+  it('enables the blog destination in shared site links', () => {
+    expect(isUnavailable('/blog')).toBe(false)
+  })
   it('includes every article in the sitemap with its actual publication date', () => {
     const entries = sitemap()
     expect(entries.some(entry => entry.url.endsWith('/blog'))).toBe(true)

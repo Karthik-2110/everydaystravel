@@ -9,7 +9,6 @@
 // When a page ships, delete its entry here and the link comes alive.
 
 export const UNAVAILABLE_ROUTES: readonly string[] = [
-  '/blog',
   '/team',
   '/vacancies',
 ]
