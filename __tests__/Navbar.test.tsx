@@ -1,5 +1,6 @@
 import { render, screen, fireEvent, within } from '@testing-library/react'
 import { vi, describe, it, expect } from 'vitest'
+import { usePathname } from 'next/navigation'
 import Navbar from '@/app/components/Navbar'
 import { FLEET_CATEGORIES } from '@/app/data/fleet'
 
@@ -44,6 +45,25 @@ describe('Navbar', () => {
       expect(screen.getByRole('banner')).toHaveClass('bg-transparent')
     } finally {
       Object.defineProperty(window, 'scrollY', { configurable: true, value: 0 })
+    }
+  })
+
+  it('closes an open menu and unlocks scrolling when the route changes', () => {
+    const route = vi.mocked(usePathname)
+    route.mockReturnValue('/')
+    const view = render(<Navbar />)
+    try {
+      openMobileMenu()
+      expect(document.body.style.overflow).toBe('hidden')
+      route.mockReturnValue('/blog')
+      view.rerender(<Navbar />)
+      expect(screen.getByRole('button', { name: /toggle navigation menu/i })).toHaveAttribute('aria-expanded', 'false')
+      expect(document.body.style.overflow).toBe('')
+      route.mockReturnValue('/')
+      view.rerender(<Navbar />)
+      expect(screen.getByRole('button', { name: /toggle navigation menu/i })).toHaveAttribute('aria-expanded', 'false')
+    } finally {
+      route.mockReturnValue('/')
     }
   })
 
