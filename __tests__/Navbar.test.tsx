@@ -34,6 +34,19 @@ const openMobileMenu = () => {
 }
 
 describe('Navbar', () => {
+  it('uses the solid shared background when mounted at a restored scroll position', () => {
+    Object.defineProperty(window, 'scrollY', { configurable: true, value: 120 })
+    try {
+      render(<Navbar />)
+      expect(screen.getByRole('banner')).toHaveClass('bg-[#0C0F1C]')
+      Object.defineProperty(window, 'scrollY', { configurable: true, value: 0 })
+      fireEvent.scroll(window)
+      expect(screen.getByRole('banner')).toHaveClass('bg-transparent')
+    } finally {
+      Object.defineProperty(window, 'scrollY', { configurable: true, value: 0 })
+    }
+  })
+
   it('renders the banner and the logo link', () => {
     render(<Navbar />)
     expect(screen.getByRole('banner')).toBeInTheDocument()

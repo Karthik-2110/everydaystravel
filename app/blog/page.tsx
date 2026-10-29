@@ -20,13 +20,13 @@ export default function BlogPage() {
           <img src={BLOG_IMAGE} alt="" width={1600} height={1000} fetchPriority="high" className="w-full aspect-[16/9] object-cover" />
         </Link>
         <p className="mt-5 mb-3 text-xs uppercase tracking-widest text-[#EBBA6F]">Editor’s pick · {lead.category}</p>
-        <h3 className="text-3xl sm:text-4xl leading-tight" style={{ fontFamily: 'Georgia, serif' }}><Link href={`/blog/${lead.slug}`} className="hover:text-[#EBBA6F]">{lead.title}</Link></h3>
+        <h3 className="text-3xl sm:text-4xl leading-tight"><Link href={`/blog/${lead.slug}`} className="hover:text-[#EBBA6F]">{lead.title}</Link></h3>
         <p className="mt-4 text-white/75 leading-relaxed">{lead.description}</p>
         <Link href={`/blog/${lead.slug}`} className="inline-block mt-4 text-[#EBBA6F] underline underline-offset-4">Read the guide →</Link>
       </article>
       {posts.map(post => <article key={post.slug} className="py-7 border-b border-white/20">
         <p className="text-xs uppercase tracking-widest text-[#EBBA6F] mb-3">{post.category}</p>
-        <h3 className="text-2xl sm:text-3xl leading-snug" style={{ fontFamily: 'Georgia, serif' }}><Link className="hover:text-[#EBBA6F]" href={`/blog/${post.slug}`}>{post.title}</Link></h3>
+        <h3 className="text-2xl sm:text-3xl leading-snug"><Link className="hover:text-[#EBBA6F]" href={`/blog/${post.slug}`}>{post.title}</Link></h3>
         <p className="mt-3 leading-relaxed text-white/75">{post.description}</p>
         <Link href={`/blog/${post.slug}`} className="inline-block mt-4 text-[#EBBA6F] underline underline-offset-4" aria-label={`Read guide: ${post.title}`}>Read the guide →</Link>
       </article>)}

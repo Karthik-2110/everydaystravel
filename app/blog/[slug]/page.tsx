@@ -36,7 +36,7 @@ export default async function ArticlePage({ params }: Props) {
         </figure>
         <p className="text-sm text-white/60 mb-8">By Everydays Travel · <time dateTime={post.date}>29 October 2026</time></p>
         <nav aria-label="In this guide" className="mb-10 border-y border-white/15 py-6"><h2 className="text-xl mb-4">In this guide</h2><ol className="space-y-3">{post.sections.map((section, index) => <li key={section.title}><a href={`#section-${index + 1}`} className="text-[#EBBA6F] underline underline-offset-4">{section.title}</a></li>)}</ol></nav>
-        {post.sections.map((section, index) => <section key={section.title} id={`section-${index + 1}`} className="mb-10 scroll-mt-28"><h2 className="text-2xl sm:text-3xl leading-snug mb-5" style={{ fontFamily: 'Georgia, serif' }}>{section.title}</h2>{section.paragraphs.map(paragraph => <p key={paragraph} className="text-base sm:text-lg leading-relaxed text-white/80 mb-4">{paragraph}</p>)}</section>)}
+        {post.sections.map((section, index) => <section key={section.title} id={`section-${index + 1}`} className="mb-10 scroll-mt-28"><h2 className="text-2xl sm:text-3xl leading-snug mb-5">{section.title}</h2>{section.paragraphs.map(paragraph => <p key={paragraph} className="text-base sm:text-lg leading-relaxed text-white/80 mb-4">{paragraph}</p>)}</section>)}
         <Link href={post.service.href} className="text-[#EBBA6F] underline underline-offset-4">{post.service.label} →</Link>
       </div>
 
