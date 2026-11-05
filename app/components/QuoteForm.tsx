@@ -2,10 +2,10 @@
 
 import HumanVerification, { useHumanVerification } from './HumanVerification'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useId } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import {
-  Users,
+  Users, PartyPopper,
   ArrowRight, ArrowRightLeft, ChevronDown, Minus,
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
@@ -112,6 +112,7 @@ export interface QuoteFormProps {
 export default function QuoteForm({ variant = 'panel', docked = false, onMinimize }: QuoteFormProps = {}) {
   const verification = useHumanVerification()
   const compact = variant === 'compact'
+  const eventOptionsId = useId()
 
   // Tailwind breakpoints track the viewport, not the container, so a narrow
   // card on a wide screen needs its column counts set explicitly.
@@ -119,7 +120,7 @@ export default function QuoteForm({ variant = 'panel', docked = false, onMinimiz
   const cardPadCls = compact ? 'p-5 sm:p-6' : 'p-6 sm:p-7 lg:p-8'
   const journeyRowCls = compact
     ? 'grid grid-cols-1 sm:grid-cols-2 gap-4'
-    : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6'
+    : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6'
   const wideOnMobileCls = compact ? '' : 'sm:col-span-2 lg:col-span-1'
   const contactRowCls = compact
     ? 'grid grid-cols-1 sm:grid-cols-2 gap-4 items-start'
@@ -131,6 +132,8 @@ export default function QuoteForm({ variant = 'panel', docked = false, onMinimiz
   const [passengers, setPassengers]   = useState('')
   const [travelDate, setTravelDate]   = useState('')
   const [pickupTime, setPickupTime]   = useState('')
+  const [eventType, setEventType]     = useState('')
+  const [customEventType, setCustomEventType] = useState('')
   const [returnDate, setReturnDate]   = useState('')
   const [returnTime, setReturnTime]   = useState('')
   const [fullName, setFullName]         = useState('')
@@ -155,6 +158,8 @@ export default function QuoteForm({ variant = 'panel', docked = false, onMinimiz
       setPassengers('')
       setTravelDate('')
       setPickupTime('')
+      setEventType('')
+      setCustomEventType('')
       setReturnDate('')
       setReturnTime('')
       setFullName('')
@@ -209,7 +214,7 @@ export default function QuoteForm({ variant = 'panel', docked = false, onMinimiz
       const res = await fetch('/api/quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ turnstileToken: verification.token, journeyType, pickup, destination, passengers, travelDate, pickupTime, returnDate, returnTime, fullName, email, phone }),
+        body: JSON.stringify({ turnstileToken: verification.token, journeyType, pickup, destination, passengers, travelDate, pickupTime, eventType: eventType === 'other' ? customEventType.trim() : eventType, returnDate, returnTime, fullName, email, phone }),
       })
       if (!res.ok) {
         const problem = await res.json().catch(() => ({}))
@@ -379,6 +384,40 @@ export default function QuoteForm({ variant = 'panel', docked = false, onMinimiz
                 value={pickupTime}
                 onChange={setPickupTime}
               />
+            </div>
+            <div className={wideOnMobileCls}>
+              <label htmlFor={`${eventOptionsId}-input`}>
+                <FieldLabel>Event type</FieldLabel>
+              </label>
+              <SelectField
+                id={`${eventOptionsId}-input`}
+                ariaLabel="Event type"
+                value={eventType}
+                onChange={setEventType}
+                icon={PartyPopper}
+                placeholder="Select event type"
+              >
+                {['Christmas dinner', 'Christmas party', 'Wedding', 'Corporate event', 'School trip', 'Airport transfer', 'Birthday party', 'Day trip', 'Sports event'].map(event => (
+                  <option key={event} value={event}>{event}</option>
+                ))}
+                <option value="other">Other</option>
+              </SelectField>
+              {eventType === 'other' && (
+                <div className="mt-3">
+                  <label htmlFor={`${eventOptionsId}-custom`}>
+                    <FieldLabel>Other event type</FieldLabel>
+                  </label>
+                  <Input
+                    id={`${eventOptionsId}-custom`}
+                    value={customEventType}
+                    onChange={e => setCustomEventType(e.target.value)}
+                    placeholder="Enter your event type"
+                    autoComplete="off"
+                    maxLength={150}
+                    className={inputCls}
+                  />
+                </div>
+              )}
             </div>
           </div>
 

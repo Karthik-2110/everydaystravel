@@ -18,6 +18,7 @@ function vehicleNameFromSlug(slug: string): string {
 // hero/vehicle forms keep producing the same email they always have.
 const EXTRA_FIELDS: [key: string, label: string][] = [
   ['serviceType',     'Journey type'],
+  ['eventType',       'Event type'],
   ['company',         'Company'],
   ['flightDetails',   'Flight / train'],
   ['luggage',         'Luggage'],

@@ -142,7 +142,7 @@ export default function Hero({
       <div className="absolute inset-0 bg-gradient-to-t from-[#0C0F1C] via-[#0C0F1C]/20 to-transparent" />
 
       {/* Content */}
-      <div className="relative z-10 w-full site-container pt-28 sm:pt-32 lg:pt-44 pb-10 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 lg:gap-10">
+      <div className="site-header-clearance relative z-10 w-full site-container pb-10 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 lg:gap-10">
         <div className={inlineForm ? 'w-full lg:w-[62%] lg:min-w-[520px]' : 'max-w-[560px] lg:max-w-[660px]'}>
 
           {/* Badge pill */}

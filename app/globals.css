@@ -291,3 +291,39 @@
 }
 
 body:has(.quote-dock-modal) [data-slot="popover-content"] { z-index: 70; }
+
+/* Shared fixed-header geometry. All public page openings reserve the complete
+   initial header; sticky tools follow the smaller header after scrolling. */
+:root {
+  --site-offer-height: 88px;
+  --site-nav-height: 72px;
+  --site-contact-height: 0px;
+  --site-hero-gap: 24px;
+  --site-header-height: calc(var(--site-offer-height) + var(--site-nav-height) + var(--site-contact-height));
+  --site-header-current-height: var(--site-header-height);
+  --site-header-sticky-top: calc(var(--site-header-current-height) + 16px);
+}
+@media (min-width: 640px) {
+  :root {
+    --site-offer-height: clamp(64px, 5.6vw, 100px);
+    --site-hero-gap: 32px;
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --site-nav-height: 80px;
+    --site-contact-height: 48px;
+  }
+}
+:root:has(.site-navbar[data-scrolled='true']) {
+  --site-header-current-height: calc(var(--site-offer-height) + var(--site-nav-height));
+}
+.site-header-clearance {
+  padding-top: calc(var(--site-header-height) + var(--site-hero-gap));
+}
+.blog-quote-access { top: var(--site-header-sticky-top); }
+.blog-quote-aside { scroll-margin-top: var(--site-header-sticky-top); }
+@media (min-width: 1024px) {
+  .blog-quote-aside, .site-header-sticky { top: var(--site-header-sticky-top); }
+  .blog-quote-scroll { max-height: max(12rem, calc(100dvh - var(--site-header-sticky-top) - 120px)); }
+}

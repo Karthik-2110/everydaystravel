@@ -39,7 +39,7 @@ export default function LondonCoachHirePricingGuide() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, '\\u003c') }} />
       <Navbar />
       <main>
-        <header className="site-container pt-36 pb-16 lg:pt-44 lg:pb-24">
+        <header className="site-container site-header-clearance pb-16 lg:pb-24">
           <nav aria-label="Breadcrumb" className="mb-8 text-sm text-white/70">
             <Link href="/" className="underline underline-offset-4">Home</Link>
             <span aria-hidden="true"> / </span>

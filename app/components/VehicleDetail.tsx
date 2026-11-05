@@ -185,7 +185,7 @@ export default function VehicleDetail({
     <div className="min-h-screen bg-[#0C0F1C]">
       <Navbar />
 
-      <main className="site-container pt-28 sm:pt-32 lg:pt-40 pb-0">
+      <main className="site-container site-header-clearance pb-0">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -316,7 +316,7 @@ export default function VehicleDetail({
           </div>
 
           {/* ── Right: sticky booking form ── */}
-          <div className="lg:sticky lg:top-24 lg:self-start pb-10">
+          <div className="lg:sticky site-header-sticky lg:self-start pb-10">
             <VehicleBookingForm defaultVehicleSlug={preselectVehicle ? vehicle.slug : undefined} />
           </div>
 

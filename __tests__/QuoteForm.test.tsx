@@ -54,6 +54,23 @@ vi.mock('@/app/components/PlacesAutocompleteField', () => {
 })
 
 describe('QuoteForm', () => {
+  it('uses a native event dropdown with an Other option for custom text', () => {
+    render(<QuoteForm variant="compact" />)
+    const field = screen.getByRole('combobox', { name: 'Event type' })
+    expect(field.tagName).toBe('SELECT')
+    fireEvent.change(field, { target: { value: 'Christmas party' } })
+    expect(field).toHaveValue('Christmas party')
+    expect(screen.queryByLabelText('Other event type')).not.toBeInTheDocument()
+    fireEvent.change(field, { target: { value: 'other' } })
+    const custom = screen.getByLabelText('Other event type')
+    fireEvent.change(custom, { target: { value: 'Family reunion' } })
+    expect(custom).toHaveValue('Family reunion')
+    fireEvent.change(field, { target: { value: 'Wedding' } })
+    expect(screen.queryByLabelText('Other event type')).not.toBeInTheDocument()
+    expect(field).toHaveValue('Wedding')
+    expect(field).not.toBeRequired()
+  })
+
   it('renders the Plan your journey label', () => {
     render(<QuoteForm />)
     expect(screen.getByText('Plan your journey')).toBeInTheDocument()
@@ -79,13 +96,14 @@ describe('QuoteForm', () => {
     expect(screen.getByRole('button', { name: /one way/i })).toHaveAttribute('aria-pressed', 'false')
   })
 
-  it('renders all 5 main field labels', () => {
+  it('renders all main field labels', () => {
     render(<QuoteForm />)
     expect(screen.getByText('Pickup location')).toBeInTheDocument()
     expect(screen.getByText('Destination')).toBeInTheDocument()
     expect(screen.getByText('Passengers')).toBeInTheDocument()
     expect(screen.getByText('Travel date')).toBeInTheDocument()
     expect(screen.getByText('Pickup time')).toBeInTheDocument()
+    expect(screen.getByLabelText('Event type')).toBeInTheDocument()
   })
 
   it('does not show name, email and phone fields initially', () => {

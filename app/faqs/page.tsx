@@ -45,7 +45,7 @@ export default function FaqsPage() {
         }}
       />
 
-      <main className="site-container pt-32 lg:pt-40 pb-20">
+      <main className="site-container site-header-clearance pb-20">
         <div className="max-w-[820px]">
           <h1
             className="text-white leading-[1.05] tracking-[-0.02em] mb-4"

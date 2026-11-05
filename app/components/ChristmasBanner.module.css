@@ -1,0 +1,77 @@
+.banner {
+  position: relative;
+  overflow: hidden;
+  height: var(--site-offer-height);
+  background: #bb2527;
+  color: white;
+  font-family: var(--font-ui);
+}
+.artwork { position: absolute; inset: 0; max-width: 1800px; margin-inline: auto; pointer-events: none; }
+.layer { position: absolute; max-width: none; }
+.fallingSnow {
+  position: absolute;
+  top: -80px;
+  width: 20px;
+  height: calc(100% + 160px);
+  opacity: var(--opacity);
+  animation: snow-fall var(--fall-duration) var(--fall-delay) linear infinite;
+}
+.snowDrift, .snowSway { display: block; width: 20px; height: 21px; }
+.snowDrift { animation: snow-drift var(--fall-duration) var(--fall-delay) linear infinite; }
+.snowSway { animation: snow-sway var(--sway-duration) var(--fall-delay) cubic-bezier(.45, 0, .55, 1) infinite alternate; }
+.snowflake, .largeSnowflake {
+  position: relative;
+  display: block;
+  width: 20px;
+  height: 21px;
+  animation: snow-spin var(--spin-duration) var(--fall-delay) linear infinite var(--spin-direction);
+}
+.largeSnow { opacity: .55; }
+.largeSnowflake { width: 68px; height: 71px; }
+@keyframes snow-fall { from { transform: translateY(0); } to { transform: translateY(100%); } }
+@keyframes snow-drift { from { transform: translateX(0); } to { transform: translateX(var(--drift)); } }
+@keyframes snow-sway { from { transform: translateX(calc(-1 * var(--sway))); } to { transform: translateX(var(--sway)); } }
+@keyframes snow-spin {
+  from { transform: scale(var(--size)) rotate(0deg); }
+  to { transform: scale(var(--size)) rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fallingSnow { top: var(--resting-position); height: 21px; }
+  .fallingSnow, .snowDrift, .snowSway, .snowflake, .largeSnowflake { animation: none; }
+  .snowflake, .largeSnowflake { transform: scale(var(--size)); }
+}
+.santa { position: absolute; left: 3.222%; top: 12px; width: 96px; height: 142px; transform: scale(.8); transform-origin: top left; }
+.content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(12px, 1.2vw, 22px);
+  height: 100%;
+  max-width: 1800px;
+  margin-inline: auto;
+  padding: 8px 11.3%;
+  font-weight: 500;
+}
+.content p { font-size: clamp(13px, 1.1vw, 20px); line-height: 1.25; text-align: center; }
+.cta {
+  flex-shrink: 0;
+  border-radius: 50px;
+  background: white;
+  color: #bb2527;
+  padding: clamp(7px, .55vw, 10px) clamp(12px, .9vw, 16px);
+  font-size: clamp(12px, .95vw, 17px);
+  line-height: 1.2;
+  transition: background-color 150ms;
+}
+.cta:hover { background: #fff1f1; }
+.cta:focus-visible { outline: 2px solid white; outline-offset: 4px; }
+@media (max-width: 1279px) {
+  .santa { top: 8px; transform: scale(.52); }
+}
+@media (max-width: 639px) {
+  .content { gap: 7px; padding: 8px 10px 8px 56px; }
+  .content p { font-size: 11px; line-height: 1.3; text-align: left; }
+  .cta { padding: 8px 10px; font-size: 11px; }
+  .santa { left: 5px; top: 12px; transform: scale(.46); }
+}

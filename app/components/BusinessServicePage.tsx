@@ -20,7 +20,7 @@ export default function BusinessServicePage({ service }: { service: BusinessServ
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, '\\u003c') }} />
       <Navbar />
       <main>
-        <header className="site-container pt-36 pb-12 lg:pt-44 lg:pb-16">
+        <header className="site-container site-header-clearance pb-12 lg:pb-16">
           <nav aria-label="Breadcrumb" className="mb-8 text-sm text-white/65">
             <Link href="/" className="underline underline-offset-4">Home</Link><span aria-hidden="true"> / </span>
             {!service.path && <><Link href="/services" className="underline underline-offset-4">Services</Link><span aria-hidden="true"> / </span></>}

@@ -516,7 +516,7 @@ export default function BookingForm() {
       </div>
 
       {/* ── Right column ────────────────────────────────────────────────────── */}
-      <div className="lg:col-span-5 flex flex-col gap-5 lg:gap-6 lg:sticky lg:top-24">
+      <div className="lg:col-span-5 flex flex-col gap-5 lg:gap-6 lg:sticky site-header-sticky">
         <VehiclePicker value={vehicle} onChange={setVehicle} />
         <WhyTravelCard />
       </div>

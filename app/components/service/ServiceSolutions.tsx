@@ -77,7 +77,7 @@ export default function ServiceSolutions({ block }: { block: SolutionsBlock }) {
           </div>
 
           {/* Photos */}
-          <div className="lg:sticky lg:top-24">
+          <div className="lg:sticky site-header-sticky">
             <ServiceCarousel slides={block.carousel} />
           </div>
 

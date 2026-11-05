@@ -45,7 +45,7 @@ export default function ContactHero() {
   }, [])
 
   return (
-    <section aria-label="Contact us" className="bg-[#0C0F1C] pt-24 lg:pt-40 pb-6">
+    <section aria-label="Contact us" className="bg-[#0C0F1C] site-header-clearance pb-6">
       <div className="w-full">
         <div
           className="relative overflow-hidden bg-[#0D1221]"

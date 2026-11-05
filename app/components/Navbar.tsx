@@ -8,6 +8,7 @@ import { ChevronDown, ChevronRight, Menu, X, ArrowRight, Phone, PhoneCall, Mail,
 import { AnimatePresence, motion } from 'motion/react'
 import { FLEET_CATEGORIES } from '../data/fleet'
 import SiteLink from './SiteLink'
+import ChristmasBanner from './ChristmasBanner'
 import { WhatsAppIcon, WHATSAPP_HREF } from './icons/social'
 import { EMAIL, EMAIL_HREF, PHONE, PHONE_HREF } from './contact/contact-details'
 
@@ -136,13 +137,16 @@ export default function Navbar({
   return (
     <header
       role="banner"
+      data-scrolled={scrolled}
       className={[
-        'fixed top-0 inset-x-0 z-50 border-b transition-[background-color,border-color] duration-300',
+        'site-navbar fixed top-0 inset-x-0 z-50 border-b transition-[background-color,border-color] duration-300',
         scrolled
           ? 'bg-[#0C0F1C] border-white/[0.07]'
           : 'bg-transparent border-transparent',
       ].join(' ')}
     >
+      <ChristmasBanner />
+
       {/* ── Top contact bar — solid, and only while the hero is still in view.
              Collapses to nothing once the page scrolls, leaving the nav alone.
              Desktop only; small screens keep the floating contact bar instead. ── */}
@@ -214,7 +218,7 @@ export default function Navbar({
       </div>
 
       <div className="site-container">
-        <div className="flex items-center justify-between h-[72px] lg:h-[80px]">
+        <div className="flex items-center justify-between h-[var(--site-nav-height)]">
 
           {/* ── Logo ── */}
           <Link
@@ -359,7 +363,7 @@ export default function Navbar({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:hidden bg-[#0C0F1C]/98 backdrop-blur-xl border-t border-white/[0.07] max-h-[calc(100dvh-72px)] overflow-y-auto overscroll-contain"
+            className="lg:hidden bg-[#0C0F1C]/98 backdrop-blur-xl border-t border-white/[0.07] max-h-[calc(100dvh-var(--site-header-current-height))] overflow-y-auto overscroll-contain"
           >
             <nav
               className="site-container py-4 flex flex-col"

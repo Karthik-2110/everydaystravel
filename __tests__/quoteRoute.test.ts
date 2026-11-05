@@ -35,6 +35,14 @@ const post = (body: Record<string, unknown>) =>
 beforeEach(() => send.mockClear())
 
 describe('POST /api/quote', () => {
+  it('includes custom event types safely in the quote email', async () => {
+    const res = await post({ ...VALID, eventType: 'Family <reunion>' })
+    expect(res.status).toBe(200)
+    const { html } = send.mock.calls[0][0]
+    expect(html).toContain('Event type')
+    expect(html).toContain('Family &lt;reunion&gt;')
+  })
+
   it('puts the full name in the email, ahead of the journey detail', async () => {
     const res = await post(VALID)
     expect(res.status).toBe(200)
