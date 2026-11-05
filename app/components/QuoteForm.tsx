@@ -397,7 +397,7 @@ export default function QuoteForm({ variant = 'panel', docked = false, onMinimiz
                 icon={PartyPopper}
                 placeholder="Select event type"
               >
-                {['Christmas dinner', 'Christmas party', 'Wedding', 'Corporate event', 'School trip', 'Airport transfer', 'Birthday party', 'Day trip', 'Sports event'].map(event => (
+                {['Christmas dinner', 'Christmas party', 'Wedding', 'Corporate event', 'Conference or exhibition', 'School trip', 'University trip', 'Prom or graduation', 'Airport transfer', 'Cruise port transfer', 'Birthday party', 'Anniversary celebration', 'Family gathering', 'Stag or hen party', 'Day trip', 'Sightseeing tour', 'Theatre trip', 'Concert', 'Festival', 'Sports event', 'Race day', 'Religious or community event', 'Charity event', 'Staff shuttle'].map(event => (
                   <option key={event} value={event}>{event}</option>
                 ))}
                 <option value="other">Other</option>
