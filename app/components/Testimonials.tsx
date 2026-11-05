@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { ALL_REVIEWS, type Review } from '@/app/data/reviews'
 import ReviewCard from './ReviewCard'
+import ReviewMarquee from './ReviewMarquee'
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 // Real reviews only — see app/data/reviews.ts for provenance.
@@ -12,10 +13,12 @@ const INITIAL_COUNT = 6
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export default function Testimonials({ reviews = ALL_REVIEWS }: { reviews?: Review[] }) {
+export default function Testimonials({ reviews = ALL_REVIEWS, marquee = false }: { reviews?: Review[]; marquee?: boolean }) {
   const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT)
   const visibleReviews = reviews.slice(0, visibleCount)
   const hasMore = visibleCount < reviews.length
+
+  if (marquee) return <ReviewMarquee reviews={reviews} />
 
   return (
     <section aria-label="Customer reviews" className="bg-[#F4EFE8]">

@@ -1,0 +1,17 @@
+.viewport { overflow-x: auto; scrollbar-width: none; padding-block: 24px 80px; cursor: grab; touch-action: pan-y; user-select: none; }
+.viewport::-webkit-scrollbar { display: none; }
+.viewport:focus-visible { outline: 2px solid #0c0f1c; outline-offset: -2px; }
+.track {
+  display: flex;
+  width: max-content;
+  position: relative;
+
+}
+.group { display: flex; flex-shrink: 0; gap: 16px; padding-right: 16px; }
+.card { position: relative; display: flex; width: clamp(280px, 30vw, 380px); flex-shrink: 0; }
+.card > article { width: 100%; }
+.viewport[data-dragging='true'] { cursor: grabbing; }
+@media (prefers-reduced-motion: reduce) {
+  .duplicate { display: none; }
+  .viewport { padding-block: 8px 24px; }
+}
