@@ -112,7 +112,7 @@ export default function EnquiryForm() {
               </li>
             ))}
           </ol>
-          <BookingForm />
+          <BookingForm layout="full" />
         </div>
       ) : (
       <div role="tabpanel" id="contact-panel-enquiry" aria-labelledby="contact-tab-enquiry">

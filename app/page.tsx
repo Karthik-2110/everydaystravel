@@ -28,7 +28,7 @@ export default function Home() {
       <HomeServices />
       <FleetCarousel />
       <LandingContent page="home" />
-      <Testimonials marquee />
+      <Testimonials />
       <Footer />
     </>
   )

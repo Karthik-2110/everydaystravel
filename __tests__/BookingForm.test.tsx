@@ -60,13 +60,18 @@ function pickTime(id: string, hour: number, minute: number, period: string) {
   fireEvent.click(within(panel).getByRole('button', { name: /apply/i }))
 }
 
-function fillRequired() {
+function fillJourney() {
   fireEvent.change(screen.getByLabelText('Pickup Location'), { target: { value: 'Heathrow Airport' } })
   fireEvent.change(screen.getByLabelText('Destination'), { target: { value: 'Central London' } })
   fireEvent.change(document.getElementById('bk-date')!, { target: { value: '2026-09-01' } })
   pickTime('bk-time', 9, 0, 'AM')
-  fireEvent.change(screen.getByLabelText('Passenger Count'), { target: { value: '12' } })
+  fireEvent.change(screen.getByLabelText(/passenger count/i), { target: { value: '67' } })
   fireEvent.change(screen.getByLabelText('Journey Type'), { target: { value: 'Airport Transfers' } })
+}
+
+const next = () => fireEvent.click(screen.getByRole('button', { name: 'Continue' }))
+
+function fillContact() {
   fireEvent.change(screen.getByLabelText('Full Name'), { target: { value: 'Ada Lovelace' } })
   fireEvent.change(screen.getByLabelText('Email Address'), { target: { value: 'ada@example.com' } })
   fireEvent.change(screen.getByLabelText('Phone Number'), { target: { value: '07538 724000' } })
@@ -81,30 +86,43 @@ beforeEach(() => {
 // ── Tests ─────────────────────────────────────────────────────────────────────
 
 describe('BookingForm', () => {
-  it('renders the four numbered sections', () => {
+  it('shows the four step names and only the current step fields', () => {
     render(<BookingForm />)
-    expect(screen.getByText('Journey Details')).toBeInTheDocument()
-    expect(screen.getByText('Your Details')).toBeInTheDocument()
-    expect(screen.getByText('Additional Information')).toBeInTheDocument()
-    expect(screen.getByText('Choose Your Vehicle')).toBeInTheDocument()
+    expect(within(screen.getByRole('list', { name: 'Booking progress' })).getByText('Journey Details')).toBeInTheDocument()
+    expect(within(screen.getByRole('list', { name: 'Booking progress' })).getByText('Your Details')).toBeInTheDocument()
+    expect(within(screen.getByRole('list', { name: 'Booking progress' })).getByText('Additional Information')).toBeInTheDocument()
+    expect(within(screen.getByRole('list', { name: 'Booking progress' })).getByText('Choose Your Vehicle')).toBeInTheDocument()
+  })
+
+  it('retains journey details when returning to the previous step', () => {
+    render(<BookingForm />)
+    fillJourney()
+    next()
+    expect(screen.queryByLabelText('Pickup Location')).not.toBeInTheDocument()
+    expect(screen.getByLabelText('Full Name')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Back' }))
+    expect(screen.getByLabelText('Pickup Location')).toHaveValue('Heathrow Airport')
+    expect(screen.queryByLabelText('Full Name')).not.toBeInTheDocument()
   })
 
   it('blocks submit and shows errors when required fields are empty', async () => {
     render(<BookingForm />)
-    submit()
+    next()
 
     await waitFor(() => {
       expect(screen.getByText('Pickup location is required')).toBeInTheDocument()
     })
-    expect(screen.getByText('Full name is required')).toBeInTheDocument()
+    expect(screen.queryByLabelText('Full Name')).not.toBeInTheDocument()
     expect(globalThis.fetch).not.toHaveBeenCalled()
   })
 
   it('rejects a malformed email address', async () => {
     render(<BookingForm />)
-    fillRequired()
+    fillJourney()
+    next()
+    fillContact()
     fireEvent.change(screen.getByLabelText('Email Address'), { target: { value: 'not-an-email' } })
-    submit()
+    next()
 
     await waitFor(() => {
       expect(screen.getByText('Please enter a valid email address')).toBeInTheDocument()
@@ -124,6 +142,11 @@ describe('BookingForm', () => {
 
   it('swaps the vehicle list when a different category tab is chosen', () => {
     render(<BookingForm />)
+    fillJourney()
+    next()
+    fillContact()
+    next()
+    next()
     const vehicleSelect = screen.getByLabelText('Vehicle') as HTMLSelectElement
 
     fireEvent.click(screen.getByRole('button', { name: /executive coaches/i }))
@@ -135,6 +158,11 @@ describe('BookingForm', () => {
 
   it('adds and removes extra stops', () => {
     render(<BookingForm />)
+    fillJourney()
+    next()
+    fillContact()
+    next()
+    expect(screen.queryByLabelText('Special Requests')).not.toBeInTheDocument()
     fireEvent.change(screen.getByLabelText('Extra Stops'), { target: { value: 'Watford Junction' } })
     fireEvent.click(screen.getByRole('button', { name: /add stop/i }))
 
@@ -146,11 +174,15 @@ describe('BookingForm', () => {
 
   it('posts the full payload and shows the confirmation panel on success', async () => {
     render(<BookingForm />)
-    fillRequired()
+    fillJourney()
+    next()
+    fillContact()
     fireEvent.change(screen.getByLabelText('Company / Organisation'), { target: { value: 'Analytical Engines Ltd' } })
+    next()
     fireEvent.change(screen.getByLabelText(/flight \/ train details/i), { target: { value: 'BA123, T5' } })
     fireEvent.change(screen.getByLabelText('Extra Stops'), { target: { value: 'Watford Junction' } })
     fireEvent.click(screen.getByRole('button', { name: /add stop/i }))
+    next()
     submit()
 
     await waitFor(() => expect(globalThis.fetch).toHaveBeenCalledTimes(1))
@@ -163,7 +195,7 @@ describe('BookingForm', () => {
       destination: 'Central London',
       travelDate: '2026-09-01',
       pickupTime: '09:00',
-      passengers: '12',
+      passengers: '67',
       journeyType: 'oneway',
       serviceType: 'Airport Transfers',
       fullName: 'Ada Lovelace',

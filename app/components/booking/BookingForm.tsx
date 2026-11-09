@@ -2,7 +2,7 @@
 
 import HumanVerification, { useHumanVerification } from '../HumanVerification'
 
-import { useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import {
   Users, User, Mail, Phone, Building2, Plane, Luggage, Accessibility,
@@ -13,7 +13,7 @@ import { WhatsAppIcon, WHATSAPP_HREF } from '../icons/social'
 import PlacesAutocompleteField from '../PlacesAutocompleteField'
 import DatePickerField from '../DatePickerField'
 import { SERVICES } from '../ServiceList'
-import { validateEmail, validatePhone, validateFullName } from '@/app/lib/validation'
+import { validateEmail, validatePhone, validateFullName, digitsOnly } from '@/app/lib/validation'
 import VehiclePicker, { DEFAULT_VEHICLE_SLUG } from './VehiclePicker'
 import TimePickerField from '../TimePickerField'
 import { WhyTravelCard } from './Sidebar'
@@ -49,6 +49,9 @@ const REVEAL = {
   transition: { duration: 0.2, ease: 'easeOut' },
 } as const
 
+const STEPS = ['Journey Details', 'Your Details', 'Additional Information', 'Choose Your Vehicle'] as const
+const LAST_STEP = STEPS.length - 1
+
 type Errors = Partial<Record<
   'pickup' | 'destination' | 'travelDate' | 'pickupTime' | 'passengers' |
   'serviceType' | 'fullName' | 'email' | 'phone', string
@@ -57,8 +60,27 @@ type Errors = Partial<Record<
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export default function BookingForm() {
+export default function BookingForm({ layout = 'stepper' }: { layout?: 'stepper' | 'full' } = {}) {
+  const isStepper = layout === 'stepper'
   const verification = useHumanVerification()
+  const [step, setStep] = useState(0)
+  const formRef = useRef<HTMLFormElement>(null)
+  const headingRef = useRef<HTMLHeadingElement>(null)
+  const focusStep = useRef(false)
+
+  useLayoutEffect(() => {
+    if (!focusStep.current) return
+    focusStep.current = false
+    formRef.current?.scrollIntoView?.({ block: 'start' })
+    headingRef.current?.focus({ preventScroll: true })
+  }, [step])
+
+  const goToStep = (next: number) => {
+    if (step === LAST_STEP) verification.reset()
+    focusStep.current = true
+    setStep(next)
+  }
+
   // 1 — Journey
   const [pickup, setPickup]           = useState('')
   const [destination, setDestination] = useState('')
@@ -102,7 +124,7 @@ export default function BookingForm() {
     setStopDraft('')
   }
 
-  const validate = (): Errors => {
+  const validateJourney = (): Errors => {
     const e: Errors = {}
     if (!pickup.trim())      e.pickup      = 'Pickup location is required'
     if (!destination.trim()) e.destination = 'Destination is required'
@@ -110,6 +132,11 @@ export default function BookingForm() {
     if (!pickupTime)         e.pickupTime  = 'Pickup time is required'
     if (!passengers)         e.passengers  = 'Passenger count is required'
     if (!serviceType)        e.serviceType = 'Journey type is required'
+    return e
+  }
+
+  const validateContact = (): Errors => {
+    const e: Errors = {}
     // The shared validators reject placeholders and keyboard runs, not just
     // empty fields, and the API applies the very same rules on arrival.
     const nameProblem  = validateFullName(fullName)
@@ -126,10 +153,19 @@ export default function BookingForm() {
 
   const handleSubmit = async (ev: React.FormEvent) => {
     ev.preventDefault()
-    const found = validate()
-    setErrors(found)
-    if (Object.keys(found).length > 0) {
-      document.getElementById('bk-journey-details')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    if (submitting) return
+
+    const journeyErrors = !isStepper || step === 0 || step === LAST_STEP ? validateJourney() : {}
+    const contactErrors = !isStepper || step === 1 || step === LAST_STEP ? validateContact() : {}
+    setErrors({ ...journeyErrors, ...contactErrors })
+    const invalidStep = Object.keys(journeyErrors).length ? 0 : Object.keys(contactErrors).length ? 1 : null
+    if (invalidStep !== null) {
+      if (isStepper && step !== invalidStep) goToStep(invalidStep)
+      if (!isStepper) document.getElementById('bk-journey-details')?.scrollIntoView?.({ behavior: 'smooth', block: 'start' })
+      return
+    }
+    if (isStepper && step < LAST_STEP) {
+      goToStep(step + 1)
       return
     }
 
@@ -152,7 +188,8 @@ export default function BookingForm() {
           returnTime: isReturn ? returnTime : '',
           fullName, email, phone, company,
           flightDetails, luggage, accessibility,
-          extraStops, specialRequests, notes,
+          extraStops, notes,
+          ...(!isStepper && { specialRequests }),
         }),
       })
       if (!res.ok) {
@@ -172,7 +209,7 @@ export default function BookingForm() {
 
   if (submitted) {
     return (
-      <div className="bg-[#0D1221] rounded-2xl border border-white/[0.08] shadow-[0_0_0_1px_rgba(235,186,111,0.08),0_24px_60px_rgba(0,0,0,0.5)] px-6 py-16 flex flex-col items-center text-center gap-3">
+      <div className="py-16 flex flex-col items-center text-center gap-3">
         <div className="w-12 h-12 rounded-full bg-[#EBBA6F]/15 flex items-center justify-center">
           <Check size={22} strokeWidth={2} className="text-[#EBBA6F]" aria-hidden />
         </div>
@@ -199,359 +236,477 @@ export default function BookingForm() {
 
   // ── Form ────────────────────────────────────────────────────────────────────
 
-  return (
-    <form onSubmit={handleSubmit} noValidate>
+  const journeyFields = (
+    <div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
 
-      {/* Two columns. The submit bar lives outside this grid so the sticky
-          right column can never slide over it. */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start">
-
-      {/* ── Left column ─────────────────────────────────────────────────────── */}
-      <div className="lg:col-span-7 flex flex-col gap-5 lg:gap-6">
-
-        {/* 1 — Journey Details */}
-        <div id="bk-journey-details">
-          <SectionCard step={1} title="Journey Details">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
-
-              <div>
-                <FieldLabel htmlFor="bk-pickup" required>Pickup Location</FieldLabel>
-                <PlacesAutocompleteField
-                  id="bk-pickup" ariaLabel="Pickup Location" value={pickup}
-                  onChange={(v) => { setPickup(v); clearError('pickup') }}
-                  placeholder="Enter pickup location"
-                />
-                <FieldError message={errors.pickup} />
-              </div>
-
-              <div>
-                <FieldLabel htmlFor="bk-destination" required>Destination</FieldLabel>
-                <PlacesAutocompleteField
-                  id="bk-destination" ariaLabel="Destination" value={destination}
-                  onChange={(v) => { setDestination(v); clearError('destination') }}
-                  placeholder="Enter destination"
-                />
-                <FieldError message={errors.destination} />
-              </div>
-
-              <div>
-                <FieldLabel htmlFor="bk-date" required>Date of Journey</FieldLabel>
-                <DatePickerField
-                  id="bk-date" value={travelDate} minDate={todayISO()}
-                  onChange={(v) => { setTravelDate(v); clearError('travelDate') }}
-                  className={errors.travelDate ? errorRing : ''}
-                />
-                <FieldError message={errors.travelDate} />
-              </div>
-
-              <div className="flex items-end gap-4">
-                <div className="flex-1 min-w-0">
-                  <FieldLabel htmlFor="bk-time" required>Pickup Time</FieldLabel>
-                  <TimePickerField
-                    id="bk-time" title="Pickup Time" value={pickupTime}
-                    onChange={(v) => { setPickupTime(v); clearError('pickupTime') }}
-                    invalid={!!errors.pickupTime}
-                  />
-                  <FieldError message={errors.pickupTime} />
-                </div>
-
-                {/* Return toggle */}
-                <div className="shrink-0 pb-0.5">
-                  <span className="block text-white text-[11px] mb-1.5 tracking-[0.02em]" style={{ fontFamily: 'var(--font-ui)' }}>
-                    Return Journey
-                  </span>
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={isReturn}
-                    aria-label="Return Journey"
-                    onClick={() => setIsReturn((r) => !r)}
-                    className={[
-                      'relative block w-[46px] h-[26px] p-0 rounded-full transition-colors duration-200',
-                      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EBBA6F]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0D1221]',
-                      isReturn ? 'bg-[#EBBA6F]' : 'bg-white/12',
-                    ].join(' ')}
-                  >
-                    <span
-                      className={[
-                        'absolute top-[3px] left-[3px] w-5 h-5 rounded-full bg-white shadow transition-transform duration-200',
-                        isReturn ? 'translate-x-[20px]' : 'translate-x-0',
-                      ].join(' ')}
-                    />
-                  </button>
-                </div>
-              </div>
-
-            </div>
-
-            {/* Return fields */}
-            <AnimatePresence initial={false}>
-              {isReturn && (
-                <motion.div {...REVEAL} className="overflow-hidden">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
-                    <div>
-                      <FieldLabel htmlFor="bk-rdate">Return Date</FieldLabel>
-                      <DatePickerField
-                        id="bk-rdate" value={returnDate}
-                        minDate={travelDate || todayISO()}
-                        onChange={setReturnDate}
-                      />
-                    </div>
-                    <div>
-                      <FieldLabel htmlFor="bk-rtime">Return Time</FieldLabel>
-                      <TimePickerField
-                        id="bk-rtime" title="Return Time" value={returnTime} onChange={setReturnTime}
-                      />
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4 mt-4">
-              <div>
-                <FieldLabel htmlFor="bk-pax" required>Passenger Count</FieldLabel>
-                <SimpleSelect
-                  id="bk-pax" ariaLabel="Passenger Count" value={passengers}
-                  onChange={(v) => { setPassengers(v); clearError('passengers') }}
-                  icon={Users} placeholder="Select passengers" invalid={!!errors.passengers}
-                >
-                  {PASSENGER_OPTIONS.map((p) => <option key={p} value={p}>{p}</option>)}
-                </SimpleSelect>
-                <FieldError message={errors.passengers} />
-              </div>
-
-              <div>
-                <FieldLabel htmlFor="bk-service" required>Journey Type</FieldLabel>
-                <SimpleSelect
-                  id="bk-service" ariaLabel="Journey Type" value={serviceType}
-                  onChange={(v) => { setServiceType(v); clearError('serviceType') }}
-                  icon={Route} placeholder="Select journey type" invalid={!!errors.serviceType}
-                >
-                  {SERVICES.map((s) => <option key={s.slug} value={s.name}>{s.name}</option>)}
-                  <option value="Other">Other</option>
-                </SimpleSelect>
-                <FieldError message={errors.serviceType} />
-              </div>
-            </div>
-          </SectionCard>
+        <div>
+          <FieldLabel htmlFor="bk-pickup" required>Pickup Location</FieldLabel>
+          <PlacesAutocompleteField
+            id="bk-pickup" ariaLabel="Pickup Location" value={pickup}
+            onChange={(v) => { setPickup(v); clearError('pickup') }}
+            placeholder="Enter pickup location"
+          />
+          <FieldError message={errors.pickup} />
         </div>
 
-        {/* 2 — Your Details */}
-        <SectionCard step={2} title="Your Details">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
+        <div>
+          <FieldLabel htmlFor="bk-destination" required>Destination</FieldLabel>
+          <PlacesAutocompleteField
+            id="bk-destination" ariaLabel="Destination" value={destination}
+            onChange={(v) => { setDestination(v); clearError('destination') }}
+            placeholder="Enter destination"
+          />
+          <FieldError message={errors.destination} />
+        </div>
 
-            <div>
-              <FieldLabel htmlFor="bk-name" required>Full Name</FieldLabel>
-              <div className="relative">
-                <User size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35 pointer-events-none z-10" aria-hidden />
-                <Input
-                  id="bk-name" aria-label="Full Name" value={fullName}
-                  onChange={(e) => { setFullName(e.target.value); clearError('fullName') }}
-                  placeholder="Enter full name"
-                  aria-invalid={!!errors.fullName}
-                  className={`pl-8 ${inputCls} ${errors.fullName ? errorRing : ''}`}
-                />
-              </div>
-              <FieldError message={errors.fullName} />
-            </div>
+        <div>
+          <FieldLabel htmlFor="bk-date" required>Date of Journey</FieldLabel>
+          <DatePickerField
+            id="bk-date" value={travelDate} minDate={todayISO()}
+            onChange={(v) => { setTravelDate(v); clearError('travelDate') }}
+            className={errors.travelDate ? errorRing : ''}
+          />
+          <FieldError message={errors.travelDate} />
+        </div>
 
-            <div>
-              <FieldLabel htmlFor="bk-email" required>Email Address</FieldLabel>
-              <div className="relative">
-                <Mail size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35 pointer-events-none z-10" aria-hidden />
-                <Input
-                  id="bk-email" type="email" aria-label="Email Address" value={email}
-                  onChange={(e) => { setEmail(e.target.value); clearError('email') }}
-                  placeholder="Enter email address"
-                  aria-invalid={!!errors.email}
-                  className={`pl-8 ${inputCls} ${errors.email ? errorRing : ''}`}
-                />
-              </div>
-              <FieldError message={errors.email} />
-            </div>
-
-            <div>
-              <FieldLabel htmlFor="bk-phone" required>Phone Number</FieldLabel>
-              <div className="relative">
-                <Phone size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35 pointer-events-none z-10" aria-hidden />
-                <Input
-                  id="bk-phone" type="tel" aria-label="Phone Number" value={phone}
-                  onChange={(e) => { setPhone(e.target.value); clearError('phone') }}
-                  placeholder="Enter phone number"
-                  aria-invalid={!!errors.phone}
-                  className={`pl-8 ${inputCls} ${errors.phone ? errorRing : ''}`}
-                />
-              </div>
-              <FieldError message={errors.phone} />
-            </div>
-
-            <div>
-              <FieldLabel htmlFor="bk-company">Company / Organisation</FieldLabel>
-              <div className="relative">
-                <Building2 size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35 pointer-events-none z-10" aria-hidden />
-                <Input
-                  id="bk-company" aria-label="Company / Organisation" value={company}
-                  onChange={(e) => setCompany(e.target.value)}
-                  placeholder="Enter company name (optional)"
-                  className={`pl-8 ${inputCls}`}
-                />
-              </div>
-            </div>
-
+        <div className="flex items-end gap-4">
+          <div className="flex-1 min-w-0">
+            <FieldLabel htmlFor="bk-time" required>Pickup Time</FieldLabel>
+            <TimePickerField
+              id="bk-time" title="Pickup Time" value={pickupTime}
+              onChange={(v) => { setPickupTime(v); clearError('pickupTime') }}
+              invalid={!!errors.pickupTime}
+            />
+            <FieldError message={errors.pickupTime} />
           </div>
-        </SectionCard>
 
-        {/* 3 — Additional Information */}
-        <SectionCard step={3} title="Additional Information">
-          <div className="flex flex-col gap-4">
+          {/* Return toggle */}
+          <div className="shrink-0 pb-0.5">
+            <span className="block text-white text-[11px] mb-1.5 tracking-[0.02em]" style={{ fontFamily: 'var(--font-ui)' }}>
+              Return Journey
+            </span>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={isReturn}
+              aria-label="Return Journey"
+              onClick={() => setIsReturn((r) => !r)}
+              className={[
+                'relative block w-[46px] h-[26px] p-0 rounded-full transition-colors duration-200',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EBBA6F]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0D1221]',
+                isReturn ? 'bg-[#EBBA6F]' : 'bg-white/12',
+              ].join(' ')}
+            >
+              <span
+                className={[
+                  'absolute top-[3px] left-[3px] w-5 h-5 rounded-full bg-white shadow transition-transform duration-200',
+                  isReturn ? 'translate-x-[20px]' : 'translate-x-0',
+                ].join(' ')}
+              />
+            </button>
+          </div>
+        </div>
 
-            <div>
-              <FieldLabel htmlFor="bk-flight">Flight / Train Details (if applicable)</FieldLabel>
-              <div className="relative">
-                <Plane size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35 pointer-events-none z-10" aria-hidden />
-                <Input
-                  id="bk-flight" aria-label="Flight / Train Details (if applicable)" value={flightDetails}
-                  onChange={(e) => setFlightDetails(e.target.value)}
-                  placeholder="Flight number, arrival time, terminal…"
-                  className={`pl-8 ${inputCls}`}
-                />
-              </div>
-            </div>
+      </div>
 
+      {/* Return fields */}
+      <AnimatePresence initial={false}>
+        {isReturn && (
+          <motion.div {...REVEAL} className="overflow-hidden">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
               <div>
-                <FieldLabel htmlFor="bk-luggage">Luggage Amount</FieldLabel>
-                <SimpleSelect
-                  id="bk-luggage" ariaLabel="Luggage Amount" value={luggage}
-                  onChange={setLuggage} icon={Luggage} placeholder="Select luggage amount"
-                >
-                  {LUGGAGE_OPTIONS.map((l) => <option key={l} value={l}>{l}</option>)}
-                </SimpleSelect>
+                <FieldLabel htmlFor="bk-rdate">Return Date</FieldLabel>
+                <DatePickerField
+                  id="bk-rdate" value={returnDate}
+                  minDate={travelDate || todayISO()}
+                  onChange={setReturnDate}
+                />
               </div>
               <div>
-                <FieldLabel htmlFor="bk-access">Accessibility Requirements</FieldLabel>
-                <SimpleSelect
-                  id="bk-access" ariaLabel="Accessibility Requirements" value={accessibility}
-                  onChange={setAccessibility} icon={Accessibility} placeholder="Select accessibility needs"
-                >
-                  {ACCESSIBILITY_OPTIONS.map((a) => <option key={a} value={a}>{a}</option>)}
-                </SimpleSelect>
+                <FieldLabel htmlFor="bk-rtime">Return Time</FieldLabel>
+                <TimePickerField
+                  id="bk-rtime" title="Return Time" value={returnTime} onChange={setReturnTime}
+                />
               </div>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-            {/* Extra stops */}
-            <div>
-              <FieldLabel htmlFor="bk-stop">Extra Stops</FieldLabel>
-              <div className="relative">
-                <MapPin size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35 pointer-events-none z-10" aria-hidden />
-                <Input
-                  id="bk-stop" aria-label="Extra Stops" value={stopDraft}
-                  onChange={(e) => setStopDraft(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addStop() } }}
-                  placeholder="Add any additional stops"
-                  className={`pl-8 pr-11 ${inputCls}`}
-                />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4 mt-4">
+        <div>
+          <FieldLabel htmlFor="bk-pax" required>Passenger Count</FieldLabel>
+          {isStepper ? (
+            <div className="relative">
+              <Users size={13} className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-white/35" aria-hidden />
+              <Input
+                id="bk-pax"
+                inputMode="numeric"
+                value={passengers}
+                onChange={(event) => { setPassengers(digitsOnly(event.target.value)); clearError('passengers') }}
+                placeholder="Enter passenger count"
+                aria-required="true"
+                aria-invalid={!!errors.passengers}
+                className={`pl-8 ${inputCls} ${errors.passengers ? errorRing : ''}`}
+              />
+            </div>
+          ) : (
+              <SimpleSelect
+                id="bk-pax" ariaLabel="Passenger Count" value={passengers}
+                onChange={(v) => { setPassengers(v); clearError('passengers') }}
+                icon={Users} placeholder="Select passengers" invalid={!!errors.passengers}
+              >
+                {PASSENGER_OPTIONS.map((p) => <option key={p} value={p}>{p}</option>)}
+              </SimpleSelect>
+          )}
+          <FieldError message={errors.passengers} />
+        </div>
+
+        <div>
+          <FieldLabel htmlFor="bk-service" required>Journey Type</FieldLabel>
+          <SimpleSelect
+            id="bk-service" ariaLabel="Journey Type" value={serviceType}
+            onChange={(v) => { setServiceType(v); clearError('serviceType') }}
+            icon={Route} placeholder="Select journey type" invalid={!!errors.serviceType}
+          >
+            {SERVICES.map((s) => <option key={s.slug} value={s.name}>{s.name}</option>)}
+            <option value="Other">Other</option>
+          </SimpleSelect>
+          <FieldError message={errors.serviceType} />
+        </div>
+      </div>
+    </div>
+  )
+
+  const contactFields = (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
+
+      <div>
+        <FieldLabel htmlFor="bk-name" required>Full Name</FieldLabel>
+        <div className="relative">
+          <User size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35 pointer-events-none z-10" aria-hidden />
+          <Input
+            id="bk-name" aria-label="Full Name" value={fullName}
+            onChange={(e) => { setFullName(e.target.value); clearError('fullName') }}
+            placeholder="Enter full name"
+            aria-invalid={!!errors.fullName}
+            className={`pl-8 ${inputCls} ${errors.fullName ? errorRing : ''}`}
+          />
+        </div>
+        <FieldError message={errors.fullName} />
+      </div>
+
+      <div>
+        <FieldLabel htmlFor="bk-email" required>Email Address</FieldLabel>
+        <div className="relative">
+          <Mail size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35 pointer-events-none z-10" aria-hidden />
+          <Input
+            id="bk-email" type="email" aria-label="Email Address" value={email}
+            onChange={(e) => { setEmail(e.target.value); clearError('email') }}
+            placeholder="Enter email address"
+            aria-invalid={!!errors.email}
+            className={`pl-8 ${inputCls} ${errors.email ? errorRing : ''}`}
+          />
+        </div>
+        <FieldError message={errors.email} />
+      </div>
+
+      <div>
+        <FieldLabel htmlFor="bk-phone" required>Phone Number</FieldLabel>
+        <div className="relative">
+          <Phone size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35 pointer-events-none z-10" aria-hidden />
+          <Input
+            id="bk-phone" type="tel" aria-label="Phone Number" value={phone}
+            onChange={(e) => { setPhone(e.target.value); clearError('phone') }}
+            placeholder="Enter phone number"
+            aria-invalid={!!errors.phone}
+            className={`pl-8 ${inputCls} ${errors.phone ? errorRing : ''}`}
+          />
+        </div>
+        <FieldError message={errors.phone} />
+      </div>
+
+      <div>
+        <FieldLabel htmlFor="bk-company">Company / Organisation</FieldLabel>
+        <div className="relative">
+          <Building2 size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35 pointer-events-none z-10" aria-hidden />
+          <Input
+            id="bk-company" aria-label="Company / Organisation" value={company}
+            onChange={(e) => setCompany(e.target.value)}
+            placeholder="Enter company name (optional)"
+            className={`pl-8 ${inputCls}`}
+          />
+        </div>
+      </div>
+
+    </div>
+  )
+
+  const additionalFields = (
+    <div className="flex flex-col gap-4">
+
+      <div>
+        <FieldLabel htmlFor="bk-flight">Flight / Train Details (if applicable)</FieldLabel>
+        <div className="relative">
+          <Plane size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35 pointer-events-none z-10" aria-hidden />
+          <Input
+            id="bk-flight" aria-label="Flight / Train Details (if applicable)" value={flightDetails}
+            onChange={(e) => setFlightDetails(e.target.value)}
+            placeholder="Flight number, arrival time, terminal…"
+            className={`pl-8 ${inputCls}`}
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
+        <div>
+          <FieldLabel htmlFor="bk-luggage">Luggage Amount</FieldLabel>
+          <SimpleSelect
+            id="bk-luggage" ariaLabel="Luggage Amount" value={luggage}
+            onChange={setLuggage} icon={Luggage} placeholder="Select luggage amount"
+          >
+            {LUGGAGE_OPTIONS.map((l) => <option key={l} value={l}>{l}</option>)}
+          </SimpleSelect>
+        </div>
+        <div>
+          <FieldLabel htmlFor="bk-access">Accessibility Requirements</FieldLabel>
+          <SimpleSelect
+            id="bk-access" ariaLabel="Accessibility Requirements" value={accessibility}
+            onChange={setAccessibility} icon={Accessibility} placeholder="Select accessibility needs"
+          >
+            {ACCESSIBILITY_OPTIONS.map((a) => <option key={a} value={a}>{a}</option>)}
+          </SimpleSelect>
+        </div>
+      </div>
+
+      {/* Extra stops */}
+      <div>
+        <FieldLabel htmlFor="bk-stop">Extra Stops</FieldLabel>
+        <div className="relative">
+          <MapPin size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35 pointer-events-none z-10" aria-hidden />
+          <Input
+            id="bk-stop" aria-label="Extra Stops" value={stopDraft}
+            onChange={(e) => setStopDraft(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addStop() } }}
+            placeholder="Add any additional stops"
+            className={`pl-8 pr-11 ${inputCls}`}
+          />
+          <button
+            type="button"
+            onClick={addStop}
+            aria-label="Add stop"
+            className="absolute right-1.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-md flex items-center justify-center text-[#EBBA6F] hover:bg-[#EBBA6F]/10 transition-colors duration-150"
+          >
+            <Plus size={15} aria-hidden />
+          </button>
+        </div>
+
+        {extraStops.length > 0 && (
+          <ul className="flex flex-wrap gap-2 mt-2.5">
+            {extraStops.map((stop, i) => (
+              <li
+                key={`${stop}-${i}`}
+                className="flex items-center gap-1.5 pl-2.5 pr-1.5 py-1 rounded-full border border-white/12 bg-[#0C0F1C] text-white/75 text-[12px]"
+                style={{ fontFamily: 'var(--font-ui)' }}
+              >
+                {stop}
                 <button
                   type="button"
-                  onClick={addStop}
-                  aria-label="Add stop"
-                  className="absolute right-1.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-md flex items-center justify-center text-[#EBBA6F] hover:bg-[#EBBA6F]/10 transition-colors duration-150"
+                  aria-label={`Remove ${stop}`}
+                  onClick={() => setExtraStops((s) => s.filter((_, j) => j !== i))}
+                  className="w-4 h-4 rounded-full flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-colors duration-150"
                 >
-                  <Plus size={15} aria-hidden />
+                  <X size={11} aria-hidden />
                 </button>
-              </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
 
-              {extraStops.length > 0 && (
-                <ul className="flex flex-wrap gap-2 mt-2.5">
-                  {extraStops.map((stop, i) => (
-                    <li
-                      key={`${stop}-${i}`}
-                      className="flex items-center gap-1.5 pl-2.5 pr-1.5 py-1 rounded-full border border-white/12 bg-[#0C0F1C] text-white/75 text-[12px]"
-                      style={{ fontFamily: 'var(--font-ui)' }}
-                    >
-                      {stop}
-                      <button
-                        type="button"
-                        aria-label={`Remove ${stop}`}
-                        onClick={() => setExtraStops((s) => s.filter((_, j) => j !== i))}
-                        className="w-4 h-4 rounded-full flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-colors duration-150"
-                      >
-                        <X size={11} aria-hidden />
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
+      {!isStepper && (
+        <div>
+          <FieldLabel htmlFor="bk-requests">Special Requests</FieldLabel>
+          <Input
+            id="bk-requests" aria-label="Special Requests" value={specialRequests}
+            onChange={(e) => setSpecialRequests(e.target.value)}
+            placeholder="Luggage, mobility needs, extra stops, your own child seats, etc."
+            className={inputCls}
+          />
+        </div>
+      )}
+
+      <div>
+        <FieldLabel htmlFor="bk-notes">Additional Notes</FieldLabel>
+        <textarea
+          id="bk-notes" aria-label="Additional Notes" value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          rows={4}
+          placeholder="Any other information that helps us tailor your journey…"
+          className={textareaCls}
+          style={{ fontFamily: 'var(--font-body)' }}
+        />
+      </div>
+
+      {!isStepper && <p className="text-white/35 text-xs"><span className="text-[#EBBA6F]">*</span> Required fields</p>}
+    </div>
+  )
+
+  if (!isStepper) {
+    return (
+      <form onSubmit={handleSubmit} noValidate>
+
+        {/* Two columns. The submit bar lives outside this grid so the sticky
+            right column can never slide over it. */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start">
+
+          {/* ── Left column ─────────────────────────────────────────────────────── */}
+          <div className="lg:col-span-7 flex flex-col gap-5 lg:gap-6">
+
+            {/* 1 — Journey Details */}
+            <div id="bk-journey-details">
+              <SectionCard step={1} title="Journey Details">
+                {journeyFields}
+              </SectionCard>
             </div>
 
-            <div>
-              <FieldLabel htmlFor="bk-requests">Special Requests</FieldLabel>
-              <Input
-                id="bk-requests" aria-label="Special Requests" value={specialRequests}
-                onChange={(e) => setSpecialRequests(e.target.value)}
-                placeholder="Luggage, mobility needs, extra stops, your own child seats, etc."
-                className={inputCls}
-              />
-            </div>
+            {/* 2 — Your Details */}
+            <SectionCard step={2} title="Your Details">
+              {contactFields}
+            </SectionCard>
 
-            <div>
-              <FieldLabel htmlFor="bk-notes">Additional Notes</FieldLabel>
-              <textarea
-                id="bk-notes" aria-label="Additional Notes" value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                rows={4}
-                placeholder="Any other information that helps us tailor your journey…"
-                className={textareaCls}
-                style={{ fontFamily: 'var(--font-body)' }}
-              />
-            </div>
-
-            <p className="text-white/35 text-[11.5px]" style={{ fontFamily: 'var(--font-ui)' }}>
-              <span className="text-[#EBBA6F]">*</span> Required fields
-            </p>
-
+            {/* 3 — Additional Information */}
+            <SectionCard step={3} title="Additional Information">
+              {additionalFields}
+            </SectionCard>
           </div>
-        </SectionCard>
-      </div>
 
-      {/* ── Right column ────────────────────────────────────────────────────── */}
-      <div className="lg:col-span-5 flex flex-col gap-5 lg:gap-6 lg:sticky site-header-sticky">
-        <VehiclePicker value={vehicle} onChange={setVehicle} />
-        <WhyTravelCard />
-      </div>
+          {/* ── Right column ────────────────────────────────────────────────────── */}
+          <div className="lg:col-span-5 flex flex-col gap-5 lg:gap-6 lg:sticky site-header-sticky">
+            <SectionCard step={4} title="Choose Your Vehicle">
+              <VehiclePicker value={vehicle} onChange={setVehicle} />
+            </SectionCard>
+            <WhyTravelCard />
+          </div>
 
-      </div>
+        </div>
 
-      {/* ── Submit bar ──────────────────────────────────────────────────────── */}
-      <div className="mt-6 lg:mt-8">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3">
-          <HumanVerification action="quote" onVerify={verification.setToken} resetKey={verification.resetKey} />
+        {/* ── Submit bar ──────────────────────────────────────────────────────── */}
+        <div className="mt-6 lg:mt-8">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3">
+            <HumanVerification action="quote" onVerify={verification.setToken} resetKey={verification.resetKey} />
+            <button
+              type="submit"
+              disabled={submitting}
+              className="h-12 px-8 flex items-center justify-center gap-2 bg-[#EBBA6F] text-[#0C0F1C] text-[14.5px] font-semibold rounded-lg hover:bg-[#E2B36A] active:bg-[#D4A85E] transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
+              style={{ fontFamily: 'var(--font-ui)' }}
+            >
+              {submitting ? 'Sending…' : 'Request My Quote'}
+              {!submitting && <ArrowRight size={16} aria-hidden />}
+            </button>
+
+            <a
+              href={WHATSAPP_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="h-12 px-6 flex items-center justify-center gap-2 rounded-lg bg-[#25D366] hover:bg-[#1FBB59] text-white text-[14px] font-medium transition-colors duration-150"
+              style={{ fontFamily: 'var(--font-ui)' }}
+            >
+              <WhatsAppIcon size={15} />
+              Need Help? WhatsApp Us
+            </a>
+          </div>
+
+          <p className="text-center text-white/35 text-[12.5px] mt-4" style={{ fontFamily: 'var(--font-body)' }}>
+            We aim to respond within 30 minutes during business hours.
+          </p>
+        </div>
+
+      </form>
+    )
+  }
+
+  return (
+    <form
+      ref={formRef}
+      onSubmit={handleSubmit}
+      noValidate
+      className="min-w-0 scroll-mt-[var(--site-header-sticky-top)]"
+    >
+      <ol aria-label="Booking progress" className="mb-8 grid grid-cols-4 gap-1.5 sm:mb-10 sm:gap-3 xl:gap-4">
+        {STEPS.map((title, index) => (
+          <li key={title} aria-current={index === step ? 'step' : undefined} className="flex flex-col gap-2">
+            <span className={`h-1 rounded-full motion-safe:transition-colors ${index <= step ? 'bg-[#EBBA6F]' : 'bg-white/15'}`} aria-hidden />
+            <span className="flex flex-col items-start gap-1.5 xl:flex-row xl:items-center xl:gap-2">
+              <span className={`flex size-6 shrink-0 items-center justify-center rounded-full border text-xs font-semibold sm:size-7 ${index <= step ? 'border-[#EBBA6F] bg-[#EBBA6F] text-[#0C0F1C]' : 'border-white/20 text-white/65'}`}>
+                {index < step ? (
+                  <>
+                    <Check size={14} strokeWidth={2.5} aria-hidden />
+                    <span className="sr-only">Step {index + 1} completed</span>
+                  </>
+                ) : index + 1}
+              </span>
+              <span className={`text-[10px] font-medium leading-tight [overflow-wrap:anywhere] sm:text-xs xl:text-sm ${index === step ? 'text-[#EBBA6F]' : 'text-white/65'}`}>{title}</span>
+            </span>
+          </li>
+        ))}
+      </ol>
+
+      <section aria-labelledby="bk-step-title">
+        <h2 ref={headingRef} id="bk-step-title" tabIndex={-1} className="mb-6 text-2xl font-medium text-white focus:outline-none">
+          {STEPS[step]}
+        </h2>
+        {step === 0 && journeyFields}
+        {step === 1 && contactFields}
+        {step === 2 && additionalFields}
+        {step === LAST_STEP && <VehiclePicker value={vehicle} onChange={setVehicle} sideBySide />}
+      </section>
+
+      <div className="mt-8">
+        {step === LAST_STEP && (
+          <div className="mb-4">
+            <HumanVerification action="quote" onVerify={verification.setToken} resetKey={verification.resetKey} />
+          </div>
+        )}
+        <div className="flex flex-wrap items-center gap-3">
+          {step > 0 && (
+            <button
+              type="button"
+              disabled={submitting}
+              onClick={() => goToStep(step - 1)}
+              className="h-12 rounded-full border border-white/20 px-6 text-sm font-medium text-white transition-colors hover:border-[#EBBA6F] disabled:opacity-60"
+            >
+              Back
+            </button>
+          )}
           <button
             type="submit"
             disabled={submitting}
-            className="h-12 px-8 flex items-center justify-center gap-2 bg-[#EBBA6F] text-[#0C0F1C] text-[14.5px] font-semibold rounded-lg hover:bg-[#E2B36A] active:bg-[#D4A85E] transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
-            style={{ fontFamily: 'var(--font-ui)' }}
+            className="ml-auto flex h-12 items-center justify-center gap-2 rounded-full bg-[#EBBA6F] px-6 text-sm font-semibold text-[#0C0F1C] transition-colors hover:bg-[#E2B36A] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {submitting ? 'Sending…' : 'Request My Quote'}
+            {step < LAST_STEP ? 'Continue' : submitting ? 'Sending…' : 'Request My Quote'}
             {!submitting && <ArrowRight size={16} aria-hidden />}
           </button>
-
-          <a
-            href={WHATSAPP_HREF}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="h-12 px-6 flex items-center justify-center gap-2 rounded-lg bg-[#25D366] hover:bg-[#1FBB59] text-white text-[14px] font-medium transition-colors duration-150"
-            style={{ fontFamily: 'var(--font-ui)' }}
-          >
-            <WhatsAppIcon size={15} />
-            Need Help? WhatsApp Us
-          </a>
         </div>
 
-        <p className="text-center text-white/35 text-[12.5px] mt-4" style={{ fontFamily: 'var(--font-body)' }}>
-          We aim to respond within 30 minutes during business hours.
-        </p>
+        {step === LAST_STEP && (
+          <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+            <a
+              href={WHATSAPP_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="h-12 px-6 flex items-center justify-center gap-2 rounded-lg bg-[#25D366] hover:bg-[#1FBB59] text-white text-[14px] font-medium transition-colors duration-150"
+              style={{ fontFamily: 'var(--font-ui)' }}
+            >
+              <WhatsAppIcon size={15} />
+              Need Help? WhatsApp Us
+            </a>
+            <p className="text-xs text-white/55">
+              We aim to respond within 30 minutes during business hours.
+            </p>
+          </div>
+        )}
       </div>
 
     </form>

@@ -14,22 +14,7 @@ import TimePickerField from './TimePickerField'
 import PlacesAutocompleteField from './PlacesAutocompleteField'
 import { validateEmail, validatePhone, validateFullName, digitsOnly } from '../lib/validation'
 
-// ── Style constants ─────────────────────────────────────────────────────────
-
-const base =
-  'w-full h-10 rounded-md border border-white/10 bg-[#0C0F1C] text-[13px] ' +
-  'transition-colors duration-150'
-
-const inputCls =
-  base +
-  ' text-white placeholder:text-white/30 ' +
-  'focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#EBBA6F]'
-
-const nativeSelect = (hasValue: boolean) =>
-  base +
-  ' pl-8 pr-8 appearance-none cursor-pointer [color-scheme:dark] ' +
-  'focus:outline-none focus:border-[#EBBA6F] focus:ring-0 ' +
-  (hasValue ? 'text-white' : 'text-white/30')
+import { inputCls, selectCls } from './form-fields'
 
 const REVEAL = {
   initial:    { opacity: 0, height: 0, marginTop: 0 },
@@ -82,7 +67,7 @@ function SelectField({
         aria-label={ariaLabel}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={nativeSelect(!!value)}
+        className={selectCls(!!value)}
       >
         <option value="" disabled>{placeholder}</option>
         {children}

@@ -3,6 +3,7 @@ import { UserCheck, ShieldCheck, Clock } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import BookingForm from '../components/booking/BookingForm'
+import BookingPromotion from '../components/booking/BookingPromotion'
 import Testimonials from '../components/Testimonials'
 import { createPageMetadata } from '../lib/seo'
 
@@ -77,7 +78,10 @@ export default function BookPage() {
 
       {/* ── Form ──────────────────────────────────────────────────────────── */}
       <main className="site-container py-10 lg:py-14">
-        <BookingForm />
+        <div className="grid grid-cols-[minmax(0,7fr)_minmax(0,3fr)] items-start gap-3 sm:gap-6 lg:gap-10">
+          <BookingForm />
+          <BookingPromotion />
+        </div>
       </main>
 
       <Testimonials />
