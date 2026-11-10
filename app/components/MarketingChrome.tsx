@@ -12,5 +12,5 @@ export default function MarketingChrome() {
   const crm = pathname === '/crm' || pathname.startsWith('/crm/')
   useEffect(() => { if (crm) disableAnalytics() }, [crm])
   if (crm) return null
-  return <>{pathname !== '/christmas' && <FloatingContactBar />}<CookieConsent /><Analytics /></>
+  return <><FloatingContactBar /><CookieConsent /><Analytics /></>
 }

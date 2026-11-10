@@ -171,6 +171,21 @@ export default function ChristmasPage() {
           </div>
         </section>
       </main>
+      <footer aria-labelledby="christmas-footer-title" className={`${styles.redSection} border-t border-[#FAEBD9]/20 px-5 py-12 text-white sm:px-10 sm:py-16`}>
+        <div className="mx-auto max-w-6xl">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#FAEBD9]">A note from Everydays Travel</p>
+          <h2 id="christmas-footer-title" className="text-3xl font-semibold tracking-tight text-[#FAEBD9] sm:text-4xl">
+            Bring your favourite people together this Christmas
+          </h2>
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/85 sm:text-base">
+            Thinking of hosting a Christmas dinner, an office party or a festive get-together? We’d love to help you get everyone there. We’re Everydays Travel, a London coach and minibus hire team, and we’ll guide you through choosing a vehicle, planning pickups and getting everyone home.
+          </p>
+          <p className="mb-6 mt-3 max-w-2xl text-sm leading-relaxed text-white/85 sm:text-base">
+            Tell us what you have in mind, even if you’re still working out the details. We’ll help you make a plan so you can enjoy the celebration too.
+          </p>
+          <QuoteLink />
+        </div>
+      </footer>
     </>
   )
 }
