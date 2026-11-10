@@ -11,6 +11,7 @@ import { digitsOnly, validateEmail, validateFullName, validatePhone } from '../l
 import { todayISO } from '../components/form-fields'
 
 const fieldClass = 'h-11 w-full rounded-md border border-white/20 bg-[#671624] text-sm text-white placeholder:text-white/55 focus-visible:border-[#F37A80] focus-visible:ring-0 [color-scheme:dark]'
+const selectClass = `${fieldClass} focus:outline-none focus:border-[#F37A80] forced-colors:focus:outline`
 const pickerClass = 'h-11 border-white/20 bg-[#671624] text-sm hover:border-[#F37A80] focus-visible:border-[#F37A80] data-[state=open]:border-[#F37A80]'
 const fields = [
   { name: 'pickup', label: 'Pickup location', placeholder: 'Town or postcode' },
@@ -122,7 +123,7 @@ export default function ChristmasQuoteForm() {
               <label className="grid min-w-0 gap-1.5 text-sm font-medium">
                 <span>Journey type<RequiredMark /></span>
                 <span className="relative">
-                  <select name="journeyType" required className={`${fieldClass} appearance-none pl-3 pr-9 forced-colors:appearance-auto`}>
+                  <select name="journeyType" required className={`${selectClass} appearance-none pl-3 pr-9 forced-colors:appearance-auto`}>
                     <option value="oneway">One way</option>
                     <option value="return">Return</option>
                   </select>
@@ -135,7 +136,7 @@ export default function ChristmasQuoteForm() {
                   <Input name={name} className={fieldClass} {...props} required />
                 </label>
               ))}
-              <ReferralSourceField required labelClassName="text-sm font-medium tracking-normal" selectClassName={fieldClass} />
+              <ReferralSourceField required labelClassName="text-sm font-medium tracking-normal" selectClassName={selectClass} />
             </div>
             <HumanVerification action="quote" onVerify={verification.setToken} resetKey={verification.resetKey} />
             {error && <p role="alert" className="mb-3 text-sm text-[#FFC4C7]">{error}</p>}

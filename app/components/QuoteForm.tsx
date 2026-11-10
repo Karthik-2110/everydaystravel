@@ -542,7 +542,10 @@ export default function QuoteForm({ variant = 'panel', docked = false, onMinimiz
                     )}
                   </div>
 
-                  <ReferralSourceField className="col-span-full" />
+                  <ReferralSourceField
+                    labelClassName="[font-family:var(--font-ui)]"
+                    selectClassName="pl-2.5 outline-none focus:border-[#EBBA6F] forced-colors:focus:outline"
+                  />
                 </div>
               <HumanVerification action="quote" onVerify={verification.setToken} resetKey={verification.resetKey} />
               <button
