@@ -79,7 +79,7 @@ export default function BookPage() {
 
       {/* ── Form ──────────────────────────────────────────────────────────── */}
       <main className="site-container py-10 lg:py-14">
-        <div className="grid grid-cols-[minmax(0,7fr)_minmax(0,3fr)] items-start gap-3 sm:gap-6 lg:gap-10">
+        <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,3fr)] lg:gap-10">
           <BookingForm />
           <BookingPromotion />
         </div>
