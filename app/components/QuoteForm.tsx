@@ -1,5 +1,6 @@
 'use client'
 
+import ReferralSourceField from './ReferralSourceField'
 import HumanVerification, { useHumanVerification } from './HumanVerification'
 
 import { useState, useEffect, useRef, useId } from 'react'
@@ -178,8 +179,9 @@ export default function QuoteForm({ variant = 'panel', docked = false, onMinimiz
     setPhoneError(validatePhone(phone))
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    const referralSource = new FormData(e.currentTarget).get('referralSource') || undefined
     setNameTouched(true)
     setEmailTouched(true)
     setPhoneTouched(true)
@@ -199,7 +201,7 @@ export default function QuoteForm({ variant = 'panel', docked = false, onMinimiz
       const res = await fetch('/api/quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ turnstileToken: verification.token, journeyType, pickup, destination, passengers, travelDate, pickupTime, eventType: eventType === 'other' ? customEventType.trim() : eventType, returnDate, returnTime, fullName, email, phone }),
+        body: JSON.stringify({ turnstileToken: verification.token, journeyType, pickup, destination, passengers, travelDate, pickupTime, eventType: eventType === 'other' ? customEventType.trim() : eventType, returnDate, returnTime, fullName, email, phone, referralSource }),
       })
       if (!res.ok) {
         const problem = await res.json().catch(() => ({}))
@@ -540,6 +542,7 @@ export default function QuoteForm({ variant = 'panel', docked = false, onMinimiz
                     )}
                   </div>
 
+                  <ReferralSourceField className="col-span-full" />
                 </div>
               <HumanVerification action="quote" onVerify={verification.setToken} resetKey={verification.resetKey} />
               <button

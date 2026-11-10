@@ -1,0 +1,111 @@
+.redSection { background: #821d2b; }
+.greenSection { background: #123a2a; }
+
+.fleetPhoto {
+  transform: rotate(-1.6deg);
+  box-shadow: 0 8px 22px rgb(28 9 12 / 35%);
+}
+
+.fleetPhoto::before {
+  position: absolute;
+  z-index: 1;
+  top: -9px;
+  left: 41%;
+  width: 22%;
+  height: 20px;
+  background: rgb(240 217 180 / 78%);
+  transform: rotate(5deg);
+  content: "";
+}
+
+.offerStamp {
+  position: absolute;
+  top: 12%;
+  right: 4%;
+  padding: .45rem .6rem;
+  transform: rotate(8deg);
+  border: 1px dashed #faebd9;
+  outline: 3px solid #8a1c2a;
+  background: #8a1c2a;
+  color: #faebd9;
+  font-size: clamp(.7rem, 1.3vw, 1rem);
+  font-weight: 750;
+  letter-spacing: .05em;
+}
+
+.fleetGrid {
+  display: grid;
+  gap: 3.5rem;
+}
+
+.fleetStop {
+  min-width: 0;
+  padding-inline: .5rem;
+}
+
+.fleetStop:nth-child(2) .fleetPhoto { transform: rotate(2deg); }
+
+.fleetTrail {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  color: #faebd9;
+  opacity: .8;
+  pointer-events: none;
+}
+
+.paperNote {
+  position: relative;
+  z-index: 2;
+  margin: -1.55rem .3rem 0 8%;
+  padding: 1.2rem 1rem .9rem;
+  transform: rotate(1.4deg);
+  background: #faebd9;
+  color: #153f2c;
+  box-shadow: 0 6px 14px rgb(4 20 12 / 24%);
+}
+
+.paperNote::after {
+  position: absolute;
+  inset: auto 0 -6px;
+  height: 8px;
+  background: #faebd9;
+  clip-path: polygon(0 0, 100% 0, 100% 75%, 91% 50%, 82% 100%, 72% 62%, 64% 90%, 52% 56%, 43% 100%, 31% 50%, 22% 93%, 11% 57%, 0 84%);
+  content: "";
+}
+
+.paperPin {
+  position: absolute;
+  top: -.8rem;
+  left: 48%;
+  color: #ab2636;
+  transform: rotate(28deg);
+  filter: drop-shadow(1px 2px 1px rgb(55 13 18 / 35%));
+}
+
+.faqSummary { list-style: none; }
+.faqSummary::-webkit-details-marker { display: none; }
+
+@media (min-width: 768px) {
+  .fleetGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.25rem; }
+  .fleetStop:nth-child(2) { margin-top: 3rem; }
+  .fleetStop:nth-child(3) { margin-top: 1rem; }
+}
+
+@media (max-width: 767px) {
+  .fleetTrail { display: none; }
+  .fleetStop { position: relative; }
+  .fleetStop:not(:last-child)::after {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 27%;
+    width: 44%;
+    height: 2.9rem;
+    border-right: 3px dotted #faebd9;
+    border-radius: 50%;
+    opacity: .8;
+    content: "";
+  }
+}

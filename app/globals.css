@@ -327,3 +327,9 @@ body:has(.quote-dock-modal) [data-slot="popover-content"] { z-index: 70; }
   .blog-quote-aside, .site-header-sticky { top: var(--site-header-sticky-top); }
   .blog-quote-scroll { max-height: max(12rem, calc(100dvh - var(--site-header-sticky-top) - 120px)); }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  html:has(#christmas-quote) {
+    scroll-behavior: smooth;
+  }
+}

@@ -1,5 +1,6 @@
 'use client'
 
+import ReferralSourceField from './ReferralSourceField'
 import HumanVerification, { useHumanVerification } from './HumanVerification'
 
 import { useState, useEffect } from 'react'
@@ -109,8 +110,9 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
     setPhoneError(validatePhone(phone))
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    const referralSource = new FormData(e.currentTarget).get('referralSource') || undefined
     setEmailTouched(true)
     setPhoneTouched(true)
     const emailProblem = validateEmail(email)
@@ -127,7 +129,7 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
       const res = await fetch('/api/quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ turnstileToken: verification.token, vehicle, journeyType, pickup, destination, passengers, travelDate, pickupTime, returnDate, returnTime, email, phone }),
+        body: JSON.stringify({ turnstileToken: verification.token, vehicle, journeyType, pickup, destination, passengers, travelDate, pickupTime, returnDate, returnTime, email, phone, referralSource }),
       })
       if (!res.ok) {
         const problem = await res.json().catch(() => ({}))
@@ -316,6 +318,7 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
             )}
           </div>
 
+          <ReferralSourceField />
           {/* Submit */}
           <HumanVerification action="quote" onVerify={verification.setToken} resetKey={verification.resetKey} />
           <button

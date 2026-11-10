@@ -23,6 +23,7 @@ export async function POST(request: Request) {
   if (verification) return NextResponse.json({ error: verification.error }, { status: verification.status })
   const { firstName, lastName, email, phone, message } = body
 
+  const referralSource = typeof body.referralSource === 'string' ? body.referralSource.trim().slice(0, 200) : ''
   const name = [firstName, lastName].filter(Boolean).join(' ').trim() || 'Website visitor'
 
   const html = `
@@ -46,6 +47,11 @@ export async function POST(request: Request) {
           <tr>
             <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #666; font-size: 13px;">Phone</td>
             <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-size: 13px; font-weight: 600;"><a href="tel:${escapeHtml(phone)}" style="color: #0C0F1C;">${escapeHtml(phone)}</a></td>
+          </tr>` : ''}
+          ${referralSource ? `
+          <tr>
+            <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #666; font-size: 13px;">How did you hear about us?</td>
+            <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-size: 13px; font-weight: 600;">${escapeHtml(referralSource)}</td>
           </tr>` : ''}
         </table>
 

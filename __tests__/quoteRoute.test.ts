@@ -43,6 +43,16 @@ describe('POST /api/quote', () => {
     expect(html).toContain('Family &lt;reunion&gt;')
   })
 
+  it('includes campaign attribution in the quote email as escaped text', async () => {
+    const res = await post({ ...VALID, landingPage: '/christmas', referralSource: 'Facebook', utm_campaign: 'Festive <offer>', utm_content: 'party_video' })
+    expect(res.status).toBe(200)
+    const { html } = send.mock.calls[0][0]
+    expect(html).toContain('/christmas')
+    expect(html).toContain('Festive &lt;offer&gt;')
+    expect(html).toContain('party_video')
+    expect(html).toContain('Facebook')
+  })
+
   it('puts the full name in the email, ahead of the journey detail', async () => {
     const res = await post(VALID)
     expect(res.status).toBe(200)

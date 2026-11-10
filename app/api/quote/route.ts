@@ -77,13 +77,35 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid contact details', fields }, { status: 400 })
   }
 
+  if (body.landingPage === '/christmas') {
+    const required = ['pickup', 'destination', 'travelDate', 'pickupTime', 'passengers', 'journeyType', 'fullName', 'referralSource']
+    if (required.some(key => typeof body[key] !== 'string' || !body[key].trim())) {
+      return NextResponse.json({ error: 'Complete all fields on the Christmas quote form.' }, { status: 400 })
+    }
+    if (!/^\d+$/.test(passengers) || !/[1-9]/.test(passengers)) {
+      return NextResponse.json({ error: 'Enter a passenger count greater than zero.' }, { status: 400 })
+    }
+  }
+
   const stops: string[] = Array.isArray(extraStops) ? extraStops.filter(Boolean) : []
 
   // The name identifies the enquiry, so it heads the table instead of sitting
   // below the journey detail with the optional rows.
   const nameRow = fullName ? row('Name', String(fullName)) : ''
 
+  const campaignFields = [
+    ['referralSource', 'How did you hear about us?'],
+    ['landingPage', 'Landing page'],
+    ['utm_source', 'Campaign source'],
+    ['utm_medium', 'Campaign medium'],
+    ['utm_campaign', 'Campaign'],
+    ['utm_content', 'Ad creative'],
+  ]
   const extraRows = [
+    ...campaignFields.flatMap(([key, label]) => {
+      const value = typeof body[key] === 'string' ? body[key].trim().slice(0, 200) : ''
+      return value ? [row(label, value)] : []
+    }),
     ...(stops.length ? [row('Extra stops', stops.join(' · '))] : []),
     ...EXTRA_FIELDS.filter(([key]) => body[key]).map(([key, label]) => row(label, body[key])),
   ].join('')

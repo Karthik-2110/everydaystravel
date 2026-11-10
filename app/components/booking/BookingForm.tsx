@@ -1,5 +1,6 @@
 'use client'
 
+import ReferralSourceField from '../ReferralSourceField'
 import HumanVerification, { useHumanVerification } from '../HumanVerification'
 
 import { useLayoutEffect, useRef, useState } from 'react'
@@ -96,6 +97,7 @@ export default function BookingForm({ layout = 'stepper' }: { layout?: 'stepper'
   // 2 — Your details
   const [fullName, setFullName] = useState('')
   const [email, setEmail]       = useState('')
+  const [referralSource, setReferralSource] = useState('')
   const [phone, setPhone]       = useState('')
   const [company, setCompany]   = useState('')
 
@@ -119,7 +121,7 @@ export default function BookingForm({ layout = 'stepper' }: { layout?: 'stepper'
 
   const hasUnsavedDetails = isStepper && !submitted && Boolean(
     pickup || destination || travelDate || pickupTime || isReturn || returnDate || returnTime ||
-    passengers || serviceType || fullName || email || phone || company || flightDetails ||
+    passengers || serviceType || fullName || email || phone || referralSource || company || flightDetails ||
     luggage || accessibility || stopDraft || extraStops.length || notes || vehicleChoice
   )
   useBookingLeaveWarning(hasUnsavedDetails)
@@ -196,7 +198,7 @@ export default function BookingForm({ layout = 'stepper' }: { layout?: 'stepper'
           travelDate, pickupTime,
           returnDate: isReturn ? returnDate : '',
           returnTime: isReturn ? returnTime : '',
-          fullName, email, phone, company,
+          fullName, email, phone, company, referralSource: referralSource || undefined,
           flightDetails, luggage, accessibility,
           extraStops, notes,
           ...(!isStepper && { specialRequests }),
@@ -450,6 +452,7 @@ export default function BookingForm({ layout = 'stepper' }: { layout?: 'stepper'
         </div>
       </div>
 
+      <ReferralSourceField value={referralSource} onChange={setReferralSource} />
     </div>
   )
 

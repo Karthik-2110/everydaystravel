@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, type CSSProperties } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
@@ -40,6 +40,7 @@ interface NavItem {
 interface NavbarProps {
   ctaText?: string
   ctaHref?: string
+  surfaceColor?: string
 }
 
 /**
@@ -105,6 +106,7 @@ const DESKTOP_ROW_CAP = 5
 export default function Navbar({
   ctaText = 'Book your journey',
   ctaHref = '/book',
+  surfaceColor,
 }: NavbarProps) {
   const [mobileOpen, setMobileOpen]               = useState(false)
   const [mobileExpanded, setMobileExpanded]       = useState<string | null>(null)
@@ -138,21 +140,22 @@ export default function Navbar({
     <header
       role="banner"
       data-scrolled={scrolled}
+      style={surfaceColor ? { '--navbar-surface': surfaceColor } as CSSProperties : undefined}
       className={[
         'site-navbar fixed top-0 inset-x-0 z-50 border-b transition-[background-color,border-color] duration-300',
         scrolled
-          ? 'bg-[#0C0F1C] border-white/[0.07]'
+          ? `${surfaceColor ? 'bg-[var(--navbar-surface)]' : 'bg-[#0C0F1C]'} border-white/[0.07]`
           : 'bg-transparent border-transparent',
       ].join(' ')}
     >
-      <ChristmasBanner />
+      <ChristmasBanner quoteHref={pathname === '/christmas' ? '#christmas-quote' : undefined} />
 
       {/* ── Top contact bar — solid, and only while the hero is still in view.
              Collapses to nothing once the page scrolls, leaving the nav alone.
              Desktop only; small screens keep the floating contact bar instead. ── */}
       <div
         className={[
-          'hidden lg:block overflow-hidden bg-[#0C0F1C] transition-[height,opacity] duration-300',
+          'hidden lg:block overflow-hidden bg-[var(--navbar-surface,#0C0F1C)] transition-[height,opacity] duration-300',
           scrolled
             ? 'h-0 opacity-0 invisible'
             : 'h-12 opacity-100 border-b border-white/[0.07]',
@@ -278,7 +281,7 @@ export default function Navbar({
                     <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto translate-y-1 group-hover:translate-y-0 group-focus-within:translate-y-0 transition-all duration-200 z-50">
                       <div
                         data-testid={`desktop-submenu-${item.label}`}
-                        className="bg-[#0D1221] border border-white/[0.09] rounded-xl shadow-[0_16px_48px_rgba(0,0,0,0.5)] min-w-[220px]"
+                        className="bg-[var(--navbar-surface,#0D1221)] border border-white/[0.09] rounded-xl shadow-[0_16px_48px_rgba(0,0,0,0.5)] min-w-[220px]"
                       >
                         {rows.map((child) => (
                           <DesktopRow key={child.href} child={child} />
@@ -363,7 +366,7 @@ export default function Navbar({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:hidden bg-[#0C0F1C]/98 backdrop-blur-xl border-t border-white/[0.07] max-h-[calc(100dvh-var(--site-header-current-height))] overflow-y-auto overscroll-contain"
+            className="lg:hidden bg-[var(--navbar-surface,#0C0F1C)]/98 backdrop-blur-xl border-t border-white/[0.07] max-h-[calc(100dvh-var(--site-header-current-height))] overflow-y-auto overscroll-contain"
           >
             <nav
               className="site-container py-4 flex flex-col"
@@ -533,7 +536,7 @@ function DesktopRow({ child }: { child: DropdownChild }) {
       <div className="absolute left-full top-0 pl-2 opacity-0 pointer-events-none group-hover/cat:opacity-100 group-hover/cat:pointer-events-auto group-focus-within/cat:opacity-100 group-focus-within/cat:pointer-events-auto transition-opacity duration-200 z-50">
         <div
           data-testid={`fleet-submenu-${child.id ?? child.href}`}
-          className="bg-[#0D1221] border border-white/[0.09] rounded-xl shadow-[0_16px_48px_rgba(0,0,0,0.5)] overflow-hidden min-w-[240px]"
+          className="bg-[var(--navbar-surface,#0D1221)] border border-white/[0.09] rounded-xl shadow-[0_16px_48px_rgba(0,0,0,0.5)] overflow-hidden min-w-[240px]"
         >
           {child.children.map((grandchild) => (
             <Link

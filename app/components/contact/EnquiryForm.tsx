@@ -1,5 +1,6 @@
 'use client'
 
+import ReferralSourceField from '../ReferralSourceField'
 import HumanVerification, { useHumanVerification } from '../HumanVerification'
 
 import { useState } from 'react'
@@ -39,8 +40,9 @@ export default function EnquiryForm() {
     return e
   }
 
-  const handleSubmit = async (ev: React.FormEvent) => {
+  const handleSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault()
+    const referralSource = new FormData(ev.currentTarget).get('referralSource') || undefined
     const found = validate()
     setErrors(found)
     if (Object.keys(found).length > 0) return
@@ -54,7 +56,7 @@ export default function EnquiryForm() {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ turnstileToken: verification.token, firstName, lastName, email, phone, message }),
+        body: JSON.stringify({ turnstileToken: verification.token, firstName, lastName, email, phone, message, referralSource }),
       })
       if (!res.ok) {
         const problem = await res.json().catch(() => ({}))
@@ -202,6 +204,7 @@ export default function EnquiryForm() {
             <FieldError message={errors.message} />
           </div>
 
+          <ReferralSourceField selectClassName="h-12" />
           <HumanVerification action="contact" onVerify={verification.setToken} resetKey={verification.resetKey} />
           <button
             type="submit"
