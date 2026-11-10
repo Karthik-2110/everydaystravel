@@ -5,6 +5,7 @@ import Footer from '../components/Footer'
 import BookingForm from '../components/booking/BookingForm'
 import BookingPromotion from '../components/booking/BookingPromotion'
 import Testimonials from '../components/Testimonials'
+import WhatsAppBanner from '../components/WhatsAppBanner'
 import { createPageMetadata } from '../lib/seo'
 
 export const metadata = createPageMetadata({
@@ -84,9 +85,11 @@ export default function BookPage() {
         </div>
       </main>
 
+      <WhatsAppBanner />
+
       <Testimonials />
 
-      <Footer />
+      <Footer showWhatsAppBanner={false} />
     </div>
   )
 }

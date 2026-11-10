@@ -14,9 +14,10 @@ import PlacesAutocompleteField from '../PlacesAutocompleteField'
 import DatePickerField from '../DatePickerField'
 import { SERVICES } from '../ServiceList'
 import { validateEmail, validatePhone, validateFullName, digitsOnly } from '@/app/lib/validation'
-import VehiclePicker, { DEFAULT_VEHICLE_SLUG } from './VehiclePicker'
+import VehiclePicker, { DEFAULT_VEHICLE_SLUG, recommendVehicle } from './VehiclePicker'
 import TimePickerField from '../TimePickerField'
 import { WhyTravelCard } from './Sidebar'
+import { useBookingLeaveWarning } from './useBookingLeaveWarning'
 import {
   SectionCard, FieldLabel, FieldError, SimpleSelect,
   inputCls, textareaCls, errorRing, todayISO,
@@ -49,7 +50,7 @@ const REVEAL = {
   transition: { duration: 0.2, ease: 'easeOut' },
 } as const
 
-const STEPS = ['Journey Details', 'Your Details', 'Additional Information', 'Choose Your Vehicle'] as const
+const STEPS = ['Journey Details', 'Your Details', 'Choose Your Vehicle', 'Additional Information'] as const
 const LAST_STEP = STEPS.length - 1
 
 type Errors = Partial<Record<
@@ -107,12 +108,21 @@ export default function BookingForm({ layout = 'stepper' }: { layout?: 'stepper'
   const [specialRequests, setSpecialRequests] = useState('')
   const [notes, setNotes]                   = useState('')
 
-  // 4 — Vehicle
-  const [vehicle, setVehicle] = useState(DEFAULT_VEHICLE_SLUG)
+  const [vehicleChoice, setVehicle] = useState(isStepper ? '' : DEFAULT_VEHICLE_SLUG)
+  const passengerCount = Number(passengers)
+  const recommendation = isStepper && passengerCount > 0 ? recommendVehicle(passengerCount) : undefined
+  const vehicle = vehicleChoice || recommendation?.slug || ''
 
   const [errors, setErrors]       = useState<Errors>({})
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted]   = useState(false)
+
+  const hasUnsavedDetails = isStepper && !submitted && Boolean(
+    pickup || destination || travelDate || pickupTime || isReturn || returnDate || returnTime ||
+    passengers || serviceType || fullName || email || phone || company || flightDetails ||
+    luggage || accessibility || stopDraft || extraStops.length || notes || vehicleChoice
+  )
+  useBookingLeaveWarning(hasUnsavedDetails)
 
   const clearError = (key: keyof Errors) =>
     setErrors((prev) => (prev[key] ? { ...prev, [key]: undefined } : prev))
@@ -635,32 +645,55 @@ export default function BookingForm({ layout = 'stepper' }: { layout?: 'stepper'
       className="min-w-0 scroll-mt-[var(--site-header-sticky-top)]"
     >
       <ol aria-label="Booking progress" className="mb-8 grid grid-cols-4 gap-1.5 sm:mb-10 sm:gap-3 xl:gap-4">
-        {STEPS.map((title, index) => (
-          <li key={title} aria-current={index === step ? 'step' : undefined} className="flex flex-col gap-2">
-            <span className={`h-1 rounded-full motion-safe:transition-colors ${index <= step ? 'bg-[#EBBA6F]' : 'bg-white/15'}`} aria-hidden />
-            <span className="flex flex-col items-start gap-1.5 xl:flex-row xl:items-center xl:gap-2">
-              <span className={`flex size-6 shrink-0 items-center justify-center rounded-full border text-xs font-semibold sm:size-7 ${index <= step ? 'border-[#EBBA6F] bg-[#EBBA6F] text-[#0C0F1C]' : 'border-white/20 text-white/65'}`}>
-                {index < step ? (
-                  <>
-                    <Check size={14} strokeWidth={2.5} aria-hidden />
-                    <span className="sr-only">Step {index + 1} completed</span>
-                  </>
-                ) : index + 1}
-              </span>
-              <span className={`text-[10px] font-medium leading-tight [overflow-wrap:anywhere] sm:text-xs xl:text-sm ${index === step ? 'text-[#EBBA6F]' : 'text-white/65'}`}>{title}</span>
-            </span>
-          </li>
-        ))}
+        {STEPS.map((title, index) => {
+          const completed = index < step
+          const StepControl = completed ? 'button' : 'span'
+          return (
+            <li key={title} aria-current={index === step ? 'step' : undefined} className="flex flex-col gap-2">
+              <span className={`h-1 rounded-full motion-safe:transition-colors ${index <= step ? 'bg-[#EBBA6F]' : 'bg-white/15'}`} aria-hidden />
+              <StepControl
+                type={completed ? 'button' : undefined}
+                disabled={completed ? submitting : undefined}
+                onClick={completed ? () => goToStep(index) : undefined}
+                aria-label={completed ? `Go back to ${title}` : undefined}
+                className={`flex flex-col items-start gap-1.5 text-left xl:flex-row xl:items-center xl:gap-2 ${completed ? 'cursor-pointer rounded-md hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#EBBA6F] disabled:cursor-not-allowed' : ''}`}
+              >
+                <span className={`flex size-6 shrink-0 items-center justify-center rounded-full border text-xs font-semibold sm:size-7 ${index <= step ? 'border-[#EBBA6F] bg-[#EBBA6F] text-[#0C0F1C]' : 'border-white/20 text-white/65'}`}>
+                  {index < step ? (
+                    <>
+                      <Check size={14} strokeWidth={2.5} aria-hidden />
+                      <span className="sr-only">Step {index + 1} completed</span>
+                    </>
+                  ) : index + 1}
+                </span>
+                <span className={`text-[10px] font-medium leading-tight [overflow-wrap:anywhere] sm:text-xs xl:text-sm ${index === step ? 'text-[#EBBA6F]' : 'text-white/65'}`}>{title}</span>
+              </StepControl>
+            </li>
+          )
+        })}
       </ol>
 
       <section aria-labelledby="bk-step-title">
         <h2 ref={headingRef} id="bk-step-title" tabIndex={-1} className="mb-6 text-2xl font-medium text-white focus:outline-none">
           {STEPS[step]}
+          {step === LAST_STEP && ' (Optional step. You can request a quote now.)'}
         </h2>
         {step === 0 && journeyFields}
         {step === 1 && contactFields}
-        {step === 2 && additionalFields}
-        {step === LAST_STEP && <VehiclePicker value={vehicle} onChange={setVehicle} sideBySide />}
+        {step === 2 && (
+          <VehiclePicker
+            value={vehicle}
+            onChange={setVehicle}
+            sideBySide
+            passengerCount={passengerCount}
+            recommendation={recommendation}
+            onConfirmRecommendation={slug => {
+              setVehicle(slug)
+              goToStep(LAST_STEP)
+            }}
+          />
+        )}
+        {step === LAST_STEP && additionalFields}
       </section>
 
       <div className="mt-8">
@@ -689,24 +722,6 @@ export default function BookingForm({ layout = 'stepper' }: { layout?: 'stepper'
             {!submitting && <ArrowRight size={16} aria-hidden />}
           </button>
         </div>
-
-        {step === LAST_STEP && (
-          <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-            <a
-              href={WHATSAPP_HREF}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="h-12 px-6 flex items-center justify-center gap-2 rounded-lg bg-[#25D366] hover:bg-[#1FBB59] text-white text-[14px] font-medium transition-colors duration-150"
-              style={{ fontFamily: 'var(--font-ui)' }}
-            >
-              <WhatsAppIcon size={15} />
-              Need Help? WhatsApp Us
-            </a>
-            <p className="text-xs text-white/55">
-              We aim to respond within 30 minutes during business hours.
-            </p>
-          </div>
-        )}
       </div>
 
     </form>

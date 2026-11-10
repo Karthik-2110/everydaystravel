@@ -60,12 +60,12 @@ function pickTime(id: string, hour: number, minute: number, period: string) {
   fireEvent.click(within(panel).getByRole('button', { name: /apply/i }))
 }
 
-function fillJourney() {
+function fillJourney(passengerCount = '67') {
   fireEvent.change(screen.getByLabelText('Pickup Location'), { target: { value: 'Heathrow Airport' } })
   fireEvent.change(screen.getByLabelText('Destination'), { target: { value: 'Central London' } })
   fireEvent.change(document.getElementById('bk-date')!, { target: { value: '2026-09-01' } })
   pickTime('bk-time', 9, 0, 'AM')
-  fireEvent.change(screen.getByLabelText(/passenger count/i), { target: { value: '67' } })
+  fireEvent.change(screen.getByLabelText(/passenger count/i), { target: { value: passengerCount } })
   fireEvent.change(screen.getByLabelText('Journey Type'), { target: { value: 'Airport Transfers' } })
 }
 
@@ -100,9 +100,39 @@ describe('BookingForm', () => {
     next()
     expect(screen.queryByLabelText('Pickup Location')).not.toBeInTheDocument()
     expect(screen.getByLabelText('Full Name')).toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: 'Back' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Go back to Journey Details' }))
     expect(screen.getByLabelText('Pickup Location')).toHaveValue('Heathrow Airport')
     expect(screen.queryByLabelText('Full Name')).not.toBeInTheDocument()
+  })
+
+  it('warns on tab close only while booking details are unsaved', () => {
+    render(<BookingForm />)
+    const attemptLeave = () => window.dispatchEvent(new Event('beforeunload', { cancelable: true }))
+    expect(attemptLeave()).toBe(true)
+    fireEvent.change(screen.getByLabelText('Pickup Location'), { target: { value: 'Heathrow Airport' } })
+    expect(attemptLeave()).toBe(false)
+    fireEvent.change(screen.getByLabelText('Pickup Location'), { target: { value: '' } })
+    expect(attemptLeave()).toBe(true)
+  })
+
+  it('keeps the booking and its answers when the user cancels browser Back', () => {
+    const originalUrl = window.location.href
+    const originalState = window.history.state
+    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false)
+    window.history.replaceState({}, '', '/book')
+    const view = render(<BookingForm />)
+    try {
+      fireEvent.change(screen.getByLabelText('Pickup Location'), { target: { value: 'Heathrow Airport' } })
+      window.history.replaceState({}, '', '/services')
+      window.dispatchEvent(new PopStateEvent('popstate'))
+      expect(confirm).toHaveBeenCalledWith(expect.stringContaining('booking details will be lost'))
+      expect(window.location.pathname).toBe('/book')
+      expect(screen.getByLabelText('Pickup Location')).toHaveValue('Heathrow Airport')
+    } finally {
+      view.unmount()
+      confirm.mockRestore()
+      window.history.replaceState(originalState, '', originalUrl)
+    }
   })
 
   it('blocks submit and shows errors when required fields are empty', async () => {
@@ -146,7 +176,6 @@ describe('BookingForm', () => {
     next()
     fillContact()
     next()
-    next()
     const vehicleSelect = screen.getByLabelText('Vehicle') as HTMLSelectElement
 
     fireEvent.click(screen.getByRole('button', { name: /executive coaches/i }))
@@ -156,11 +185,29 @@ describe('BookingForm', () => {
     expect(options.some((o) => /lamborghini/i.test(o ?? ''))).toBe(false)
   })
 
+  it('selects a vehicle that fits and allows an override with all additional fields blank', async () => {
+    render(<BookingForm />)
+    fillJourney('12')
+    next()
+    fillContact()
+    next()
+    expect(screen.getByText(/for 12 passengers, we recommend/i)).toBeVisible()
+    expect(screen.getByLabelText('Vehicle')).toHaveValue('16-seater-minibus')
+    fireEvent.click(screen.getByRole('button', { name: /executive coaches/i }))
+    next()
+    expect(screen.getByRole('heading', { name: 'Additional Information (Optional step. You can request a quote now.)' })).toBeVisible()
+    submit()
+    await waitFor(() => expect(globalThis.fetch).toHaveBeenCalledTimes(1))
+    const request = vi.mocked(fetch).mock.calls[0][1]
+    expect(JSON.parse(String(request?.body))).toMatchObject({ vehicle: '35-seater-turas-midi', notes: '' })
+  })
+
   it('adds and removes extra stops', () => {
     render(<BookingForm />)
     fillJourney()
     next()
     fillContact()
+    next()
     next()
     expect(screen.queryByLabelText('Special Requests')).not.toBeInTheDocument()
     fireEvent.change(screen.getByLabelText('Extra Stops'), { target: { value: 'Watford Junction' } })
@@ -179,10 +226,10 @@ describe('BookingForm', () => {
     fillContact()
     fireEvent.change(screen.getByLabelText('Company / Organisation'), { target: { value: 'Analytical Engines Ltd' } })
     next()
+    next()
     fireEvent.change(screen.getByLabelText(/flight \/ train details/i), { target: { value: 'BA123, T5' } })
     fireEvent.change(screen.getByLabelText('Extra Stops'), { target: { value: 'Watford Junction' } })
     fireEvent.click(screen.getByRole('button', { name: /add stop/i }))
-    next()
     submit()
 
     await waitFor(() => expect(globalThis.fetch).toHaveBeenCalledTimes(1))
@@ -205,7 +252,7 @@ describe('BookingForm', () => {
       flightDetails: 'BA123, T5',
       extraStops: ['Watford Junction'],
     })
-    expect(body.vehicle).toBeTruthy()
+    expect(body.vehicle).toBe('')
 
     await waitFor(() => {
       expect(screen.getByText(/quote request sent/i)).toBeInTheDocument()

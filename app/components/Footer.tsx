@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { Phone, Mail, Clock, MapPin, ArrowRight, ArrowUpRight } from 'lucide-react'
 import { WhatsAppIcon, InstagramIcon, FacebookIcon, LinkedInIcon, WHATSAPP_HREF, INSTAGRAM_HREF, FACEBOOK_HREF, LINKEDIN_HREF, SOCIAL_BRAND } from './icons/social'
 import SiteLink from './SiteLink'
+import WhatsAppBanner from './WhatsAppBanner'
 import CookieSettingsButton from './CookieSettingsButton'
 import { ADDRESS } from './contact/contact-details'
 
@@ -92,9 +93,10 @@ const CTA_BACKGROUND =
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export default function Footer() {
+export default function Footer({ showWhatsAppBanner = true }: { showWhatsAppBanner?: boolean } = {}) {
   return (
     <footer>
+      {showWhatsAppBanner && <WhatsAppBanner />}
 
       {/* ── Pre-footer CTA ── */}
       <div className="relative overflow-hidden">
@@ -141,16 +143,6 @@ export default function Footer() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3">
-                <a
-                  href={WHATSAPP_HREF}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2.5 px-7 py-3.5 bg-[#25D366] text-white text-[14px] font-semibold rounded-full hover:bg-[#1FBB59] active:bg-[#19A34D] transition-colors duration-150 shadow-[0_0_28px_rgba(37,211,102,0.25)]"
-                  style={{ fontFamily: 'var(--font-ui)' }}
-                >
-                  <WhatsAppIcon size={15} />
-                  Chat on WhatsApp
-                </a>
                 <SiteLink
                   href="/contact"
                   className="flex items-center justify-center gap-2.5 px-7 py-3.5 border border-white/25 text-white text-[14px] font-medium rounded-full hover:border-[#EBBA6F]/50 hover:text-[#EBBA6F] transition-all duration-150"
