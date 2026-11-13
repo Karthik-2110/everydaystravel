@@ -5,6 +5,7 @@ import Footer from '../../../components/Footer'
 import { AIRPORT_TRANSFER_IMAGES } from '../../../components/ServiceList'
 import { createPageMetadata, serviceSchema } from '../../../lib/seo'
 import { HEATHROW_PATH } from '../../../data/seo-pages'
+import ServiceFacilities from '../../../components/service/ServiceFacilities'
 
 const description = 'Private Heathrow coach and minibus hire with professional drivers. Premium group transfers to London hotels, venues and beyond, backed by 17+ years of industry experience.'
 
@@ -33,6 +34,7 @@ export default function HeathrowCoachHirePage() {
         imageSrc={AIRPORT_TRANSFER_IMAGES[0]}
       />
       <LandingContent page="heathrow" />
+      <ServiceFacilities slug="airport-transfers" />
       <Footer />
     </>
   )

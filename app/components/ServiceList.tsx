@@ -1,9 +1,35 @@
 import type { Vehicle } from './VehicleList'
+import { EXECUTIVE_COACHES, LUXURY_MINIBUSES, CHAUFFEUR_CARS } from '../data/fleet'
 
 // Services reuse the Vehicle shape so service pages render through VehicleDetail
 // with an identical layout. `seats` holds the card tagline; `luggage` is unused.
 
-const PH = 'https://res.cloudinary.com/dckyndryf/image/upload/f_auto,q_auto,w_900,c_limit/IMG_0938_fhylhh'
+const fleet = [...EXECUTIVE_COACHES, ...LUXURY_MINIBUSES, ...CHAUFFEUR_CARS]
+const photos = (slug: string) => {
+  const vehicle = fleet.find(vehicle => vehicle.slug === slug)!
+  return vehicle.images ?? [vehicle.image]
+}
+const coach = photos('53-seater-coach')
+const tourer = photos('55-seater-neoplan-tourliner')
+const midi = photos('35-seater-turas-midi')
+const minibus = photos('16-seater-minibus')
+const saloon = photos('mercedes-s-class')
+const mpv = photos('7-seater-mpv-v-class')
+
+// Mix vehicle sizes and cabin views so visitors can compare their journey options.
+export const SERVICE_IMAGES: Record<string, string[]> = {
+  'private-hire': [midi[0], midi[3], minibus[0], coach[0]],
+  corporate: [coach[6], mpv[1], saloon[0], midi[3]],
+  'weddings-events': [saloon[0], mpv[1], minibus[0], coach[6]],
+  'school-trips': [coach[0], midi[3], midi[0], minibus[0]],
+  'group-travel': [tourer[0], midi[3], coach[0], minibus[0]],
+  'sports-team-travel': [photos('49-seater-mercedes-turismo')[1], midi[3], tourer[0], minibus[0]],
+  'cruise-port-transfers': [tourer[0], mpv[1], coach[6], minibus[0]],
+  'executive-travel': [saloon[0], mpv[1], saloon[5], mpv[0]],
+  'staff-shuttles': [coach[6], midi[3], minibus[0], mpv[1]],
+  'event-coach-hire': [tourer[0], midi[3], saloon[0], coach[6]],
+}
+
 
 /** Real airport photos — first is the card, the rest fill the service gallery. */
 export const AIRPORT_TRANSFER_IMAGES = [
@@ -17,13 +43,9 @@ export const AIRPORT_TRANSFER_IMAGES = [
  * director. Same reason the airport service has its own photos rather than the
  * stand-in — a placeholder argues we have nothing to show.
  */
-export const CORPORATE_IMAGES = [
-  'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_1600,c_limit/v1783787451/IMG_0419_kkqxkq.jpg',
-  'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_1600,c_limit/v1783783910/IMG_8052_aixyc2.jpg',
-  'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_1600,c_limit/v1783787266/837f9f74-eb75-4beb-9553-2424ced64ace_rhx7vy.jpg',
-]
+export const CORPORATE_IMAGES = [coach[6], photos('49-seater-mercedes-turismo')[1], saloon[0]]
 
-export const SERVICES: Vehicle[] = [
+const SERVICE_CATALOGUE: Vehicle[] = [
   {
     slug:        'airport-transfers',
     name:        'Airport Transfers',
@@ -44,7 +66,7 @@ export const SERVICES: Vehicle[] = [
     images:      CORPORATE_IMAGES,
     seats:       'Executive business transport',
     luggage:     'Luggage assistance included',
-    description: 'Executive transport for business: punctual, professional and properly presented, from single-passenger chauffeur cars to full-team coaches.',
+    description: 'Bring colleagues and clients together for meetings, conferences and airport connections. Compare chauffeur cars, executive minibuses and coaches, and tell us which cabin facilities and arrival times matter for your business journey.',
     features:    ['Punctual, professional service', 'Uniformed chauffeurs', 'Onboard WiFi', 'Privacy glass', 'Account management available', 'Flexible scheduling'],
     idealFor:    ['Corporate Events', 'Conferences & Exhibitions', 'Staff Shuttles', 'Away Days', 'Business Roadshows', 'Airport Transfers'],
   },
@@ -55,7 +77,7 @@ export const SERVICES: Vehicle[] = [
     image:       CORPORATE_IMAGES[1],
     seats:       'Your schedule, your route',
     luggage:     'Luggage assistance included',
-    description: 'Premium vehicles on your schedule. Flexible private hire for day trips, nights out and bespoke journeys anywhere in the UK.',
+    description: 'Keep your group together for days out, celebrations and journeys with multiple stops. Choose a minibus or coach around your passenger numbers, bags and itinerary, with a professional driver and a return planned before you travel.',
     features:    ['Fully flexible itineraries', 'Door-to-door service', 'Premium vehicles', 'Professional uniformed drivers', 'Extended waiting available', 'Refreshments on request'],
     idealFor:    ['Day Trips', 'Special Occasions', 'Family Travel', 'Private Groups'],
   },
@@ -63,10 +85,10 @@ export const SERVICES: Vehicle[] = [
     slug:        'weddings-events',
     name:        'Wedding & Events',
     badge:       'Weddings',
-    image:       PH,
+    image:       coach[0],
     seats:       'Bridal & guest logistics',
     luggage:     'Luggage assistance included',
-    description: 'Seamless bridal and guest transport so your day runs exactly as planned, with immaculate vehicles dressed to match the occasion.',
+    description: 'Bring guests from hotels to the ceremony and reception with collection and return times agreed around your day. Combine chauffeur cars, minibuses and coaches to suit your party, so guests can enjoy the celebration without arranging separate journeys.',
     features:    ['Ribbons & decoration on request', 'Bridal car & guest shuttles', 'Red carpet on arrival', 'Champagne on request', 'Dedicated event coordinator', 'Immaculate presentation'],
     idealFor:    ['Weddings', 'Proms', 'Special Occasions'],
   },
@@ -77,7 +99,7 @@ export const SERVICES: Vehicle[] = [
     image:       CORPORATE_IMAGES[0],
     seats:       'Safe, reliable school travel',
     luggage:     'Luggage assistance included',
-    description: 'Safe, reliable transport for schools and colleges, with DBS-checked drivers and well-maintained vehicles for trips, tours and daily runs.',
+    description: 'Plan school trips, educational visits and sports fixtures with passenger numbers, seatbelts, equipment and timings discussed before booking. Tell us your access requirements and we will help match a minibus or coach to your group.',
     features:    ['DBS-checked drivers', 'Seatbelts on every seat', 'Risk-assessment support', 'Wheelchair-accessible options', 'Experienced school-run drivers', 'Air conditioning'],
     idealFor:    ['School Trips', 'Educational Tours', 'Sports Fixtures'],
   },
@@ -85,10 +107,10 @@ export const SERVICES: Vehicle[] = [
     slug:        'group-travel',
     name:        'Group Travel and Tours',
     badge:       'Tours',
-    image:       PH,
+    image:       coach[0],
     seats:       'UK & Europe group tours',
     luggage:     'Large luggage hold',
-    description: 'Day trips and extended tours across the UK and into Europe, with comfortable coaches and full itinerary support for groups of any size.',
+    description: 'Make the journey part of the day out. Travel together on UK trips and European tours with reclining seating, luggage space and facilities matched to the vehicle you choose. Send your itinerary for a tailored group quote.',
     features:    ['UK & Europe coverage', 'Itinerary planning support', 'Onboard WiFi', 'Reclining seats', 'Large luggage hold', 'Onboard WC on coaches'],
     idealFor:    ['Group Tours', 'Days Out', 'Europe Trips'],
   },
@@ -96,10 +118,10 @@ export const SERVICES: Vehicle[] = [
     slug:        'sports-team-travel',
     name:        'Sports Team Travel',
     badge:       'Sports',
-    image:       PH,
+    image:       coach[0],
     seats:       'Match-day travel for teams',
     luggage:     'Kit & equipment storage',
-    description: 'Match-day travel for clubs and teams: kit storage, flexible scheduling and experienced drivers who know the fixture-day routine.',
+    description: 'Get players, coaches and supporters to fixtures together. Share your squad size, kit requirements and match schedule so we can recommend a vehicle with suitable storage and plan the return around your team.',
     features:    ['Kit & equipment storage', 'Flexible match-day scheduling', 'Onboard WiFi', 'USB charging at every seat', 'Air conditioning', 'Experienced team drivers'],
     idealFor:    ['Sports Teams', 'Away Fixtures', 'Tournaments'],
   },
@@ -107,10 +129,10 @@ export const SERVICES: Vehicle[] = [
     slug:        'cruise-port-transfers',
     name:        'Cruise Port Transfers',
     badge:       'Transfers',
-    image:       PH,
+    image:       coach[0],
     seats:       'Door to dock, luggage and all',
     luggage:     'Luggage assistance included',
-    description: 'Door-to-dock transfers to all major UK cruise ports: punctual arrivals and a hand with every case, for families and full groups.',
+    description: 'Start your cruise with one organised journey to the terminal. Tell us your port, sailing time, passenger numbers and case count so we can match the vehicle and luggage space to your party and plan your return transfer.',
     features:    ['All major UK cruise ports', 'Luggage assistance', 'Punctual arrivals', 'Group & family friendly', 'Meet & greet available', '24/7 availability'],
     idealFor:    ['Cruise Departures', 'Family Holidays', 'Group Travel'],
   },
@@ -118,10 +140,10 @@ export const SERVICES: Vehicle[] = [
     slug:        'executive-travel',
     name:        'Executive Travel',
     badge:       'VIP',
-    image:       PH,
+    image:       coach[0],
     seats:       'First-class travel for VIPs',
     luggage:     'Luggage assistance included',
-    description: 'First-class travel for VIPs and discerning clients: discreet chauffeurs, flagship vehicles and concierge-level attention to detail.',
+    description: 'Choose an S-Class or V-Class for client arrivals, meetings and private journeys. Explore the leather seating, privacy and cabin space in our fleet, then share your schedule for a chauffeur-driven quote tailored to your party.',
     features:    ['Luxury chauffeur-driven vehicles', 'Privacy glass', 'Bottled water provided', 'Concierge-level service', 'Discreet professional drivers', 'Flexible scheduling'],
     idealFor:    ['VIP Clients', 'Corporate Travel', 'Airport Transfers'],
   },
@@ -141,3 +163,10 @@ export const SERVICES: Vehicle[] = [
   },
 
 ]
+
+export const SERVICES: Vehicle[] = SERVICE_CATALOGUE.map(service => {
+  const images = SERVICE_IMAGES[service.slug]
+  return images ? { ...service, image: images[0], images } : {
+    ...service, images: [...AIRPORT_TRANSFER_IMAGES, mpv[1], midi[3]],
+  }
+})

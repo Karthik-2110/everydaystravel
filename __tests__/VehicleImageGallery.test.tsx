@@ -47,6 +47,26 @@ const gallery = () =>
 const playing = (container: HTMLElement) => container.querySelector('video')
 
 describe('VehicleImageGallery', () => {
+  it('navigates photos and clips with wrapping chevrons and stops automatic sequencing', () => {
+    const { container } = gallery()
+    fireEvent.click(screen.getByRole('button', { name: 'Next vehicle image' }))
+    expect(playing(container)).toHaveAttribute('src', CLIPS[1].src)
+    expect(playing(container)).toHaveAttribute('loop')
+    fireEvent.ended(playing(container)!)
+    expect(playing(container)).toHaveAttribute('src', CLIPS[1].src)
+    fireEvent.click(screen.getByRole('button', { name: 'Previous vehicle image' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Previous vehicle image' }))
+    expect(screen.getByRole('button', { name: `View image ${PHOTOS.length}` })).toHaveAttribute('aria-current', 'true')
+    fireEvent.click(screen.getByRole('button', { name: 'Next vehicle image' }))
+    expect(playing(container)).toHaveAttribute('src', CLIPS[0].src)
+  })
+
+  it('hides chevrons when there is only one photo', () => {
+    render(<VehicleImageGallery images={[PHOTOS[0]]} vehicleName={NAME} />)
+    expect(screen.queryByRole('button', { name: 'Next vehicle image' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Previous vehicle image' })).not.toBeInTheDocument()
+  })
+
   it('leads with the clips and numbers each kind from one', () => {
     gallery()
     expect(screen.getAllByRole('button', { name: /^play video/i })).toHaveLength(CLIPS.length)

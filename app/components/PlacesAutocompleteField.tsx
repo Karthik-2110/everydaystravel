@@ -21,6 +21,9 @@ export interface PlacesAutocompleteFieldProps {
   value: string
   onChange: (value: string) => void
   placeholder: string
+  className?: string
+  name?: string
+  required?: boolean
 }
 
 export default function PlacesAutocompleteField({
@@ -29,6 +32,9 @@ export default function PlacesAutocompleteField({
   value,
   onChange,
   placeholder,
+  className,
+  name,
+  required,
 }: PlacesAutocompleteFieldProps) {
   const [predictions, setPredictions] = useState<Prediction[]>([])
   const [loading, setLoading]         = useState(false)
@@ -129,6 +135,8 @@ export default function PlacesAutocompleteField({
         )}
         <input
           id={id}
+          name={name}
+          required={required}
           type="text"
           role="combobox"
           aria-label={ariaLabel}
@@ -140,7 +148,7 @@ export default function PlacesAutocompleteField({
           onKeyDown={(e) => { if (e.key === 'Escape') setPredictions([]) }}
           placeholder={placeholder}
           autoComplete="off"
-          className={`${base} pl-8 ${loading ? 'pr-8' : ''} text-white placeholder:text-white/30 focus:outline-none focus:border-[#EBBA6F]`}
+          className={`${className ?? `${base} text-white placeholder:text-white/30 focus:outline-none focus:border-[#EBBA6F]`} pl-8 ${loading ? 'pr-8' : ''}`}
           style={{ fontFamily: 'var(--font-body)' }}
         />
       </div>

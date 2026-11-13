@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { Play } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Play } from 'lucide-react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import type { VehicleVideo } from '../data/fleet'
 
@@ -116,6 +116,26 @@ export default function VehicleImageGallery({ images, videos, vehicleName }: Pro
             )}
           </motion.div>
         </AnimatePresence>
+        {slides.length > 1 && (
+          <>
+            <button
+              type="button"
+              aria-label="Previous vehicle image"
+              onClick={() => { setSequencing(false); setSelected((i) => (i - 1 + slides.length) % slides.length) }}
+              className="absolute left-3 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/25 bg-[#0C0F1C]/80 text-white transition-colors hover:border-[#EBBA6F] hover:text-[#EBBA6F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EBBA6F]"
+            >
+              <ChevronLeft size={22} aria-hidden />
+            </button>
+            <button
+              type="button"
+              aria-label="Next vehicle image"
+              onClick={() => { setSequencing(false); setSelected((i) => (i + 1) % slides.length) }}
+              className="absolute right-3 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/25 bg-[#0C0F1C]/80 text-white transition-colors hover:border-[#EBBA6F] hover:text-[#EBBA6F] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EBBA6F]"
+            >
+              <ChevronRight size={22} aria-hidden />
+            </button>
+          </>
+        )}
       </div>
 
       {/* Thumbnails */}

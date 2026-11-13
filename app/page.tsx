@@ -16,7 +16,8 @@ export default function Home() {
         videoSrc={[
           'https://res.cloudinary.com/dp4cbs8c2/video/upload/v1790949398/IMG_3033_unp5tm.mov',
           'https://res.cloudinary.com/dp4cbs8c2/video/upload/v1787915285/IMG_5928_1_esggvf.mov',
-          'https://res.cloudinary.com/dp4cbs8c2/video/upload/v1790949007/white_bus_hunczq.mov',
+          'https://res.cloudinary.com/dp4cbs8c2/video/upload/v1792358531/IMG_8891_ydgx80.mov',
+          'https://res.cloudinary.com/dp4cbs8c2/video/upload/v1792359596/IMG_7902_jxle1v.mov',
         ]}
         lines={[
           { text: 'Choose Everydays Travel', accent: false },

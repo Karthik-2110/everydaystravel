@@ -101,16 +101,6 @@ function ExploreCard({ vehicle, href, cta }: { vehicle: Vehicle; href: string; c
       {/* Gradient */}
       <div className="absolute inset-0 bg-gradient-to-t from-[#04060E]/95 via-[#04060E]/40 to-[#04060E]/10" />
 
-      {/* Badge */}
-      <div className="absolute top-4 left-4">
-        <span
-          className="px-2.5 py-0.5 bg-[#EBBA6F] text-[#0C0F1C] text-[10.5px] font-semibold rounded-full"
-          style={{ fontFamily: 'var(--font-ui)' }}
-        >
-          {vehicle.badge}
-        </span>
-      </div>
-
       {/* Content */}
       <div className="absolute inset-x-0 bottom-0 p-4 flex flex-col gap-1.5">
         <h3

@@ -121,8 +121,8 @@ export default function Hero({
                 i === current ? 'opacity-100' : 'opacity-0',
               ].join(' ')}
             >
-              <source src={webm} type="video/webm" />
               <source src={mp4} type="video/mp4" />
+              <source src={webm} type="video/webm" />
             </video>
           )
         })

@@ -1,62 +1,49 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
-import { FLEET_CATEGORIES, PH } from '../data/fleet'
-import { SERVICES, AIRPORT_TRANSFER_IMAGES } from './ServiceList'
+import { SERVICES } from './ServiceList'
 
 // The six services the homepage leads with, in the order people search for
 // them. Names and links are resolved against the real service catalogue below,
 // so a card can never point at a page that was never built — only the card copy
 // lives here, kept shorter and plainer than the service page's own description.
 
-const vehiclePhoto = (category: string, vehicle: string): string =>
-  FLEET_CATEGORIES
-    .find((c) => c.slug === category)
-    ?.vehicles.find((v) => v.slug === vehicle)
-    ?.image ?? PH
-
-const PICKS: { slug: string; description: string; image: string }[] = [
+const PICKS: { slug: string; description: string }[] = [
   {
     slug:        'airport-transfers',
     description: 'Heathrow, Gatwick and every major UK airport. We track your flight, so we are waiting when you land.',
-    image:       AIRPORT_TRANSFER_IMAGES[0],
   },
   {
     slug:        'corporate',
     description: 'Get the whole team to the meeting, conference or client site on time, and looking the part.',
-    image:       vehiclePhoto('chauffeur-cars', 'mercedes-s-class'),
   },
   {
     slug:        'group-travel',
     description: 'Day trips and longer tours across the UK and Europe. One coach, one driver, the group together.',
-    image:       vehiclePhoto('executive-coaches', '55-seater-neoplan-tourliner'),
   },
   {
     slug:        'weddings-events',
-    description: 'Bridal cars and guest shuttles timed to the minute, so nobody arrives late to your day.',
-    image:       vehiclePhoto('chauffeur-cars', 'mercedes-v-class'),
+    description: 'Bridal cars and guest shuttles planned around your ceremony, reception and journey home.',
   },
   {
     slug:        'school-trips',
     description: 'DBS-checked drivers, a seatbelt on every seat, and coaches that arrive when the register says.',
-    image:       vehiclePhoto('executive-coaches', '53-seater-coach'),
   },
   {
     slug:        'sports-team-travel',
     description: 'Match-day travel for clubs, with space for the kit and a driver who knows the fixture routine.',
-    image:       vehiclePhoto('executive-coaches', '49-seater-mercedes-turismo'),
   },
 ]
 
 export interface HomeService {
+  image:       string
   slug:        string
   name:        string
   href:        string
   description: string
-  image:       string
 }
 
-export const HOME_SERVICES: HomeService[] = PICKS.flatMap(({ slug, description, image }) => {
+export const HOME_SERVICES: HomeService[] = PICKS.flatMap(({ slug, description }) => {
   const service = SERVICES.find((s) => s.slug === slug)
   if (!service) return []
 
@@ -65,7 +52,7 @@ export const HOME_SERVICES: HomeService[] = PICKS.flatMap(({ slug, description, 
     name: service.name,
     href: `/services/${slug}`,
     description,
-    image,
+    image: service.image,
   }]
 })
 

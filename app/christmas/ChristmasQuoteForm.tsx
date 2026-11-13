@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import ReferralSourceField from '../components/ReferralSourceField'
 import DatePickerField from '../components/DatePickerField'
 import TimePickerField from '../components/TimePickerField'
+import PlacesAutocompleteField from '../components/PlacesAutocompleteField'
 import HumanVerification, { useHumanVerification } from '../components/HumanVerification'
 import { digitsOnly, validateEmail, validateFullName, validatePhone } from '../lib/validation'
 import { todayISO } from '../components/form-fields'
@@ -28,6 +29,8 @@ function RequiredMark() {
 export default function ChristmasQuoteForm() {
   const verification = useHumanVerification()
   const pickerId = useId()
+  const [pickup, setPickup] = useState('')
+  const [destination, setDestination] = useState('')
   const [travelDate, setTravelDate] = useState('')
   const [pickupTime, setPickupTime] = useState('')
   const [passengers, setPassengers] = useState('')
@@ -102,11 +105,20 @@ export default function ChristmasQuoteForm() {
           </p>
           <form className="mt-5" onSubmit={requestQuote}>
             <div className="grid gap-3 sm:grid-cols-2">
-              {fields.slice(0, 2).map(({ name, label, ...props }) => (
-                <label key={name} className="grid min-w-0 gap-1.5 text-sm font-medium">
-                  <span>{label}<RequiredMark /></span>
-                  <Input name={name} className={fieldClass} {...props} required />
-                </label>
+              {fields.slice(0, 2).map(({ name, label, placeholder }) => (
+                <div key={name} className="grid min-w-0 gap-1.5 text-sm font-medium">
+                  <label htmlFor={`${pickerId}-${name}`}>{label}<RequiredMark /></label>
+                  <PlacesAutocompleteField
+                    id={`${pickerId}-${name}`}
+                    name={name}
+                    ariaLabel={label}
+                    value={name === 'pickup' ? pickup : destination}
+                    onChange={name === 'pickup' ? setPickup : setDestination}
+                    placeholder={placeholder ?? ''}
+                    className={fieldClass}
+                    required
+                  />
+                </div>
               ))}
               <div className="grid min-w-0 gap-1.5 text-sm font-medium">
                 <label htmlFor={`${pickerId}-date`}>Travel date<RequiredMark /></label>

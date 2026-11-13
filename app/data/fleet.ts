@@ -50,6 +50,9 @@ const S_CLASS_IMAGES = [
   cdn('v1783787257/63c156f9-9bb3-4f2e-9167-24a4ad993660_dk6xmg.jpg'),
   cdn('v1783787248/31a87e08-d69e-4473-b50c-94832025b0a7_cekc7t.jpg'),
   cdn('v1783787240/19ed3b38-0619-41ed-8fe7-d098ba14b037_rbhzvy.jpg'),
+  cdn('v1794434662/IMG_0414_kot44n.heic'),
+  cdn('v1794434647/IMG_0410_geilg2.heic'),
+  cdn('v1794434642/IMG_0413_o1qjvl.heic'),
 ]
 
 // The exterior three-quarter leads, then the 2026 cabin shoot. Exported
@@ -73,25 +76,78 @@ export const V_CLASS_VIDEOS = [
   clip('v1791729138/IMG_8763_ku4yvi'),
 ]
 
-const TURAS_35_IMAGE = cdn('v1783787232/0712a7cf-b45c-45e5-86cf-71de3a21ab55_zrwpei.jpg')
+const MINIBUS_16_IMAGES = [
+  cdn('v1787914445/copy_of_0daa364f-6672-42f0-b672-ed76c6cc323e_hszv3v.jpg'),
+  cdn('v1794433472/IMG_1936_dvt0rp.jpg'),
+  cdn('v1794433471/IMG_1933_zpnecd.jpg'),
+  cdn('v1794433467/IMG_8242_ejvasm.jpg'),
+  cdn('v1794433465/IMG_8231_comtlk.jpg'),
+  cdn('v1794433458/IMG_1931_ic5a95.jpg'),
+  cdn('v1794433456/IMG_8238_gpupo1.jpg'),
+  cdn('v1794433455/IMG_0854_pp7bdh.jpg'),
+  cdn('v1794433453/IMG_1952_cpqrmk.jpg'),
+]
+
+const MINIBUS_19_IMAGES = [
+  cdn('v1794434390/IMG_1314_tdq7xe.heic'),
+  cdn('v1794434387/IMG_0128_r5ghw6.jpg'),
+  cdn('v1794434347/IMG_2208_glifzl.jpg'),
+  cdn('v1794434326/IMG_2203_zexhcw.jpg'),
+  cdn('v1794434324/IMG_2202_za1nsy.jpg'),
+  cdn('v1794434323/IMG_4357_umyw99.heic'),
+]
+
+const TURAS_35_IMAGES = [
+  cdn('v1794433085/IMG_9652_s2qnwa.jpg'),
+  cdn('v1794433084/IMG_9655_ggjgyb.jpg'),
+  'https://res.cloudinary.com/dp4cbs8c2/image/upload/c_crop,g_north_west,h_2245,w_3024,y_289/f_auto,q_auto,w_1600,c_limit/IMG_1900_hhdy3c.jpg',
+  cdn('v1794433079/IMG_1902_ouhuad.jpg'),
+  cdn('v1794433078/IMG_1901_ttrmwo.jpg'),
+  cdn('v1794433072/4680ee7b-9a06-4dfa-92c8-ca46e922cec2_ohgxnm.jpg'),
+  cdn('v1783787253/4a4f730b-aa98-4ea5-a46d-643bac692fd0_yczk0s.jpg'),
+]
 
 const COACH_49_IMAGES = [
   cdn('v1783783940/IMG_3023.JPG_y0gruj.jpg'),
   cdn('v1783783910/IMG_8052_aixyc2.jpg'),
   cdn('v1783783909/IMG_8109_hqk5fk.jpg'),
   cdn('v1783783904/IMG_8018_mthmcm.jpg'),
+  cdn('v1794433384/IMG_4500_hpxriz.heic'),
+  cdn('v1794433386/IMG_4574_ynyzkj.heic'),
+  cdn('v1794433385/IMG_4567_cvckcq.heic'),
+  cdn('v1794433383/IMG_4609_qeioze.heic'),
 ]
 
 const COACH_53_IMAGES = [
-  cdn('v1783787451/IMG_0419_kkqxkq.jpg'),
+  cdn('v1794433221/IMG_5340_hr48au.heic'),
+  cdn('v1794433220/IMG_6459_bloehc.heic'),
+  cdn('v1794433229/IMG_4970_wup8nd.jpg'),
+  cdn('v1794433228/IMG_9253_wcgk7d.jpg'),
+  cdn('v1794433227/IMG_4868_mcuqdg.jpg'),
+  cdn('v1794433223/IMG_4987_eierrt.heic'),
+  cdn('v1794433222/IMG_4946_ye0wnd.jpg'),
+  cdn('v1794433217/IMG_4984_nuzsod.heic'),
   cdn('v1783784005/C0348T01_qztkqo.jpg'),
   cdn('v1783784004/C0345T01_e5jzje.jpg'),
 ]
 
 const COACH_55_IMAGES = [
   cdn('v1783787281/IMG_0469_akacrg.heic'),
-  cdn('v1783787275/IMG_0395_zjwz1c.heic'),
   cdn('v1783787271/IMG_0338_zs5i46.jpg'),
+  cdn('v1794433325/IMG_7862_n12otl.jpg'),
+  cdn('v1794433322/IMG_0962_l5coym.jpg'),
+  cdn('v1794433320/IMG_5431_lx5uze.jpg'),
+  cdn('v1794433320/IMG_4909_ranr4l.jpg'),
+  cdn('v1794433318/IMG_4868_copy_msxefb.jpg'),
+  cdn('v1794433314/IMG_4933_dhngen.jpg'),
+  cdn('v1794433311/IMG_0963_vxgecf.jpg'),
+  cdn('v1794433302/IMG_3183_j8xj4p.jpg'),
+  cdn('v1794433302/IMG_4934_fxarjd.jpg'),
+  cdn('v1794433301/IMG_7868_qgbsnq.jpg'),
+  cdn('v1794433301/IMG_4866_slpt4e.jpg'),
+  cdn('v1794433294/IMG_7866_zbqlsh.jpg'),
+  cdn('v1794433292/IMG_5520_aww9rq.jpg'),
+  cdn('v1794433290/C5B2516E-F5E9-4094-88FA-06A0861802F0_oqfhqu.jpg'),
 ]
 
 // ── Data ──────────────────────────────────────────────────────────────────────
@@ -120,22 +176,12 @@ export const CHAUFFEUR_CARS: Vehicle[] = [
     idealFor:    ['Airport Transfers', 'Corporate Travel', 'Family Travel'],
   },
   {
-    slug:        'mercedes-e-class',
-    name:        'Mercedes-Benz E-Class Executive',
-    badge:       'Executive',
-    image:       PH,
-    seats:       '1–3 Passengers',
-    luggage:     '2 large + 2 medium cases',
-    description: 'The E-Class Executive makes sophistication effortless. Premium climate control, a whisper-quiet ride, and a refined interior designed for discerning passengers.',
-    features:    ['Premium black leather reclining seats', 'Privacy glass', 'Dual-zone climate control', 'Heated seats', 'USB ports & 12v charging points', 'Bottled water provided'],
-    idealFor:    ['Corporate Travel', 'Airport Transfers'],
-  },
-  {
     slug:        'mercedes-s-class',
     name:        'Mercedes-Benz S-Class Executive',
     badge:       'Executive',
     image:       S_CLASS_IMAGES[0],
     images:      S_CLASS_IMAGES,
+    videos:      [clip('v1794434674/IMG_0433_rnuuzh')],
     seats:       '1–2 Passengers',
     luggage:     '2 large + 2 medium cases',
     description: 'The ultimate luxury vehicle, offering prestige, comfort and refinement for airport transfers, corporate events and private travel.',
@@ -176,7 +222,8 @@ export const LUXURY_MINIBUSES: Vehicle[] = [
     slug:        '16-seater-minibus',
     name:        '16-Seater Luxury Minibus',
     badge:       'Minibus',
-    image:       PH,
+    image:       MINIBUS_16_IMAGES[0],
+    images:      MINIBUS_16_IMAGES,
     seats:       'Up to 16 Passengers',
     luggage:     '16 standard cases',
     description: 'Our flagship minibus seats up to 16 in comfort. Ideal for larger groups requiring a premium experience without the scale of a full coach.',
@@ -187,7 +234,8 @@ export const LUXURY_MINIBUSES: Vehicle[] = [
     slug:        '16-seater-vip-sprinter',
     name:        '16-Seater VIP Minibus',
     badge:       'VIP',
-    image:       PH,
+    image:       MINIBUS_16_IMAGES[0],
+    images:      MINIBUS_16_IMAGES,
     seats:       'Up to 16 Passengers',
     luggage:     '16 standard cases',
     description: 'The VIP minibus elevates group travel to first class: luxury captain seats, mood lighting and onboard entertainment for journeys that feel like an event in themselves.',
@@ -198,7 +246,8 @@ export const LUXURY_MINIBUSES: Vehicle[] = [
     slug:        '19-seater-minibus',
     name:        '19-Seater Minibus',
     badge:       'Minibus',
-    image:       PH,
+    image:       MINIBUS_19_IMAGES[0],
+    images:      MINIBUS_19_IMAGES,
     seats:       'Up to 19 Passengers',
     luggage:     '19 standard cases',
     description: 'Our largest minibus bridges the gap between a 16-seater and a full coach, with the same easy door-to-door access and room for three more passengers.',
@@ -212,7 +261,8 @@ export const EXECUTIVE_COACHES: Vehicle[] = [
     slug:        '35-seater-turas-midi',
     name:        '35-Seater Turas Midi',
     badge:       'Midi Coach',
-    image:       TURAS_35_IMAGE,
+    image:       TURAS_35_IMAGES[0],
+    images:      TURAS_35_IMAGES,
     seats:       'Up to 35 Passengers',
     luggage:     'Large underfloor hold',
     description: 'The Turas Midi punches above its size. A nimble mid-size coach with full executive specification, perfect when a full-size coach is more than you need.',
@@ -249,6 +299,7 @@ export const EXECUTIVE_COACHES: Vehicle[] = [
     badge:       'Coach',
     image:       COACH_55_IMAGES[0],
     images:      COACH_55_IMAGES,
+    videos:      [clip('v1794433348/IMG_7891_fudv1z')],
     seats:       'Up to 55 Passengers',
     luggage:     'Large underfloor hold',
     description: 'Our largest coach. The flagship Neoplan Tourliner carries up to 55 passengers in premium comfort, ideal for major events, tours and cruise transfers.',

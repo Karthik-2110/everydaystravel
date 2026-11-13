@@ -4,6 +4,7 @@ import VehicleDetail from './VehicleDetail'
 import ServiceSections from './service/ServiceSections'
 import ServiceSpecBlocks from './service/ServiceSpecBlocks'
 import { SERVICES } from './ServiceList'
+import ServiceFacilities from './service/ServiceFacilities'
 
 const SERVICE_HEADINGS: Record<string, string> = {
   'school-trips': 'School Coach Hire London',
@@ -28,7 +29,7 @@ export default function ServiceDetail({ slug }: { slug: string }) {
       cardCta="View service"
       preselectVehicle={false}
       specSections={<ServiceSpecBlocks slug={slug} />}
-      extraSections={<><ServiceSections slug={slug} /><LandingContent page={slug} />{slug === 'corporate' && <LandingContent page="business-services" />}{slug === 'airport-transfers' && <LandingContent page="airport-links" />}</>}
+      extraSections={<><ServiceFacilities slug={slug} /><ServiceSections slug={slug} /><LandingContent page={slug} />{slug === 'corporate' && <LandingContent page="business-services" />}{slug === 'airport-transfers' && <LandingContent page="airport-links" />}</>}
     />
   )
 }

@@ -5,6 +5,7 @@ import SiteLink from './SiteLink'
 import WhatsAppBanner from './WhatsAppBanner'
 import CookieSettingsButton from './CookieSettingsButton'
 import { ADDRESS } from './contact/contact-details'
+import { videoVariants } from '../lib/cloudinary'
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 
@@ -100,18 +101,18 @@ export default function Footer({ showWhatsAppBanner = true }: { showWhatsAppBann
 
       {/* ── Pre-footer CTA ── */}
       <div className="relative overflow-hidden">
-        {/* Background still. The source is a HEIC, which only Safari can
-            draw, so it is delivered through f_auto — Cloudinary hands every
-            browser a format it understands. */}
-        <Image
-          src={CTA_BACKGROUND}
-          alt=""
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster={CTA_BACKGROUND}
           aria-hidden
-          fill
-          unoptimized
-          sizes="100vw"
-          className="object-cover object-center"
-        />
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
+        >
+          <source src={videoVariants('https://res.cloudinary.com/dp4cbs8c2/video/upload/v1792359596/IMG_7902_jxle1v.mov').mp4} type="video/mp4" />
+        </video>
         {/* Gradient overlay — kept light so the coaches read, leaning on the
             copy's own shadow rather than a scrim to hold contrast. */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#04060E]/50 via-[#04060E]/10 to-[#04060E]/40" />

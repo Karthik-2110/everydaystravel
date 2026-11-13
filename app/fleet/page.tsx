@@ -3,6 +3,7 @@ import Hero from '../components/Hero'
 import ServicesGrid from '../components/ServicesGrid'
 import Footer from '../components/Footer'
 import { createPageMetadata } from '../lib/seo'
+import { CHAUFFEUR_CARS, LUXURY_MINIBUSES, EXECUTIVE_COACHES } from '../data/fleet'
 
 export const metadata = createPageMetadata({
   title: 'Coach & Minibus Fleet',
@@ -11,25 +12,28 @@ export const metadata = createPageMetadata({
   path: '/fleet',
 })
 
-const PLACEHOLDER = 'https://res.cloudinary.com/dckyndryf/image/upload/f_auto,q_auto,w_800,c_limit/IMG_0938_fhylhh'
+const carImage = CHAUFFEUR_CARS.find(vehicle => vehicle.slug === 'mercedes-s-class')!.image
+const minibusImage = LUXURY_MINIBUSES.find(vehicle => vehicle.slug === '16-seater-minibus')!.image
+const coachImage = EXECUTIVE_COACHES.find(vehicle => vehicle.slug === '53-seater-coach')!.images!
+  .find(image => image.includes('IMG_4946_ye0wnd'))!
 
 const FLEET = [
   {
     name:        'Executive Cars',
     description: 'Chauffeur-driven luxury sedans ideal for executive travel, airport transfers, and corporate events.',
-    image:       PLACEHOLDER,
+    image:       carImage,
     href:        '/fleet/chauffeur-cars',
   },
   {
     name:        'Luxury Minibuses',
     description: 'Premium minibuses for small groups, with comfort and style for up to 19 passengers.',
-    image:       PLACEHOLDER,
+    image:       minibusImage,
     href:        '/fleet/luxury-minibuses',
   },
   {
     name:        'Executive Coaches',
-    description: '53 and 70 seater executive coaches, perfect for large groups and long-distance travel.',
-    image:       PLACEHOLDER,
+    description: '35 to 55-seat executive coaches for group days out, events and longer journeys across the UK and Europe.',
+    image:       coachImage,
     href:        '/fleet/executive-coaches',
   },
 ]
@@ -46,7 +50,7 @@ export default function FleetPage() {
           { text: 'Every Occasion',  accent: true  },
         ]}
         subtext="From executive chauffeur cars to luxury minibuses and premium coaches. Every vehicle in our fleet is maintained to the highest standard."
-        imageSrc="https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_2400,c_limit/v1783783988/DSC09031_yjmhzx.jpg"
+        imageSrc={coachImage.replace('w_1600', 'w_2400')}
       />
       <ServicesGrid
         services={FLEET}

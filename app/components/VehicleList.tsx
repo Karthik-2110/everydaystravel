@@ -29,7 +29,7 @@ function VehicleCard({ vehicle, category }: { vehicle: Vehicle; category?: strin
   const detailHref = category ? `/fleet/${category}/${vehicle.slug}` : undefined
 
   return (
-    <article className="group flex flex-col lg:flex-row bg-[#0D1221] rounded-2xl border border-white/[0.07] overflow-hidden transition-all duration-300 hover:border-[#EBBA6F]/40 hover:shadow-[0_0_0_1px_rgba(235,186,111,0.12),0_8px_40px_rgba(235,186,111,0.07)]">
+    <article className="group relative isolate flex flex-col lg:flex-row bg-[#0D1221] rounded-2xl border border-white/[0.07] overflow-hidden transition-all duration-300 hover:border-[#EBBA6F]/40 hover:shadow-[0_0_0_1px_rgba(235,186,111,0.12),0_8px_40px_rgba(235,186,111,0.07)] focus-within:border-[#EBBA6F]">
 
       {/* Image */}
       <div className="relative w-full lg:w-[400px] lg:shrink-0 aspect-[3/2] lg:aspect-auto overflow-hidden">
@@ -41,15 +41,6 @@ function VehicleCard({ vehicle, category }: { vehicle: Vehicle; category?: strin
           sizes="(max-width: 1024px) 100vw, 400px"
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
         />
-        {/* Badge */}
-        <div className="absolute top-4 left-4">
-          <span
-            className="px-3 py-1 bg-[#EBBA6F] text-[#0C0F1C] text-[11.5px] font-semibold rounded-full"
-            style={{ fontFamily: 'var(--font-ui)' }}
-          >
-            {vehicle.badge}
-          </span>
-        </div>
       </div>
 
       {/* Content */}
@@ -120,7 +111,8 @@ function VehicleCard({ vehicle, category }: { vehicle: Vehicle; category?: strin
             {detailHref && (
               <Link
                 href={detailHref}
-                className="flex items-center gap-2 px-6 py-3 bg-[#EBBA6F] text-[#0C0F1C] text-[14px] font-semibold rounded-full hover:bg-[#E2B36A] active:bg-[#D4A85E] transition-colors duration-150"
+                aria-label={`View details for ${vehicle.name}`}
+                className="flex items-center gap-2 px-6 py-3 bg-[#EBBA6F] text-[#0C0F1C] text-[14px] font-semibold rounded-full hover:bg-[#E2B36A] active:bg-[#D4A85E] transition-colors duration-150 after:absolute after:inset-0 after:z-10 after:content-['']"
                 style={{ fontFamily: 'var(--font-ui)' }}
               >
                 View details
@@ -130,7 +122,8 @@ function VehicleCard({ vehicle, category }: { vehicle: Vehicle; category?: strin
             {!detailHref && (
               <Link
                 href="/contact"
-                className="flex items-center gap-2 px-6 py-3 bg-[#EBBA6F] text-[#0C0F1C] text-[14px] font-semibold rounded-full hover:bg-[#E2B36A] active:bg-[#D4A85E] transition-colors duration-150"
+                aria-label={`Get a quote for ${vehicle.name}`}
+                className="flex items-center gap-2 px-6 py-3 bg-[#EBBA6F] text-[#0C0F1C] text-[14px] font-semibold rounded-full hover:bg-[#E2B36A] active:bg-[#D4A85E] transition-colors duration-150 after:absolute after:inset-0 after:z-10 after:content-['']"
                 style={{ fontFamily: 'var(--font-ui)' }}
               >
                 Get a Quote
@@ -141,7 +134,7 @@ function VehicleCard({ vehicle, category }: { vehicle: Vehicle; category?: strin
               href={WHATSAPP_HREF}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-6 py-3 bg-[#25D366] hover:bg-[#1FBB59] text-white text-[14px] font-medium rounded-full transition-colors duration-150"
+              className="relative z-20 flex items-center gap-2 px-6 py-3 bg-[#25D366] hover:bg-[#1FBB59] text-white text-[14px] font-medium rounded-full transition-colors duration-150"
               style={{ fontFamily: 'var(--font-ui)' }}
             >
               <WhatsAppIcon size={13} />

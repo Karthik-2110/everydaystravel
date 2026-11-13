@@ -5,6 +5,7 @@ import Footer from './Footer'
 import { serviceSchema, siteUrl } from '../lib/seo'
 import FleetFilm from './FleetFilm'
 import type { BusinessService } from '../data/business-services'
+import ServiceFacilities from './service/ServiceFacilities'
 
 export default function BusinessServicePage({ service }: { service: BusinessService }) {
   const path = service.path ?? `/services/${service.slug}`
@@ -21,11 +22,6 @@ export default function BusinessServicePage({ service }: { service: BusinessServ
       <Navbar />
       <main>
         <header className="site-container site-header-clearance pb-12 lg:pb-16">
-          <nav aria-label="Breadcrumb" className="mb-8 text-sm text-white/65">
-            <Link href="/" className="underline underline-offset-4">Home</Link><span aria-hidden="true"> / </span>
-            {!service.path && <><Link href="/services" className="underline underline-offset-4">Services</Link><span aria-hidden="true"> / </span></>}
-            <span aria-current="page">{service.title}</span>
-          </nav>
           <h1 className="max-w-[19ch] text-4xl sm:text-6xl lg:text-7xl leading-[1.08] font-medium tracking-tight text-[#EBBA6F]">{service.title}</h1>
           <div className="mt-8 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-7">
             <p className="max-w-[65ch] text-lg leading-relaxed text-white/75">{service.intro}</p>
@@ -33,6 +29,7 @@ export default function BusinessServicePage({ service }: { service: BusinessServ
           </div>
         </header>
         <FleetFilm film={service.hero} />
+        <ServiceFacilities slug={service.slug} />
         {service.sections.map((section, index) => (
           <section key={section.heading}>
             <div className="site-container py-12 lg:py-20 grid gap-6 lg:grid-cols-[1fr_1.5fr] lg:gap-20">

@@ -3,6 +3,10 @@ import { afterEach, expect, it, vi } from 'vitest'
 import ChristmasQuoteForm from '@/app/christmas/ChristmasQuoteForm'
 import { todayISO } from '@/app/components/form-fields'
 
+vi.mock('@/app/lib/google-maps-loader', () => ({
+  loadGoogleMaps: vi.fn().mockResolvedValue(undefined),
+}))
+
 vi.mock('@/app/components/HumanVerification', () => ({
   default: () => null,
   useHumanVerification: () => ({ token: 'test-token', setToken: vi.fn(), resetKey: 0, reset: vi.fn() }),
@@ -11,6 +15,31 @@ vi.mock('@/app/components/HumanVerification', () => ({
 afterEach(() => {
   vi.unstubAllGlobals()
   window.history.replaceState(null, '', '/')
+})
+
+it('offers selectable locations for both journey fields and keeps their form values', async () => {
+  const fetchSuggestions = vi.fn().mockResolvedValue({ suggestions: [{
+    placePrediction: {
+      placeId: 'london', text: { text: 'London, UK' },
+      mainText: { text: 'London' }, secondaryText: { text: 'UK' },
+    },
+  }] })
+  vi.stubGlobal('google', { maps: { places: { AutocompleteSuggestion: {
+    fetchAutocompleteSuggestions: fetchSuggestions,
+  } } } })
+  render(<ChristmasQuoteForm />)
+
+  for (const name of ['Pickup location', 'Party venue']) {
+    const input = screen.getByRole('combobox', { name })
+    expect(input).toBeRequired()
+    fireEvent.change(input, { target: { value: 'lon' } })
+    fireEvent.mouseDown(await screen.findByRole('option', { name: /London/ }))
+    expect(input).toHaveValue('London, UK')
+  }
+  const form = screen.getByRole('button', { name: 'Request my quote' }).closest('form')!
+  const data = new FormData(form)
+  expect(data.get('pickup')).toBe('London, UK')
+  expect(data.get('destination')).toBe('London, UK')
 })
 
 it('submits a Christmas quote with the ad attribution and confirms receipt', async () => {
@@ -48,6 +77,8 @@ it('submits a Christmas quote with the ad attribution and confirms receipt', asy
     eventType: 'Christmas party or dinner',
     landingPage: '/christmas',
     passengers: '24',
+    pickup: 'Richmond',
+    destination: 'Central London',
     travelDate: todayISO(),
     pickupTime: '18:00',
     referralSource: 'Facebook',

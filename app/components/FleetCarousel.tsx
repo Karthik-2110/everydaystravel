@@ -9,14 +9,14 @@ import { FLEET_CATEGORIES } from '../data/fleet'
 // The vehicles we lead with on the homepage, as [category slug, vehicle slug].
 // Resolved against the real fleet below so names, photos and links can never go
 // stale — an unknown slug is dropped rather than rendered as a broken card.
-const HIGHLIGHTS: { category: string; vehicle: string }[] = [
-  { category: 'executive-coaches', vehicle: '53-seater-coach' },
+const HIGHLIGHTS: { category: string; vehicle: string; image?: string }[] = [
+  { category: 'executive-coaches', vehicle: '53-seater-coach', image: 'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_1600,c_limit/v1794433222/IMG_4946_ye0wnd.jpg' },
   { category: 'executive-coaches', vehicle: '55-seater-neoplan-tourliner' },
   { category: 'luxury-minibuses',  vehicle: '7-seater-mpv-v-class' },
   { category: 'chauffeur-cars',    vehicle: 'mercedes-s-class' },
 ]
 
-const FLEET = HIGHLIGHTS.flatMap(({ category, vehicle }) => {
+const FLEET = HIGHLIGHTS.flatMap(({ category, vehicle, image }) => {
   const found = FLEET_CATEGORIES
     .find((c) => c.slug === category)
     ?.vehicles.find((v) => v.slug === vehicle)
@@ -27,7 +27,7 @@ const FLEET = HIGHLIGHTS.flatMap(({ category, vehicle }) => {
     name:     found.name,
     href:     `/fleet/${category}/${found.slug}`,
     features: found.features.slice(0, 3),
-    image:    found.image,
+    image:    image ?? found.image,
   }]
 })
 

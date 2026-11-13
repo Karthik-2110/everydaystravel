@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
-import { SERVICES, AIRPORT_TRANSFER_IMAGES, CORPORATE_IMAGES } from './ServiceList'
+import { SERVICES } from './ServiceList'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -20,53 +20,13 @@ interface ServicesGridProps {
 
 // ── Default data ──────────────────────────────────────────────────────────────
 
-const PLACEHOLDER = 'https://res.cloudinary.com/dckyndryf/image/upload/f_auto,q_auto,w_800,c_limit/IMG_0938_fhylhh'
-
-// Only the card copy and photo live here. Names and links are resolved against
-// the service catalogue, so this list cannot name a page that does not exist —
-// it used to carry a 'Race Days & Events' card pointing at /services/race-days,
-// which was never built.
-const CARDS: { slug: string; description: string; image: string }[] = [
-  { slug: 'staff-shuttles', description: 'Premium staff journeys between stations, workplaces and sites, planned around your team.', image: CORPORATE_IMAGES[0] },
-  { slug: 'event-coach-hire', description: 'Professional guest transport for conferences, exhibitions, hospitality and private events.', image: CORPORATE_IMAGES[1] },
-  {
-    slug:        'private-hire',
-    description: 'Flexible transport for any occasion, from day trips to bespoke journeys across the UK.',
-    image:       PLACEHOLDER,
-  },
-  {
-    slug:        'corporate',
-    description: 'Executive transport for business: punctual, professional, and properly presented.',
-    image:       PLACEHOLDER,
-  },
-  {
-    slug:        'weddings-events',
-    description: 'Seamless guest and bridal transport so your day runs exactly as planned.',
-    image:       PLACEHOLDER,
-  },
-  {
-    slug:        'airport-transfers',
-    description: 'Reliable group airport travel to and from all major UK airports.',
-    image:       AIRPORT_TRANSFER_IMAGES[0],
-  },
-  {
-    slug:        'sports-team-travel',
-    description: 'Match-day travel for clubs and teams, with room for the kit and a driver who knows the routine.',
-    image:       PLACEHOLDER,
-  },
-  {
-    slug:        'group-travel',
-    description: 'Day trips and extended tours across the UK and into Europe, fully catered to your group.',
-    image:       PLACEHOLDER,
-  },
-]
-
-export const DEFAULT_SERVICES: ServiceItem[] = CARDS.flatMap(({ slug, description, image }) => {
-  const service = SERVICES.find((s) => s.slug === slug)
-  if (!service) return []
-
-  return [{ name: service.name, description, image, href: `/services/${slug}` }]
-})
+// One catalogue keeps service cards, related services and detail galleries aligned.
+export const DEFAULT_SERVICES: ServiceItem[] = SERVICES.map(service => ({
+  name: service.name,
+  description: service.description,
+  image: service.image,
+  href: `/services/${service.slug}`,
+}))
 
 // ── Card ──────────────────────────────────────────────────────────────────────
 

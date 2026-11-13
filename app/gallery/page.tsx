@@ -1,5 +1,4 @@
-import Image from 'next/image'
-import Link from 'next/link'
+import GalleryGrid, { type GalleryItem } from '../components/GalleryGrid'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { CHAUFFEUR_CARS, LUXURY_MINIBUSES, EXECUTIVE_COACHES, type Vehicle } from '../components/VehicleList'
@@ -17,21 +16,12 @@ export const metadata = createPageMetadata({
 // Tiles are collected from the fleet & service data, so new photos added there
 // appear here automatically. Placeholder images are excluded.
 
-interface GalleryItem {
-  src:   string
-  label: string
-  href:  string
-}
-
 const HERO_SHOTS: GalleryItem[] = [
-  { src: 'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_2400,c_limit/v1783784686/DSC09063_xjmaio.jpg', label: 'Our Fleet', href: '/fleet' },
-  { src: 'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_2400,c_limit/v1783783988/DSC09031_yjmhzx.jpg', label: 'Our Fleet', href: '/fleet' },
-  { src: 'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_2400,c_limit/v1783785511/IMG_6138_n9khty.jpg', label: 'Our Fleet', href: '/fleet' },
-  { src: 'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_2400,c_limit/v1783784630/20260211_134438550_iOS_okfp39.jpg', label: 'Airport Transfers', href: '/services/airport-transfers' },
+  { kind: 'image', src: 'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_2400,c_limit/v1783784686/DSC09063_xjmaio.jpg', label: 'Our Fleet', href: '/fleet' },
+  { kind: 'image', src: 'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_2400,c_limit/v1783783988/DSC09031_yjmhzx.jpg', label: 'Our Fleet', href: '/fleet' },
+  { kind: 'image', src: 'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_2400,c_limit/v1783785511/IMG_6138_n9khty.jpg', label: 'Our Fleet', href: '/fleet' },
+  { kind: 'image', src: 'https://res.cloudinary.com/dp4cbs8c2/image/upload/f_auto,q_auto,w_2400,c_limit/v1783784630/20260211_134438550_iOS_okfp39.jpg', label: 'Airport Transfers', href: '/services/airport-transfers' },
 ]
-
-// Serve grid-sized thumbnails regardless of the stored transform width
-const thumb = (url: string) => url.replace(/w_\d+/, 'w_800')
 
 function collectGallery(): GalleryItem[] {
   const items: GalleryItem[] = []
@@ -42,7 +32,7 @@ function collectGallery(): GalleryItem[] {
     const key = src.split('/').pop() ?? src          // dedupe by filename across transforms
     if (seen.has(key)) return
     seen.add(key)
-    items.push({ src, label, href })
+    items.push({ kind: 'image', src, label, href })
   }
 
   HERO_SHOTS.forEach(({ src, label, href }) => push(src, label, href))
@@ -55,6 +45,11 @@ function collectGallery(): GalleryItem[] {
   for (const [vehicles, category] of categories) {
     for (const v of vehicles) {
       for (const src of v.images ?? [v.image]) push(src, v.name, `/fleet/${category}/${v.slug}`)
+      for (const video of v.videos ?? []) {
+        if (seen.has(video.src)) continue
+        seen.add(video.src)
+        items.push({ kind: 'video', ...video, label: v.name, href: `/fleet/${category}/${v.slug}` })
+      }
     }
   }
   for (const s of SERVICES) {
@@ -97,33 +92,7 @@ export default function GalleryPage() {
           </p>
         </div>
 
-        {/* Instagram-style grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2">
-          {items.map(({ src, label, href }) => (
-            <Link
-              key={src}
-              href={href}
-              aria-label={label}
-              className="group relative aspect-square overflow-hidden rounded-lg sm:rounded-xl bg-[#0D1221]"
-            >
-              <Image
-                src={thumb(src)}
-                alt={label}
-                fill
-                unoptimized
-                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#04060E]/85 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <span
-                className="absolute bottom-3 left-3 right-3 text-white text-[12.5px] font-medium opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
-                style={{ fontFamily: 'var(--font-ui)' }}
-              >
-                {label}
-              </span>
-            </Link>
-          ))}
-        </div>
+        <GalleryGrid items={items} />
 
       </main>
 

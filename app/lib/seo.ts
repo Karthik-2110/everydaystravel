@@ -263,7 +263,6 @@ export const sitemapEntries = [
   { path: '/fleet/executive-coaches/55-seater-neoplan-tourliner', priority: 0.8 },
   { path: '/fleet/chauffeur-cars/lamborghini-huracan', priority: 0.6 },
   { path: '/fleet/chauffeur-cars/bmw-x7', priority: 0.7 },
-  { path: '/fleet/chauffeur-cars/mercedes-e-class', priority: 0.7 },
   { path: '/fleet/chauffeur-cars/mercedes-s-class', priority: 0.8 },
   { path: '/fleet/chauffeur-cars/mercedes-v-class', priority: 0.8 },
 ].map(({ path, priority }) => ({ url: `${siteUrl}${path}`, priority }))
