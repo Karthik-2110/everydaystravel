@@ -4,7 +4,7 @@ import { Resend } from 'resend'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-const TO_EMAILS = ['info@everydaystravel.co.uk', 'web@everydaystravel.co.uk']
+const TO_EMAILS = ['web@everydaystravel.co.uk', 'sales@everydaystravel.co.uk']
 
 function escapeHtml(value: string): string {
   return value

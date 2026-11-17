@@ -6,7 +6,7 @@ import { validateEmail, validatePhone, validateFullName } from '@/app/lib/valida
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-const TO_EMAILS = ['info@everydaystravel.co.uk', 'web@everydaystravel.co.uk']
+const TO_EMAILS = ['web@everydaystravel.co.uk', 'sales@everydaystravel.co.uk']
 
 const ALL_VEHICLES = [...CHAUFFEUR_CARS, ...LUXURY_MINIBUSES, ...EXECUTIVE_COACHES]
 

@@ -35,6 +35,10 @@ describe.each([['quote', quote, 'quote'], ['contact', contact, 'contact']] as co
     vi.stubGlobal('fetch', verify)
     expect((await post(request({ ...payload, turnstileToken: 'token' }))).status).toBe(200)
     expect(send).toHaveBeenCalledTimes(1)
+    expect(send).toHaveBeenCalledWith(expect.objectContaining({
+      to: ['web@everydaystravel.co.uk', 'sales@everydaystravel.co.uk'],
+      replyTo: payload.email,
+    }))
     expect(verify).toHaveBeenCalledWith('https://challenges.cloudflare.com/turnstile/v0/siteverify', expect.objectContaining({ method: 'POST' }))
   })
   it('fails closed when Cloudflare is unavailable', async () => {
