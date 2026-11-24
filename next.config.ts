@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: { agentUpgrade: "security" },
   // `GOOGLE_MAPS_API_KEY` is set unprefixed in Vercel, but the Places SDK runs in
   // the browser (PlacesAutocompleteField is a client component). This inlines the
   // value into the client bundle at build time, the same way a NEXT_PUBLIC_ var
