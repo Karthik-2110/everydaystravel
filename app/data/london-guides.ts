@@ -1,3 +1,4 @@
+import photos from './london-photos.json'
 import { FLEET_CATEGORIES } from './fleet'
 
 export const londonGuidePath = '/guides/london'
@@ -58,7 +59,7 @@ export const londonGuides = [hotels, attractions].flatMap((entries, index) =>
     if (!vehicle) throw new Error(`Unknown fleet vehicle for ${name}`)
     const slug = name.normalize('NFD').replace(/[\u0300-\u036f’']/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-$/, '')
     const gallery = vehicle.images?.length ? vehicle.images : [vehicle.image]
-    return { slug, name, area, vehicle, plan, about, image: gallery[photo % gallery.length],
+    return { photo: photos[slug as keyof typeof photos], slug, name, area, vehicle, plan, about, image: gallery[photo % gallery.length],
       kind: index === 0 ? 'Hotels' : 'Attractions',
       title: index === 0 ? `Private transfers for ${name}` : `Coach and minibus hire to ${name}`,
     }

@@ -1,0 +1,158 @@
+{
+  "british-museum": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Exterior_of_the_British_Museum-London.jpg",
+    "src": "/images/london/british-museum.webp"
+  },
+  "browns-hotel": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Brown%27s_Hotel_London.jpg",
+    "src": "/images/london/browns-hotel.webp"
+  },
+  "buckingham-palace": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Buckingham_Palace_London_Morning_2020_01_%28cropped%29.jpg",
+    "src": "/images/london/buckingham-palace.webp"
+  },
+  "claridges": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Claridge%E2%80%99s_Hotel_%28London%29.jpg",
+    "src": "/images/london/claridges.webp"
+  },
+  "dukes-london": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Hotel_Dukes_London.jpg",
+    "src": "/images/london/dukes-london.webp"
+  },
+  "hampton-court-palace": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Hampton_Court_Palace%2C_West_Front_Richmond_upon_Thames_1193127_20230823_0050.jpg",
+    "src": "/images/london/hampton-court-palace.webp"
+  },
+  "hilton-london-metropole": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Hilton_london_metropole.jpg",
+    "src": "/images/london/hilton-london-metropole.webp"
+  },
+  "hotel-cafe-royal": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Hotel_Caf%C3%A9_Royal.jpg",
+    "src": "/images/london/hotel-cafe-royal.webp"
+  },
+  "houses-of-parliament-and-big-ben": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Palace_of_Westminster_as_seen_from_Westminster_Bridge.jpg",
+    "src": "/images/london/houses-of-parliament-and-big-ben.webp"
+  },
+  "intercontinental-london-the-o2": {
+    "credit": "https://commons.wikimedia.org/wiki/File:The_O2_From_the_Intercontinental_-_geograph.org.uk_-_5386701.jpg",
+    "src": "/images/london/intercontinental-london-the-o2.webp"
+  },
+  "jw-marriott-grosvenor-house-london": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Grosvenor_House_Hotel%2C_Park_Lane.jpg",
+    "src": "/images/london/jw-marriott-grosvenor-house-london.webp"
+  },
+  "kew-gardens": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Kew_gardens.jpg",
+    "src": "/images/london/kew-gardens.webp"
+  },
+  "london-eye": {
+    "credit": "https://commons.wikimedia.org/wiki/File:London-Eye-2009.JPG",
+    "src": "/images/london/london-eye.webp"
+  },
+  "london-hilton-on-park-lane": {
+    "credit": "https://commons.wikimedia.org/wiki/File:London_Hilton_on_Park_Lane_Exterior.jpg",
+    "src": "/images/london/london-hilton-on-park-lane.webp"
+  },
+  "london-zoo": {
+    "credit": "https://commons.wikimedia.org/wiki/File:London_zoo%2C_UK_%2830658646708%29.jpg",
+    "src": "/images/london/london-zoo.webp"
+  },
+  "national-gallery": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Galer%C3%ADa_Nacional%2C_Londres%2C_Inglaterra%2C_2014-08-07%2C_DD_036.JPG",
+    "src": "/images/london/national-gallery.webp"
+  },
+  "natural-history-museum": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Natural_History_Museum_London_front_facade_2025_dllu.jpg",
+    "src": "/images/london/natural-history-museum.webp"
+  },
+  "park-plaza-westminster-bridge-london": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Park_Plaza_Hotel_Westminster_Bridge_London.jpg",
+    "src": "/images/london/park-plaza-westminster-bridge-london.webp"
+  },
+  "royal-lancaster-london": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Royal_Lancaster_London.jpg",
+    "src": "/images/london/royal-lancaster-london.webp"
+  },
+  "science-museum": {
+    "credit": "https://commons.wikimedia.org/wiki/File:The_Science_Museum_London.jpg",
+    "src": "/images/london/science-museum.webp"
+  },
+  "shangri-la-the-shard-london": {
+    "credit": "https://commons.wikimedia.org/wiki/File:The_Shard_at_sunset_2017_%28cropped%29.jpg",
+    "src": "/images/london/shangri-la-the-shard-london.webp"
+  },
+  "st-pancras-london": {
+    "credit": "https://commons.wikimedia.org/wiki/File:London_-_St_Pancras_International_railway_station_-_02.jpg",
+    "src": "/images/london/st-pancras-london.webp"
+  },
+  "st-pauls-cathedral": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Exterior_of_St._Paul%27s_Cathedral.jpg",
+    "src": "/images/london/st-pauls-cathedral.webp"
+  },
+  "tate-modern": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Exterior_of_Tate_Modern_%28January_2024%29_04.jpg",
+    "src": "/images/london/tate-modern.webp"
+  },
+  "the-dorchester": {
+    "credit": "https://commons.wikimedia.org/wiki/File:The_Dorchester_Hotel_in_London_Mayfair%2C_England_United_Kingdom_%284579989922%29.jpg",
+    "src": "/images/london/the-dorchester.webp"
+  },
+  "the-goring": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Goring_Hotel_Londres.jpg",
+    "src": "/images/london/the-goring.webp"
+  },
+  "the-langham-london": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Langham_london.jpg",
+    "src": "/images/london/the-langham-london.webp"
+  },
+  "the-ned": {
+    "credit": "https://commons.wikimedia.org/wiki/File:TheNed_exterior.jpg",
+    "src": "/images/london/the-ned.webp"
+  },
+  "the-portobello-hotel": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Londres_Notting_Hill_Rue_Portobello.jpg",
+    "src": "/images/london/the-portobello-hotel.webp"
+  },
+  "the-ritz-london": {
+    "credit": "https://commons.wikimedia.org/wiki/File:The_Ritz_%286902790412%29.jpg",
+    "src": "/images/london/the-ritz-london.webp"
+  },
+  "the-royal-horseguards-hotel": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Whitehall_Court_%2835146651290%29.jpg",
+    "src": "/images/london/the-royal-horseguards-hotel.webp"
+  },
+  "the-savoy": {
+    "credit": "https://commons.wikimedia.org/wiki/File:H%C3%B4tel_Savoy_The_Strand_Londres_-_edited.jpg",
+    "src": "/images/london/the-savoy.webp"
+  },
+  "the-standard-london": {
+    "credit": "https://commons.wikimedia.org/wiki/File:The_Standard_London_Camden_Town_Hall_Annexe_facade_at_night_2025_dllu.jpg",
+    "src": "/images/london/the-standard-london.webp"
+  },
+  "the-view-from-the-shard": {
+    "credit": "https://commons.wikimedia.org/wiki/File:The_View_From_the_Shard_%288367215057%29.jpg",
+    "src": "/images/london/the-view-from-the-shard.webp"
+  },
+  "the-waldorf-hilton-london": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Waldorf_Hilton_%28rear_of%29%2C_Tavistock_St%2C_London.jpg",
+    "src": "/images/london/the-waldorf-hilton-london.webp"
+  },
+  "tower-bridge": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Tower_Bridge_at_Dawn.jpg",
+    "src": "/images/london/tower-bridge.webp"
+  },
+  "tower-of-london": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Exterior_of_Tower_of_London.jpg",
+    "src": "/images/london/tower-of-london.webp"
+  },
+  "v-a-south-kensington": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Victoria_%26_Albert_Museum_Entrance%2C_London%2C_UK_-_Diliff.jpg",
+    "src": "/images/london/v-a-south-kensington.webp"
+  },
+  "westminster-abbey": {
+    "credit": "https://commons.wikimedia.org/wiki/File:Westminster_Abbey_exterior.jpg",
+    "src": "/images/london/westminster-abbey.webp"
+  }
+}
