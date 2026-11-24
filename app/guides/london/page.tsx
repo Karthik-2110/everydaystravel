@@ -27,13 +27,5 @@ export default function LondonGuidesPage() {
         </li>)}
       </ul>
     </section>)}
-    <details className="mt-12 text-sm text-white/70">
-      <summary className="cursor-pointer">Photography sources</summary>
-      <ul className="mt-4 grid gap-2 sm:grid-cols-3">
-        {londonGuides.map(guide => <li key={guide.slug}>
-          <a href={guide.photo.credit} className="underline underline-offset-4">{guide.name}</a>
-        </li>)}
-      </ul>
-    </details>
   </div>
 }
