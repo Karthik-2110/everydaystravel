@@ -2,8 +2,8 @@ import ServiceDetail from '../../components/ServiceDetail'
 import { createPageMetadata } from '../../lib/seo'
 
 export const metadata = createPageMetadata({
-  title: 'Group Travel & UK Coach Tours',
-  description: 'Luxury group travel, sightseeing tours and coach hire across London, the UK and Europe, with flexible itinerary support.',
+  title: 'Large Group Coach Hire London & UK Coach Tours',
+  description: 'Compare 35 to 55-seat coaches with a driver for large groups in London. Plan sightseeing trips, UK days out and European tours with Everydays Travel.',
   path: '/services/group-travel',
 })
 

@@ -13,6 +13,22 @@ export interface LandingPageContent {
 // Existing URLs own these topics. Keep commercial terms in the conditions of
 // hire rather than duplicating deposits or cancellation figures in page copy.
 export const LANDING_CONTENT: Record<string, LandingPageContent> = {
+  'group-travel': {
+    heading: 'Large group coach hire in London',
+    intro: 'Everydays Travel offers 35, 49, 53 and 55-seat coaches with a driver for London collections, UK days out and European tours.',
+    sections: [
+      {
+        heading: 'Can everyone travel on one coach?',
+        text: 'For 50 guests and two organisers, start with a 53-seat coach. If the same group is heading to an airport with 52 suitcases, include the bag count in your enquiry so we can check the hold space. For more than 55 people, tell us how many need to arrive together and whether staggered departures would work.',
+        links: [{ label: 'Compare coach sizes and luggage space', href: '/fleet/executive-coaches' }],
+      },
+      {
+        heading: 'Planning shared travel for an event',
+        text: 'If guests are staying at several London hotels, tell us whether they can walk to a shared pickup point. Include the busiest departure time and the number travelling on each return. If your organisation has an emissions requirement, include the standard in your enquiry and ask for the details of the proposed vehicle before booking.',
+        links: [{ label: 'Plan a conference shuttle', href: '/services/corporate' }],
+      },
+    ],
+  },
   home: {
     heading: 'London coach hire, planned around your group',
     intro: 'Our depot is in Feltham, serving London, Surrey and the surrounding areas. Hire a coach or minibus with a driver for a single transfer, a return trip or a longer itinerary across the UK and Europe.',

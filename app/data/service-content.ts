@@ -264,7 +264,7 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
       accordion: [
         {
           title: 'Conferences and exhibitions',
-          text:  'Delegates moved to ExCeL, Olympia or the QEII Centre on a schedule built around the doors opening rather than the diary. The return leg is booked at the same time, so nobody is left on the pavement at six.',
+          text:  'Everydays Travel arranges delegate shuttles for London conferences at ExCeL, Olympia and the QEII Centre. For a two-day conference at ExCeL, for example, send us your Canary Wharf hotel, registration time and passenger numbers for each morning. Give us the evening finish times separately so delegates staying for a reception can request a later return.',
         },
         {
           title: 'Staff shuttles',
