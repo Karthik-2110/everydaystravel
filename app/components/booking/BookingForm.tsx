@@ -1,5 +1,6 @@
 'use client'
 
+import { JourneyTypeChips, ReturnTripPrompt } from '../JourneyTypeControls'
 import ReferralSourceField from '../ReferralSourceField'
 import HumanVerification, { useHumanVerification } from '../HumanVerification'
 
@@ -89,6 +90,8 @@ export default function BookingForm({ layout = 'stepper' }: { layout?: 'stepper'
   const [travelDate, setTravelDate]   = useState('')
   const [pickupTime, setPickupTime]   = useState('')
   const [isReturn, setIsReturn]       = useState(false)
+  const [returnPickup, setReturnPickup] = useState('')
+  const [returnDropoff, setReturnDropoff] = useState('')
   const [returnDate, setReturnDate]   = useState('')
   const [returnTime, setReturnTime]   = useState('')
   const [passengers, setPassengers]   = useState('')
@@ -196,6 +199,7 @@ export default function BookingForm({ layout = 'stepper' }: { layout?: 'stepper'
           serviceType,
           pickup, destination, passengers,
           travelDate, pickupTime,
+          ...(isReturn && { returnPickup, returnDropoff }),
           returnDate: isReturn ? returnDate : '',
           returnTime: isReturn ? returnTime : '',
           fullName, email, phone, company, referralSource: referralSource || undefined,
@@ -252,6 +256,9 @@ export default function BookingForm({ layout = 'stepper' }: { layout?: 'stepper'
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
 
+        <div className="col-span-full">
+          <JourneyTypeChips isReturn={isReturn} onChange={type => setIsReturn(type === 'return')} />
+        </div>
         <div>
           <FieldLabel htmlFor="bk-pickup" required>Pickup Location</FieldLabel>
           <PlacesAutocompleteField
@@ -293,40 +300,23 @@ export default function BookingForm({ layout = 'stepper' }: { layout?: 'stepper'
             <FieldError message={errors.pickupTime} />
           </div>
 
-          {/* Return toggle */}
-          <div className="shrink-0 pb-0.5">
-            <span className="block text-white text-[11px] mb-1.5 tracking-[0.02em]" style={{ fontFamily: 'var(--font-ui)' }}>
-              Return Journey
-            </span>
-            <button
-              type="button"
-              role="switch"
-              aria-checked={isReturn}
-              aria-label="Return Journey"
-              onClick={() => setIsReturn((r) => !r)}
-              className={[
-                'relative block w-[46px] h-[26px] p-0 rounded-full transition-colors duration-200',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EBBA6F]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0D1221]',
-                isReturn ? 'bg-[#EBBA6F]' : 'bg-white/12',
-              ].join(' ')}
-            >
-              <span
-                className={[
-                  'absolute top-[3px] left-[3px] w-5 h-5 rounded-full bg-white shadow transition-transform duration-200',
-                  isReturn ? 'translate-x-[20px]' : 'translate-x-0',
-                ].join(' ')}
-              />
-            </button>
-          </div>
         </div>
-
+        {pickupTime && !isReturn && <ReturnTripPrompt onAdd={() => setIsReturn(true)} />}
       </div>
 
       {/* Return fields */}
       <AnimatePresence initial={false}>
         {isReturn && (
           <motion.div {...REVEAL} className="overflow-hidden">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
+            <div className="border-t border-dashed border-white/15 pt-4 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
+              <div>
+                <FieldLabel htmlFor="bk-r-returnPickup">Return pickup location</FieldLabel>
+                <PlacesAutocompleteField id="bk-r-returnPickup" ariaLabel="Return pickup location" value={returnPickup} onChange={setReturnPickup} placeholder="Enter return pickup location" />
+              </div>
+              <div>
+                <FieldLabel htmlFor="bk-r-returnDropoff">Return drop-off location</FieldLabel>
+                <PlacesAutocompleteField id="bk-r-returnDropoff" ariaLabel="Return drop-off location" value={returnDropoff} onChange={setReturnDropoff} placeholder="Enter return drop-off location" />
+              </div>
               <div>
                 <FieldLabel htmlFor="bk-rdate">Return Date</FieldLabel>
                 <DatePickerField

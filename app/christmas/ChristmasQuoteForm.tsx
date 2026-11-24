@@ -1,7 +1,8 @@
 'use client'
 
+import { JourneyTypeChips, ReturnTripPrompt } from '../components/JourneyTypeControls'
 import { useId, useState, type FormEvent } from 'react'
-import { ArrowRight, Check, ChevronDown } from 'lucide-react'
+import { ArrowRight, Check } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import ReferralSourceField from '../components/ReferralSourceField'
 import DatePickerField from '../components/DatePickerField'
@@ -31,7 +32,12 @@ export default function ChristmasQuoteForm() {
   const pickerId = useId()
   const [pickup, setPickup] = useState('')
   const [destination, setDestination] = useState('')
+  const [journeyType, setJourneyType] = useState('oneway')
+  const [returnDate, setReturnDate] = useState('')
+  const [returnTime, setReturnTime] = useState('')
   const [travelDate, setTravelDate] = useState('')
+  const [returnPickup, setReturnPickup] = useState('')
+  const [returnDropoff, setReturnDropoff] = useState('')
   const [pickupTime, setPickupTime] = useState('')
   const [passengers, setPassengers] = useState('')
   const [sending, setSending] = useState(false)
@@ -68,7 +74,8 @@ export default function ChristmasQuoteForm() {
           destination: value('destination'),
           travelDate,
           pickupTime,
-          journeyType: value('journeyType'),
+          journeyType,
+          ...(journeyType === 'return' && { returnPickup, returnDropoff, returnDate, returnTime }),
           referralSource: value('referralSource'),
           eventType: 'Christmas party or dinner',
           landingPage: '/christmas',
@@ -105,6 +112,9 @@ export default function ChristmasQuoteForm() {
           </p>
           <form className="mt-5" onSubmit={requestQuote}>
             <div className="grid gap-3 sm:grid-cols-2">
+              <div className="col-span-full">
+                <JourneyTypeChips isReturn={journeyType === 'return'} onChange={setJourneyType} />
+              </div>
               {fields.slice(0, 2).map(({ name, label, placeholder }) => (
                 <div key={name} className="grid min-w-0 gap-1.5 text-sm font-medium">
                   <label htmlFor={`${pickerId}-${name}`}>{label}<RequiredMark /></label>
@@ -128,20 +138,32 @@ export default function ChristmasQuoteForm() {
                 <label htmlFor={`${pickerId}-time`}>Pickup time<RequiredMark /></label>
                 <TimePickerField id={`${pickerId}-time`} title="Pickup time" value={pickupTime} onChange={setPickupTime} className={pickerClass} />
               </div>
+              {pickupTime && journeyType === 'oneway' && <ReturnTripPrompt onAdd={() => setJourneyType('return')} />}
               <label className="grid min-w-0 gap-1.5 text-sm font-medium">
                 <span>Passenger count<RequiredMark /></span>
                 <Input name="passengers" inputMode="numeric" placeholder="Number of passengers" value={passengers} onChange={event => setPassengers(digitsOnly(event.target.value))} className={fieldClass} required />
               </label>
-              <label className="grid min-w-0 gap-1.5 text-sm font-medium">
-                <span>Journey type<RequiredMark /></span>
-                <span className="relative">
-                  <select name="journeyType" required className={`${selectClass} appearance-none pl-3 pr-9 forced-colors:appearance-auto`}>
-                    <option value="oneway">One way</option>
-                    <option value="return">Return</option>
-                  </select>
-                  <ChevronDown size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 forced-colors:hidden" aria-hidden />
-                </span>
-              </label>
+              {journeyType === 'return' && (
+                <>
+                  <hr aria-hidden="true" className="col-span-full border-t border-dashed border-white/15" />
+                  <div className="grid min-w-0 gap-1.5 text-sm font-medium">
+                    <label htmlFor={ `${pickerId}-returnPickup` }>Return pickup location</label>
+                    <PlacesAutocompleteField id={ `${pickerId}-returnPickup` } ariaLabel="Return pickup location" value={returnPickup} onChange={setReturnPickup} placeholder="Enter return pickup location" className={fieldClass} />
+                  </div>
+                  <div className="grid min-w-0 gap-1.5 text-sm font-medium">
+                    <label htmlFor={ `${pickerId}-returnDropoff` }>Return drop-off location</label>
+                    <PlacesAutocompleteField id={ `${pickerId}-returnDropoff` } ariaLabel="Return drop-off location" value={returnDropoff} onChange={setReturnDropoff} placeholder="Enter return drop-off location" className={fieldClass} />
+                  </div>
+                  <div className="grid gap-1.5 text-sm font-medium">
+                    <label htmlFor={`${pickerId}-return-date`}>Return date</label>
+                    <DatePickerField id={`${pickerId}-return-date`} value={returnDate} onChange={setReturnDate} minDate={travelDate || todayISO()} className={pickerClass} />
+                  </div>
+                  <div className="grid gap-1.5 text-sm font-medium">
+                    <label htmlFor={`${pickerId}-return-time`}>Return time</label>
+                    <TimePickerField id={`${pickerId}-return-time`} title="Return time" value={returnTime} onChange={setReturnTime} className={pickerClass} />
+                  </div>
+                </>
+              )}
               {fields.slice(2).map(({ name, label, ...props }) => (
                 <label key={name} className="grid min-w-0 gap-1.5 text-sm font-medium">
                   <span>{label}<RequiredMark /></span>

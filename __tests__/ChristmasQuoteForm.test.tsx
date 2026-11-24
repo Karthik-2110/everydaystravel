@@ -61,9 +61,10 @@ it('submits a Christmas quote with the ad attribution and confirms receipt', asy
   fireEvent.click(screen.getByRole('button', { name: 'Travel date' }))
   fireEvent.click(screen.getByRole('button', { name: /today/i }))
   fireEvent.click(screen.getByRole('button', { name: 'Pickup time' }))
-  fireEvent.click(screen.getByRole('button', { name: '6 hours' }))
-  fireEvent.click(screen.getByRole('button', { name: '0 minutes' }))
-  fireEvent.click(screen.getByRole('button', { name: 'PM' }))
+  for (const [field, value] of [['Hour', '6'], ['AM/PM', 'PM']]) {
+    fireEvent.click(screen.getByRole('combobox', { name: field }))
+    fireEvent.click(screen.getByRole('option', { name: value }))
+  }
   fireEvent.click(screen.getByRole('button', { name: 'Apply' }))
   const source = screen.getByRole('combobox', { name: 'How did you hear about us?' })
   expect(source).toBeRequired()

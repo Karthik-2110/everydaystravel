@@ -54,9 +54,10 @@ vi.mock('@/app/components/DatePickerField', () => ({
 function pickTime(id: string, hour: number, minute: number, period: string) {
   fireEvent.click(document.getElementById(id) as HTMLElement)
   const panel = screen.getByRole('dialog')
-  fireEvent.click(within(panel).getByRole('button', { name: `${hour} hours` }))
-  fireEvent.click(within(panel).getByRole('button', { name: `${minute} minutes` }))
-  fireEvent.click(within(panel).getByRole('button', { name: period }))
+  for (const [field, value] of [['Hour', String(hour)], ['Minute', String(minute).padStart(2, '0')], ['AM/PM', period]]) {
+    fireEvent.click(within(panel).getByRole('combobox', { name: field }))
+    fireEvent.click(screen.getByRole('option', { name: value }))
+  }
   fireEvent.click(within(panel).getByRole('button', { name: /apply/i }))
 }
 
@@ -164,7 +165,7 @@ describe('BookingForm', () => {
     render(<BookingForm />)
     expect(screen.queryByLabelText('Return Date')).not.toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('switch', { name: /return journey/i }))
+    fireEvent.click(screen.getByRole('button', { name: 'Add Return trip' }))
 
     expect(screen.getByLabelText('Return Date')).toBeInTheDocument()
     expect(screen.getByLabelText('Return Time')).toBeInTheDocument()

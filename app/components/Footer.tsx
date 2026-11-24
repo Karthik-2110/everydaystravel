@@ -2,7 +2,6 @@ import Image from 'next/image'
 import { Phone, Mail, Clock, MapPin, ArrowRight, ArrowUpRight } from 'lucide-react'
 import { WhatsAppIcon, InstagramIcon, FacebookIcon, LinkedInIcon, WHATSAPP_HREF, INSTAGRAM_HREF, FACEBOOK_HREF, LINKEDIN_HREF, SOCIAL_BRAND } from './icons/social'
 import SiteLink from './SiteLink'
-import WhatsAppBanner from './WhatsAppBanner'
 import CookieSettingsButton from './CookieSettingsButton'
 import { ADDRESS } from './contact/contact-details'
 import { videoVariants } from '../lib/cloudinary'
@@ -94,11 +93,9 @@ const CTA_BACKGROUND =
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export default function Footer({ showWhatsAppBanner = true }: { showWhatsAppBanner?: boolean } = {}) {
+export default function Footer() {
   return (
     <footer>
-      {showWhatsAppBanner && <WhatsAppBanner />}
-
       {/* ── Pre-footer CTA ── */}
       <div className="relative overflow-hidden">
         <video
@@ -146,12 +143,21 @@ export default function Footer({ showWhatsAppBanner = true }: { showWhatsAppBann
               <div className="flex flex-col sm:flex-row gap-3">
                 <SiteLink
                   href="/contact"
-                  className="flex items-center justify-center gap-2.5 px-7 py-3.5 border border-white/25 text-white text-[14px] font-medium rounded-full hover:border-[#EBBA6F]/50 hover:text-[#EBBA6F] transition-all duration-150"
+                  className="flex items-center justify-center gap-2.5 px-7 py-3.5 bg-[#0C0F1C]/45 backdrop-blur-md border border-white/25 text-white text-[14px] font-medium rounded-full hover:border-[#EBBA6F]/50 hover:text-[#EBBA6F] transition-all duration-150"
                   style={{ fontFamily: 'var(--font-ui)' }}
                 >
                   Get a free quote
                   <ArrowRight size={14} strokeWidth={2} aria-hidden />
                 </SiteLink>
+                <a
+                  href={WHATSAPP_HREF}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-semibold text-[#0C0F1C] transition-colors hover:bg-[#42E27B] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#25D366]"
+                >
+                  Chat on WhatsApp
+                  <ArrowUpRight size={16} aria-hidden />
+                </a>
               </div>
             </div>
 

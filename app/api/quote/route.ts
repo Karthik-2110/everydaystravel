@@ -148,11 +148,12 @@ export async function POST(request: Request) {
             <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #666; font-size: 13px;">Travel date</td>
             <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-size: 13px; font-weight: 600;">${esc(travelDate)} at ${esc(pickupTime)}</td>
           </tr>
-          ${journeyType === 'return' && returnDate ? `
-          <tr>
-            <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #666; font-size: 13px;">Return</td>
-            <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-size: 13px; font-weight: 600;">${esc(returnDate)}${returnTime ? ` at ${esc(returnTime)}` : ''}</td>
-          </tr>` : ''}
+          ${journeyType === 'return' ? [
+            ['Return pickup location', body.returnPickup],
+            ['Return drop-off location', body.returnDropoff],
+            ['Return date', returnDate],
+            ['Return time', returnTime],
+          ].filter(([, value]) => value).map(([label, value]) => row(label, value)).join('') : ''}
           <tr>
             <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #666; font-size: 13px;">Email</td>
             <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-size: 13px; font-weight: 600;"><a href="mailto:${esc(email)}" style="color: #0C0F1C;">${esc(email)}</a></td>

@@ -1,312 +1,109 @@
 'use client'
 
-import { useState } from 'react'
-import { Clock } from 'lucide-react'
+import { useRef, useState } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Clock } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-// The form stores and submits 24-hour "HH:mm" — the same string the native
-// input used to produce — so nothing downstream has to know this field changed.
-// Twelve-hour display lives entirely in here.
-
-const HOURS   = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-const MINUTES = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]
-const PERIODS = ['AM', 'PM'] as const
-
-type Period = (typeof PERIODS)[number]
-
-interface Parts { hour12: number; minute: number; period: Period }
-
-const DEFAULT: Parts = { hour12: 9, minute: 0, period: 'AM' }
-
-const pad = (n: number) => String(n).padStart(2, '0')
-
-/** "19:45" → { hour12: 7, minute: 45, period: 'PM' }. Invalid input is dropped. */
-function parse(value: string): Parts | null {
-  const match = /^(\d{2}):(\d{2})$/.exec(value)
-  if (!match) return null
-
-  const hour24 = Number(match[1])
-  const minute = Number(match[2])
-  if (hour24 > 23 || minute > 59) return null
-
-  return {
-    hour12: hour24 % 12 === 0 ? 12 : hour24 % 12,
-    minute,
-    period: hour24 < 12 ? 'AM' : 'PM',
-  }
+function displayTime(value: string) {
+  const [hour, minute] = value.split(':')
+  return `${Number(hour) % 12 || 12}:${minute} ${Number(hour) < 12 ? 'AM' : 'PM'}`
 }
 
-/** The inverse: 7 / 45 / 'PM' → "19:45". Noon and midnight are the awkward pair. */
-function format({ hour12, minute, period }: Parts): string {
-  const base   = hour12 % 12               // 12 → 0, so midnight and noon land right
-  const hour24 = period === 'PM' ? base + 12 : base
-  return `${pad(hour24)}:${pad(minute)}`
-}
-
-const label = (p: Parts) => `${p.hour12}:${pad(p.minute)} ${p.period}`
-
-// ── Dial ────────────────────────────────────────────────────────────────────
-// Twelve marks on a circle, 12 o'clock at the top and 30° between each. The
-// ring and the hand are drawn underneath in SVG; the numbers sit on top as real
-// buttons so the dial stays reachable by keyboard.
-
-const SIZE   = 224
-const CENTRE = SIZE / 2
-const RADIUS = 86
-
-const pointAt = (index: number) => {
-  const angle = (index * 30 - 90) * (Math.PI / 180)
-  return { x: CENTRE + RADIUS * Math.cos(angle), y: CENTRE + RADIUS * Math.sin(angle) }
-}
-
-function Dial({
-  values,
-  selected,
-  unit,
-  onPick,
-}: {
-  values:   number[]
-  selected: number
-  unit:     'hours' | 'minutes'
-  onPick:   (v: number) => void
-}) {
-  const index = values.indexOf(selected)
-  const hand  = pointAt(index === -1 ? 0 : index)
-
-  return (
-    <div className="relative mx-auto" style={{ width: SIZE, height: SIZE }}>
-      <svg width={SIZE} height={SIZE} className="absolute inset-0" aria-hidden>
-        <circle cx={CENTRE} cy={CENTRE} r={RADIUS + 20} fill="rgba(255,255,255,0.03)" />
-        <circle
-          cx={CENTRE} cy={CENTRE} r={RADIUS + 20}
-          fill="none" stroke="rgba(255,255,255,0.10)" strokeWidth="1"
-        />
-        {index !== -1 && (
-          <>
-            <line x1={CENTRE} y1={CENTRE} x2={hand.x} y2={hand.y} stroke="#EBBA6F" strokeWidth="1.5" />
-            <circle cx={CENTRE} cy={CENTRE} r="3"  fill="#EBBA6F" />
-            <circle cx={hand.x} cy={hand.y} r="18" fill="#EBBA6F" />
-          </>
-        )}
-      </svg>
-
-      {values.map((v, i) => {
-        const { x, y }   = pointAt(i)
-        const isSelected = v === selected
-        return (
-          <button
-            key={v}
-            type="button"
-            aria-label={`${v} ${unit}`}
-            aria-pressed={isSelected}
-            onClick={() => onPick(v)}
-            className={cn(
-              'absolute w-9 h-9 -translate-x-1/2 -translate-y-1/2 rounded-full text-[13px]',
-              'flex items-center justify-center transition-colors duration-150',
-              isSelected
-                ? 'text-[#0C0F1C] font-semibold'
-                : 'text-white/75 hover:text-white hover:bg-white/[0.07]',
-            )}
-            style={{ left: x, top: y, fontFamily: 'var(--font-body)' }}
-          >
-            {pad(v)}
-          </button>
-        )
-      })}
-    </div>
-  )
-}
-
-// ── Readout ─────────────────────────────────────────────────────────────────
-
-function Readout({
-  value,
-  active,
-  ariaLabel,
-  onClick,
-}: {
-  value:     string
-  active:    boolean
-  ariaLabel: string
-  onClick:   () => void
-}) {
-  return (
-    <button
-      type="button"
-      aria-label={ariaLabel}
-      aria-pressed={active}
-      onClick={onClick}
-      className={cn(
-        'w-[58px] h-11 rounded-lg text-[22px] transition-colors duration-150',
-        active
-          ? 'bg-[#EBBA6F]/15 border border-[#EBBA6F]/50 text-[#EBBA6F]'
-          : 'border border-white/10 text-white/75 hover:border-white/25',
-      )}
-      style={{ fontFamily: 'var(--font-body)' }}
-    >
-      {value}
-    </button>
-  )
-}
-
-// ── Component ───────────────────────────────────────────────────────────────
+const hours = Array.from({ length: 12 }, (_, i) => String(i + 1))
+const minutes = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'))
 
 interface Props {
-  id:           string
-  value:        string          // HH:mm, 24-hour
-  onChange:     (v: string) => void
-  /** Heads the panel, and names the field for screen readers — the visible
-   *  value alone does not. */
-  title?:       string
+  id: string
+  value: string
+  onChange: (value: string) => void
+  title?: string
   placeholder?: string
-  invalid?:     boolean
-  className?:   string
+  invalid?: boolean
+  className?: string
 }
 
 export default function TimePickerField({
-  id,
-  value,
-  onChange,
-  title = 'Select time',
-  placeholder = 'Select time',
-  invalid = false,
-  className,
+  id, value, onChange, title = 'Select time', placeholder = 'Select time', invalid, className,
 }: Props) {
-  const [open, setOpen]   = useState(false)
-  const [unit, setUnit]   = useState<'hours' | 'minutes'>('hours')
-  const [draft, setDraft] = useState<Parts>(parse(value) ?? DEFAULT)
+  const selected = /^([01]\d|2[0-3]):[0-5]\d$/.test(value) ? value : ''
+  const [open, setOpen] = useState(false)
+  const [hour, setHour] = useState('9')
+  const [minute, setMinute] = useState('00')
+  const [period, setPeriod] = useState('AM')
 
-  const committed = parse(value)
-
-  const triggerBase =
-    'w-full h-10 rounded-md border border-white/10 bg-[#0C0F1C] text-[13px] ' +
-    'transition-colors duration-150 flex items-center gap-2 pl-3 pr-3 text-left ' +
-    'hover:border-[#EBBA6F]/50 focus:outline-none data-[state=open]:border-[#EBBA6F]'
-
-  // Each opening starts from the time the field holds, not from wherever the
-  // last visit left off — Cancel has to be able to put everything back.
-  const handleOpenChange = (next: boolean) => {
+  function toggle(next: boolean) {
     if (next) {
-      setDraft(parse(value) ?? DEFAULT)
-      setUnit('hours')
+      const [h, m] = (selected || '09:00').split(':')
+      setHour(String(Number(h) % 12 || 12))
+      setMinute(m)
+      setPeriod(Number(h) >= 12 ? 'PM' : 'AM')
     }
     setOpen(next)
   }
 
+  const panel = useRef<HTMLDivElement>(null)
+
+  function applyTime() {
+    const hour24 = Number(hour) % 12 + (period === 'PM' ? 12 : 0)
+    onChange(`${String(hour24).padStart(2, '0')}:${minute}`)
+    setOpen(false)
+  }
+
+  const fields = [
+    { label: 'Hour', value: hour, options: hours, change: setHour },
+    { label: 'Minute', value: minute, options: minutes.includes(minute) ? minutes : [...minutes, minute].sort(), change: setMinute },
+    { label: 'AM/PM', value: period, options: ['AM', 'PM'], change: setPeriod },
+  ]
+
   return (
-    <Popover open={open} onOpenChange={handleOpenChange}>
+    <Popover open={open} onOpenChange={toggle}>
       <PopoverTrigger asChild>
-        <button
-          id={id}
-          type="button"
-          aria-label={title}
-          className={cn(
-            triggerBase,
-            committed ? 'text-white' : 'text-white/30',
-            invalid && 'border-red-400/60',
-            className,
-          )}
-        >
-          <Clock size={13} className="text-white/35 shrink-0" aria-hidden />
-          <span className="flex-1 truncate" style={{ fontFamily: 'var(--font-body)' }}>
-            {committed ? label(committed) : placeholder}
-          </span>
+        <button type="button" id={id} aria-label={selected ? `${title}, ${displayTime(selected)}` : title} aria-invalid={invalid}
+          className={cn('flex w-full h-10 items-center gap-2 rounded-md border border-white/10 bg-[#0C0F1C] px-3 text-[13px] hover:border-[#EBBA6F]/50 focus-visible:border-[#EBBA6F] data-[state=open]:border-[#EBBA6F]',
+            selected ? 'text-white' : 'text-white/50', invalid && 'border-red-400/60', className)}>
+          <Clock size={13} aria-hidden className="text-white/35" />
+          {selected ? displayTime(selected) : placeholder}
         </button>
       </PopoverTrigger>
-
-      <PopoverContent
-        className="w-auto p-0 border-0 shadow-2xl rounded-xl overflow-hidden"
-        align="start"
-        sideOffset={4}
-      >
-        {/* Same shell as the calendar, so the date and time fields read as one
-            control — the layout follows a clock app, the colours do not. */}
-        <div className="bg-[#0D1221] border border-white/10 rounded-xl overflow-hidden text-white w-[288px]">
-
-          <p
-            className="px-5 py-3.5 text-[14px] font-semibold border-b border-white/10"
-            style={{ fontFamily: 'var(--font-ui)' }}
-          >
-            {title}
-          </p>
-
-          <div className="px-5 pt-5 pb-4">
-
-            {/* Readouts — tapping one swaps which dial is showing */}
-            <div className="flex items-center justify-center gap-2 mb-5">
-              <Readout
-                value={pad(draft.hour12)}
-                active={unit === 'hours'}
-                ariaLabel="Hour"
-                onClick={() => setUnit('hours')}
-              />
-              <span className="text-white/40 text-[20px]" aria-hidden>:</span>
-              <Readout
-                value={pad(draft.minute)}
-                active={unit === 'minutes'}
-                ariaLabel="Minutes"
-                onClick={() => setUnit('minutes')}
-              />
-              <div className="flex flex-col ml-2">
-                {PERIODS.map((p) => (
-                  <button
-                    key={p}
-                    type="button"
-                    aria-pressed={draft.period === p}
-                    onClick={() => setDraft((d) => ({ ...d, period: p }))}
-                    className={cn(
-                      'px-2 py-0.5 text-[13px] font-semibold transition-colors duration-150',
-                      draft.period === p ? 'text-[#EBBA6F]' : 'text-white/35 hover:text-white/60',
-                    )}
-                    style={{ fontFamily: 'var(--font-ui)' }}
-                  >
-                    {p}
-                  </button>
-                ))}
-              </div>
+      <PopoverContent align="start" sideOffset={4} aria-label={title}
+        ref={panel}
+        onFocusOutside={event => event.preventDefault()}
+        onPointerDownOutside={() => applyTime()}
+        className="w-64 rounded-xl border border-white/10 bg-[#0D1221] p-4 text-white shadow-2xl">
+        <div className="grid grid-cols-3 gap-2">
+          {fields.map(field => (
+            <div key={field.label} className="grid gap-1 text-xs text-white/70">
+              <label htmlFor={`${id}-${field.label}`}>{field.label}</label>
+              <Select value={field.value} onValueChange={field.change}>
+                <SelectTrigger id={`${id}-${field.label}`} aria-label={field.label}
+                  className="w-full border-white/15 bg-[#0C0F1C] px-2 text-white focus-visible:border-[#EBBA6F] data-[size=default]:h-10">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent position="popper" align="start"
+                  onPointerDownOutside={event => {
+                    // The open list captures pointer events even over the underlying panel.
+                    const bounds = panel.current?.getBoundingClientRect()
+                    const { clientX, clientY } = event.detail.originalEvent
+                    if (bounds && (clientX < bounds.left || clientX > bounds.right ||
+                        clientY < bounds.top || clientY > bounds.bottom)) applyTime()
+                  }}
+                  className="max-h-[min(10rem,var(--radix-select-content-available-height))] min-w-0 border border-white/15 [--popover:#0D1221] bg-popover text-white">
+                  {field.options.map(option => (
+                    <SelectItem key={option} value={option} className="text-white focus:bg-[#EBBA6F]/15 focus:text-white not-data-[variant=destructive]:focus:**:text-white">
+                      {option}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-
-            {unit === 'hours' ? (
-              <Dial
-                values={HOURS}
-                selected={draft.hour12}
-                unit="hours"
-                onPick={(h) => {
-                  setDraft((d) => ({ ...d, hour12: h }))
-                  setUnit('minutes')   // straight on to minutes, as a clock app would
-                }}
-              />
-            ) : (
-              <Dial
-                values={MINUTES}
-                selected={draft.minute}
-                unit="minutes"
-                onPick={(m) => setDraft((d) => ({ ...d, minute: m }))}
-              />
-            )}
-          </div>
-
-          <div className="flex items-center justify-end gap-2 px-5 py-3.5 border-t border-white/10">
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              className="px-4 h-9 rounded-full text-white/60 text-[13px] font-medium hover:text-white transition-colors duration-150"
-              style={{ fontFamily: 'var(--font-ui)' }}
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              onClick={() => { onChange(format(draft)); setOpen(false) }}
-              className="px-5 h-9 rounded-full bg-[#EBBA6F] text-[#0C0F1C] text-[13px] font-semibold hover:bg-[#DDA85E] transition-colors duration-150"
-              style={{ fontFamily: 'var(--font-ui)' }}
-            >
-              Apply
-            </button>
-          </div>
-
+          ))}
         </div>
+        <button type="button" className="mt-4 ml-auto block rounded-full bg-[#EBBA6F] px-4 py-2 text-sm font-semibold text-[#0C0F1C]"
+          onClick={applyTime}>
+          Apply
+        </button>
       </PopoverContent>
     </Popover>
   )

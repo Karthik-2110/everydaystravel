@@ -536,7 +536,7 @@ function DesktopRow({ child }: { child: DropdownChild }) {
       <div className="absolute left-full top-0 pl-2 opacity-0 pointer-events-none group-hover/cat:opacity-100 group-hover/cat:pointer-events-auto group-focus-within/cat:opacity-100 group-focus-within/cat:pointer-events-auto transition-opacity duration-200 z-50">
         <div
           data-testid={`fleet-submenu-${child.id ?? child.href}`}
-          className="bg-[var(--navbar-surface,#0D1221)] border border-white/[0.09] rounded-xl shadow-[0_16px_48px_rgba(0,0,0,0.5)] overflow-hidden min-w-[240px]"
+          className="bg-[var(--navbar-surface,#0D1221)] border border-white/[0.09] rounded-xl shadow-[0_16px_48px_rgba(0,0,0,0.5)] overflow-hidden w-max min-w-[240px]"
         >
           {child.children.map((grandchild) => (
             <Link
@@ -544,7 +544,7 @@ function DesktopRow({ child }: { child: DropdownChild }) {
               href={grandchild.href}
               className="flex flex-col px-4 py-3 hover:bg-white/[0.04] transition-colors duration-150 group/sub"
             >
-              <span className="text-white text-[13.5px] font-medium group-hover/sub:text-[#EBBA6F] transition-colors duration-150" style={{ fontFamily: 'var(--font-ui)' }}>
+              <span className="text-white text-[13.5px] whitespace-nowrap font-medium group-hover/sub:text-[#EBBA6F] transition-colors duration-150" style={{ fontFamily: 'var(--font-ui)' }}>
                 {grandchild.label}
               </span>
               <span className="text-white/35 text-[11.5px] mt-0.5" style={{ fontFamily: 'var(--font-body)' }}>

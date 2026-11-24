@@ -72,7 +72,6 @@ export default function PlacesAutocompleteField({
         const { suggestions } =
           await google.maps.places.AutocompleteSuggestion.fetchAutocompleteSuggestions({
             input: value,
-            includedRegionCodes: ['gb'],
           })
 
         if (requestId !== requestIdRef.current) return // a newer query superseded this one

@@ -144,13 +144,11 @@ describe('QuoteForm', () => {
       fireEvent.click(days[days.length - 1])
     })
 
-    // Set pickup time — a clock dial, so it is tapped rather than typed into
     fireEvent.click(document.getElementById('pickup-time') as HTMLElement)
-    const timePanel = screen.getByRole('dialog')
-    fireEvent.click(within(timePanel).getByRole('button', { name: '9 hours' }))
-    fireEvent.click(within(timePanel).getByRole('button', { name: '0 minutes' }))
-    fireEvent.click(within(timePanel).getByRole('button', { name: 'AM' }))
-    fireEvent.click(within(timePanel).getByRole('button', { name: /apply/i }))
+    fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: /apply/i }))
+    fireEvent.click(screen.getByRole('button', { name: /add return trip information/i }))
+    expect(screen.getByRole('button', { name: 'Add Return trip' })).toHaveAttribute('aria-pressed', 'true')
+    expect(document.getElementById('return-date')).toBeVisible()
 
     await waitFor(() => {
       expect(screen.getByLabelText(/full name/i)).toBeInTheDocument()

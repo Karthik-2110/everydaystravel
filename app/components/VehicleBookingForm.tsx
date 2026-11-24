@@ -1,5 +1,6 @@
 'use client'
 
+import { JourneyTypeChips, ReturnTripPrompt } from './JourneyTypeControls'
 import ReferralSourceField from './ReferralSourceField'
 import HumanVerification, { useHumanVerification } from './HumanVerification'
 
@@ -7,7 +8,7 @@ import { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import {
   Users, Car,
-  ArrowRight, ArrowRightLeft, ChevronDown, Check,
+  ArrowRight, ChevronDown, Check,
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { ALL_VEHICLE_OPTIONS } from './VehicleList'
@@ -87,6 +88,8 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
   const [passengers, setPassengers]   = useState('')
   const [travelDate, setTravelDate]   = useState('')
   const [pickupTime, setPickupTime]   = useState('')
+  const [returnPickup, setReturnPickup] = useState('')
+  const [returnDropoff, setReturnDropoff] = useState('')
   const [returnDate, setReturnDate]   = useState('')
   const [returnTime, setReturnTime]   = useState('')
   const [email, setEmail]             = useState('')
@@ -129,7 +132,7 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
       const res = await fetch('/api/quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ turnstileToken: verification.token, vehicle, journeyType, pickup, destination, passengers, travelDate, pickupTime, returnDate, returnTime, email, phone, referralSource }),
+        body: JSON.stringify({ turnstileToken: verification.token, vehicle, journeyType, pickup, destination, passengers, travelDate, pickupTime, ...(isReturn && { returnPickup, returnDropoff, returnDate, returnTime }), email, phone, referralSource }),
       })
       if (!res.ok) {
         const problem = await res.json().catch(() => ({}))
@@ -139,7 +142,7 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
       setTimeout(() => {
         setSubmitted(false)
         setPickup(''); setDestination(''); setPassengers('')
-        setTravelDate(''); setPickupTime(''); setReturnDate(''); setReturnTime('')
+        setTravelDate(''); setPickupTime(''); setReturnPickup(''); setReturnDropoff(''); setReturnDate(''); setReturnTime('')
         setEmail(''); setPhone(''); setEmailTouched(false); setEmailError('')
       }, 3000)
     } catch (error) {
@@ -196,28 +199,7 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
           </div>
 
           {/* Journey type */}
-          <div className="flex gap-1.5">
-            <button
-              type="button"
-              aria-pressed={!isReturn}
-              onClick={() => setJourneyType('oneway')}
-              className={['flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12.5px] font-medium transition-all duration-200',
-                !isReturn ? 'bg-[#1e2338] text-white border border-white/20' : 'text-white/45 hover:text-white/70'].join(' ')}
-              style={{ fontFamily: 'var(--font-ui)' }}
-            >
-              <ArrowRight size={12} aria-hidden />One way
-            </button>
-            <button
-              type="button"
-              aria-pressed={isReturn}
-              onClick={() => setJourneyType('return')}
-              className={['flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12.5px] font-medium transition-all duration-200',
-                isReturn ? 'bg-[#1e2338] text-white border border-white/20' : 'text-white/45 hover:text-white/70'].join(' ')}
-              style={{ fontFamily: 'var(--font-ui)' }}
-            >
-              <ArrowRightLeft size={12} aria-hidden />Return
-            </button>
-          </div>
+          <JourneyTypeChips isReturn={isReturn} onChange={setJourneyType} />
 
           {/* Pickup */}
           <div>
@@ -254,11 +236,21 @@ export default function VehicleBookingForm({ defaultVehicleSlug }: { defaultVehi
             </div>
           </div>
 
+          {pickupTime && !isReturn && <ReturnTripPrompt onAdd={() => setJourneyType('return')} />}
+
           {/* Return fields */}
           <AnimatePresence>
             {isReturn && (
               <motion.div {...REVEAL} className="overflow-hidden">
-                <div className="grid grid-cols-2 gap-3">
+                <div className="border-t border-dashed border-white/15 pt-4 grid grid-cols-2 gap-3">
+                  <div>
+                    <label htmlFor="vbf-r-returnPickup"><FieldLabel>Return pickup location</FieldLabel></label>
+                    <PlacesAutocompleteField id="vbf-r-returnPickup" ariaLabel="Return pickup location" value={returnPickup} onChange={setReturnPickup} placeholder="Enter return pickup location" />
+                  </div>
+                  <div>
+                    <label htmlFor="vbf-r-returnDropoff"><FieldLabel>Return drop-off location</FieldLabel></label>
+                    <PlacesAutocompleteField id="vbf-r-returnDropoff" ariaLabel="Return drop-off location" value={returnDropoff} onChange={setReturnDropoff} placeholder="Enter return drop-off location" />
+                  </div>
                   <div>
                     <label htmlFor="vbf-rdate"><FieldLabel>Return date</FieldLabel></label>
                     <DatePickerField id="vbf-rdate" value={returnDate} minDate={travelDate || today} onChange={setReturnDate} />

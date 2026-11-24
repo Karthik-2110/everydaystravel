@@ -1,5 +1,6 @@
 'use client'
 
+import { JourneyTypeChips, ReturnTripPrompt } from './JourneyTypeControls'
 import ReferralSourceField from './ReferralSourceField'
 import HumanVerification, { useHumanVerification } from './HumanVerification'
 
@@ -7,7 +8,7 @@ import { useState, useEffect, useRef, useId } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import {
   Users, PartyPopper,
-  ArrowRight, ArrowRightLeft, ChevronDown, Minus,
+  ArrowRight, ChevronDown, Minus,
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import DatePickerField from './DatePickerField'
@@ -120,6 +121,8 @@ export default function QuoteForm({ variant = 'panel', docked = false, onMinimiz
   const [pickupTime, setPickupTime]   = useState('')
   const [eventType, setEventType]     = useState('')
   const [customEventType, setCustomEventType] = useState('')
+  const [returnPickup, setReturnPickup] = useState('')
+  const [returnDropoff, setReturnDropoff] = useState('')
   const [returnDate, setReturnDate]   = useState('')
   const [returnTime, setReturnTime]   = useState('')
   const [fullName, setFullName]         = useState('')
@@ -146,7 +149,7 @@ export default function QuoteForm({ variant = 'panel', docked = false, onMinimiz
       setPickupTime('')
       setEventType('')
       setCustomEventType('')
-      setReturnDate('')
+      setReturnPickup(''); setReturnDropoff(''); setReturnDate('')
       setReturnTime('')
       setFullName('')
       setEmail('')
@@ -201,7 +204,7 @@ export default function QuoteForm({ variant = 'panel', docked = false, onMinimiz
       const res = await fetch('/api/quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ turnstileToken: verification.token, journeyType, pickup, destination, passengers, travelDate, pickupTime, eventType: eventType === 'other' ? customEventType.trim() : eventType, returnDate, returnTime, fullName, email, phone, referralSource }),
+        body: JSON.stringify({ turnstileToken: verification.token, journeyType, pickup, destination, passengers, travelDate, pickupTime, eventType: eventType === 'other' ? customEventType.trim() : eventType, ...(isReturn && { returnPickup, returnDropoff, returnDate, returnTime }), fullName, email, phone, referralSource }),
       })
       if (!res.ok) {
         const problem = await res.json().catch(() => ({}))
@@ -233,49 +236,19 @@ export default function QuoteForm({ variant = 'panel', docked = false, onMinimiz
       <div ref={cardRef} onMouseEnter={focusFirstField} className={`bg-[#0D1221] rounded-2xl border border-[#EBBA6F]/35 shadow-[0_0_0_1px_rgba(235,186,111,0.10),0_0_34px_rgba(235,186,111,0.14),0_20px_60px_rgba(0,0,0,0.45)] ${cardPadCls} transition-[border-color,box-shadow] duration-300 hover:border-[#EBBA6F]/70 hover:shadow-[0_0_0_1px_rgba(235,186,111,0.28),0_0_70px_rgba(235,186,111,0.30),0_24px_70px_rgba(0,0,0,0.5)]`}>
 
         {/* ── Header ── */}
-        <div className="flex flex-wrap items-center gap-2 mb-6">
+        <div className="grid grid-cols-[1fr_auto] items-center gap-y-3 mb-6">
           <span
-            className={`text-[#EBBA6F] font-medium text-[15px] ${onMinimize ? "w-full sm:w-auto" : ""}`}
+            className="text-[#EBBA6F] font-medium text-[15px]"
             style={{ fontFamily: 'var(--font-body)' }}
           >
             Plan your journey
           </span>
 
-          <div className="flex gap-1.5">
-            <button
-              type="button"
-              aria-pressed={!isReturn}
-              onClick={() => setJourneyType('oneway')}
-              className={[
-                'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-all duration-200',
-                !isReturn
-                  ? 'bg-[#1e2338] text-white border border-white/20'
-                  : 'text-white/45 hover:text-white/70',
-              ].join(' ')}
-              style={{ fontFamily: 'var(--font-ui)' }}
-            >
-              <ArrowRight size={13} aria-hidden />
-              One way
-            </button>
-
-            <button
-              type="button"
-              aria-pressed={isReturn}
-              onClick={() => setJourneyType('return')}
-              className={[
-                'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-all duration-200',
-                isReturn
-                  ? 'bg-[#1e2338] text-white border border-white/20'
-                  : 'text-white/45 hover:text-white/70',
-              ].join(' ')}
-              style={{ fontFamily: 'var(--font-ui)' }}
-            >
-              <ArrowRightLeft size={13} aria-hidden />
-              Return
-            </button>
+          <div className="col-span-full row-start-2">
+            <JourneyTypeChips isReturn={isReturn} onChange={setJourneyType} />
           </div>
           {onMinimize && <button type="button" onClick={onMinimize} aria-label="Minimize quote form" title="Minimize quote form"
-            className="ml-auto flex size-9 shrink-0 items-center justify-center rounded-full border border-white/15 text-[#EBBA6F] transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EBBA6F]">
+            className="col-start-2 row-start-1 ml-auto flex size-9 shrink-0 items-center justify-center rounded-full border border-white/15 text-[#EBBA6F] transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EBBA6F]">
             <Minus size={18} aria-hidden />
           </button>}
         </div>
@@ -408,12 +381,22 @@ export default function QuoteForm({ variant = 'panel', docked = false, onMinimiz
             </div>
           </div>
 
+          {pickupTime && !isReturn && <ReturnTripPrompt onAdd={() => setJourneyType('return')} />}
+
           {/* ── Return fields ── */}
           <AnimatePresence>
             {isReturn && (
               <motion.div {...REVEAL} className="overflow-hidden">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="border-t border-dashed border-white/15 pt-4 grid grid-cols-1 sm:grid-cols-2 gap-6">
 
+                  <div>
+                    <label htmlFor="return-pickup"><FieldLabel>Return pickup location</FieldLabel></label>
+                    <PlacesAutocompleteField id="return-pickup" ariaLabel="Return pickup location" value={returnPickup} onChange={setReturnPickup} placeholder="Enter return pickup location" />
+                  </div>
+                  <div>
+                    <label htmlFor="return-dropoff"><FieldLabel>Return drop-off location</FieldLabel></label>
+                    <PlacesAutocompleteField id="return-dropoff" ariaLabel="Return drop-off location" value={returnDropoff} onChange={setReturnDropoff} placeholder="Enter return drop-off location" />
+                  </div>
                   <div>
                     <label htmlFor="return-date">
                       <FieldLabel>Return date</FieldLabel>
