@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next'
+import { londonGuides, londonGuidePath } from './data/london-guides'
 import { BLOG_POSTS } from './data/blog'
 import { contentUpdated, sitemapEntries, siteUrl } from './lib/seo'
 
@@ -11,6 +12,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority,
     })),
     { url: `${siteUrl}/blog`, lastModified: '2026-10-29', changeFrequency: 'monthly', priority: 0.7 },
+    ...[londonGuidePath, ...londonGuides.map(guide => `${londonGuidePath}/${guide.slug}`)].map(path => ({
+      url: `${siteUrl}${path}`, lastModified: '2026-11-24', changeFrequency: 'monthly' as const, priority: 0.6,
+    })),
     ...BLOG_POSTS.map(post => ({
       url: `${siteUrl}/blog/${post.slug}`,
       lastModified: post.date,

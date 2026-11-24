@@ -72,19 +72,18 @@ export default function FloatingContactBar() {
             <a
               href={MOBILE_HREF}
               aria-label={`Call ${MOBILE}`}
-              className="h-11 px-5 inline-flex items-center gap-2.5 rounded-full bg-[#EBBA6F] text-[#0C0F1C] text-[14px] font-semibold hover:bg-[#DDA85E] active:bg-[#C8963E] transition-colors duration-150"
+              className="size-11 shrink-0 inline-flex items-center justify-center md:w-auto md:px-5 md:gap-2.5 rounded-full bg-[#EBBA6F] text-[#0C0F1C] text-[14px] font-semibold hover:bg-[#DDA85E] active:bg-[#C8963E] transition-colors duration-150"
             >
               <Phone size={16} aria-hidden />
-              <span className="hidden sm:inline">{MOBILE}</span>
-              <span className="sm:hidden">Call us</span>
+              <span className="hidden md:inline">{MOBILE}</span>
             </a>
             <a
               href={EMAIL_HREF}
               aria-label={`Email ${EMAIL}`}
-              className="h-11 px-5 inline-flex items-center gap-2.5 rounded-full text-white/85 text-[14px] font-medium border border-white/15 hover:border-[#EBBA6F]/60 hover:text-[#EBBA6F] transition-colors duration-150"
+              className="size-11 shrink-0 inline-flex items-center justify-center md:w-auto md:px-5 md:gap-2.5 rounded-full text-white/85 text-[14px] font-medium border border-white/15 hover:border-[#EBBA6F]/60 hover:text-[#EBBA6F] transition-colors duration-150"
             >
               <Mail size={16} aria-hidden />
-              Email us
+              <span className="hidden md:inline">Email us</span>
             </a>
             {/* Icon-only socials — same brand fills as the hero and footer */}
             {SOCIALS.map(({ label, href, brand, icon }) => (

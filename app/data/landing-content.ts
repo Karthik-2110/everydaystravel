@@ -116,7 +116,7 @@ export const LANDING_CONTENT: Record<string, LandingPageContent> = {
     sections: [
       {
         heading: 'Choose a coach by capacity and journey',
-        text: 'The 35-seat Turas Midi offers a smaller coach option. The 49, 53 and 55-seat vehicles accommodate larger groups. Leave room for all passengers, including accompanying staff, and tell us about luggage or equipment. A larger seating capacity does not by itself confirm the space available for every case.',
+        text: 'The Turas Midi coach seats up to 35 passengers for school visits and team travel. The 49, 53 and 55-seat vehicles accommodate larger groups. Leave room for all passengers, including accompanying staff, and tell us about luggage or equipment. A larger seating capacity does not by itself confirm the space available for every case.',
         links: [{ label: '35-seat midi coach', href: '/fleet/executive-coaches/35-seater-turas-midi' }, { label: '49-seat coach', href: '/fleet/executive-coaches/49-seater-mercedes-turismo' }, { label: '53-seat coach', href: '/fleet/executive-coaches/53-seater-coach' }, { label: '55-seat coach', href: '/fleet/executive-coaches/55-seater-neoplan-tourliner' }],
       },
       {
@@ -240,7 +240,7 @@ LANDING_CONTENT["19-seater-minibus"] = {
 
 LANDING_CONTENT["35-seater-turas-midi"] = {
   "heading": "35 seater midi coach hire in London",
-  "intro": "The Turas Midi suits a group that needs more room than a minibus without booking a full-size coach. Consider it for school visits, corporate away days and private tours from London or Surrey.",
+  "intro": "Bring up to 35 people together in the Turas Midi coach, with reclining seats and an onboard PA for your tour guide. Consider it for school visits, corporate away days and private tours from London or Surrey.",
   "sections": [
     {
       "heading": "Capacity, luggage and facilities",

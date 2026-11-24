@@ -303,7 +303,7 @@ export const SERVICE_CONTENT: Record<string, ServiceContent> = {
         { src: CORPORATE_IMAGES[0], alt: 'An Everydays Travel coach on corporate work' },
         { src: S_CLASS_PHOTO,       alt: 'Mercedes-Benz S-Class, used for client and executive transfers' },
         { src: CORPORATE_IMAGES[1], alt: 'A 49-seater Mercedes Turismo, used for conference groups' },
-        { src: TURAS_35_PHOTO,      alt: 'The 35-seater Turas Midi, used for away days and smaller teams' },
+        { src: TURAS_35_PHOTO,      alt: 'The 35-seater Turas Midi coach, used for away days and smaller teams' },
       ],
     },
 

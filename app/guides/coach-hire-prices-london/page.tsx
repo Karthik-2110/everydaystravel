@@ -62,6 +62,9 @@ export default function LondonCoachHirePricingGuide() {
         </header>
         <FleetFilm film={{ ...BUSINESS_SERVICES['staff-shuttles'].hero, caption: 'Explore the Everydays Travel fleet for premium group journeys.' }} />
         <LandingContent page="london-pricing" />
+        <p className="site-container pb-12">
+          <Link className="text-[#EBBA6F] underline underline-offset-4" href="/guides/london">Plan transport for London hotels and visitor attractions</Link>
+        </p>
       </main>
       <Footer />
     </>

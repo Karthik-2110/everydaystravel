@@ -239,6 +239,19 @@ export default function VehicleDetail({
               {vehicle.description}
             </p>
 
+            {base.startsWith('/fleet/') && (
+              <div className="mb-8 grid gap-4 border-y border-[#EBBA6F]/30 py-5 sm:grid-cols-2">
+                <h2 className="flex items-center gap-3 text-xl font-semibold text-[#EBBA6F]">
+                  <ShieldCheck aria-hidden className="size-6 shrink-0" />
+                  {category === 'executive-coaches' ? 'Your coach, guaranteed' : category === 'luxury-minibuses' ? 'Your minibus, guaranteed' : 'Your car, guaranteed'}
+                </h2>
+                <h2 className="flex items-center gap-3 text-xl font-semibold text-[#EBBA6F]">
+                  <UserCheck aria-hidden className="size-6 shrink-0" />
+                  17+ years in the industry
+                </h2>
+              </div>
+            )}
+
             {/* 4. Amenities */}
             <div className="mb-7">
               <h2
