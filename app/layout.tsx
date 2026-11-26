@@ -19,7 +19,10 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  verification: { google: 'eyMW9ia0hbk1XVGSi2Ziu6cMwuep94yi-CiRCKsFtTU' },
+  verification: {
+    google: 'eyMW9ia0hbk1XVGSi2Ziu6cMwuep94yi-CiRCKsFtTU',
+    other: { 'facebook-domain-verification': 'fz02hpwdmd6v4bwjovvbmw94acx3uu' },
+  },
   title: "Coach Hire London & Minibus Hire with Driver | Everydays Travel",
   description: "Coach and minibus hire with a driver in London and Surrey. Explore 7 to 55-seat group vehicles for schools, corporate events, weddings and airport transfers. Request a quote.",
   keywords: [
